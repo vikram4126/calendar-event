@@ -2,15 +2,11 @@ import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import CalendarGrid from './components/CalendarGrid'
 import EventModal from './components/EventModal'
+import LoginPage from './components/LoginPage'
 import { useAuth } from './context/AuthContext'
-import initialData from './data/events.json'
-
-// Bump this version whenever you push new seed data.
-// A version mismatch clears localStorage and reloads from JSON.
-const DATA_VERSION = 'v6'
 
 function App() {
-  const { isAdmin } = useAuth()
+  const { isAdmin, isLoggedIn } = useAuth()
 
   const [activeTab, setActiveTab]     = useState('Finance')
   const [selectedYear, setSelectedYear] = useState(2026)
@@ -19,24 +15,37 @@ function App() {
   const [activities, setActivities]   = useState([])
   const [editingEvent, setEditingEvent] = useState(null)
 
-  // ── Seed / restore data ───────────────────────────────────────────
+  // ── Initialization ────────────────────────────────────────────────
   useEffect(() => {
-    const storedVersion    = localStorage.getItem('calendarDataVersion')
-    const savedEvents      = localStorage.getItem('calendarEvents')
-    const savedActivities  = localStorage.getItem('calendarActivities')
+    // Fetch directly from public folder (bypassing build bundle)
+    fetch('/events.json?t=' + Date.now())
+      .then(res => res.json())
+      .then(serverData => {
+        const savedEvents = localStorage.getItem('calendarEvents')
+        const savedActivities = localStorage.getItem('calendarActivities')
+        const savedTimestamp = localStorage.getItem('calendarLastUpdated') || 0
 
-    if (storedVersion === DATA_VERSION && savedEvents && savedActivities) {
-      // Use the user's saved (possibly edited) data
-      setEvents(JSON.parse(savedEvents))
-      setActivities(JSON.parse(savedActivities))
-    } else {
-      // Fresh load from JSON (version mismatch or first run)
-      setEvents(initialData.events)
-      setActivities(initialData.activities)
-      localStorage.setItem('calendarDataVersion', DATA_VERSION)
-      localStorage.setItem('calendarEvents', JSON.stringify(initialData.events))
-      localStorage.setItem('calendarActivities', JSON.stringify(initialData.activities))
-    }
+        const serverTime = serverData.lastUpdated || 1
+
+        // If local draft is newer than or same as server file, use local draft
+        if (savedEvents && savedActivities && parseInt(savedTimestamp) >= serverTime) {
+          setEvents(JSON.parse(savedEvents))
+          setActivities(JSON.parse(savedActivities))
+        } else {
+          // Server file is newer (Admin uploaded it), so overwrite local drafts
+          setEvents(serverData.events)
+          setActivities(serverData.activities)
+          localStorage.setItem('calendarLastUpdated', serverTime.toString())
+        }
+      })
+      .catch(err => {
+        console.error("Failed to load events.json", err)
+        // Fallback to local storage if offline
+        const savedEvents = localStorage.getItem('calendarEvents')
+        const savedActivities = localStorage.getItem('calendarActivities')
+        if (savedEvents) setEvents(JSON.parse(savedEvents))
+        if (savedActivities) setActivities(JSON.parse(savedActivities))
+      })
   }, [])
 
   // ── Persist on change ─────────────────────────────────────────────
@@ -82,21 +91,48 @@ function App() {
     } else {
       setEvents([...events, { ...eventToSave, id: `e${Date.now()}` }])
     }
+    localStorage.setItem('calendarLastUpdated', Date.now().toString())
     setIsModalOpen(false)
   }
 
   const handleDeleteEvent = (eventId) => {
     setEvents(events.filter(e => e.id !== eventId))
+    localStorage.setItem('calendarLastUpdated', Date.now().toString())
     setIsModalOpen(false)
   }
 
+  const handleExportData = () => {
+    const dataToExport = {
+      lastUpdated: Date.now(),
+      activities,
+      events
+    }
+    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'events.json'
+    document.body.appendChild(a)
+    a.click()
+    
+    // Cleanup
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   // ── Render ────────────────────────────────────────────────────────
+  if (!isLoggedIn) {
+    return <LoginPage />
+  }
+
   return (
     <div className="app-container">
       <Header
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onAddEvent={handleAddEvent}
+        onExport={handleExportData}
       />
 
       <main className="calendar-main">

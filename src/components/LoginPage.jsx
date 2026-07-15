@@ -1,106 +1,42 @@
-import { useState } from 'react'
+import { BarChart3, AlertTriangle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-export default function LoginPage() {
+function LoginPage() {
   const { login } = useAuth()
-  const [email, setEmail]       = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError]       = useState('')
-  const [loading, setLoading]   = useState(false)
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-    // small delay for demo feel
-    await new Promise(r => setTimeout(r, 400))
-    const result = login(email, password)
-    setLoading(false)
-    if (!result.success) setError(result.error)
-  }
-
-  const fillDemo = (role) => {
-    if (role === 'admin') {
-      setEmail('admin@kpmg.com')
-      setPassword('admin123')
-    } else {
-      setEmail('ses.kumar@kpmg.com')
-      setPassword('user123')
-    }
-    setError('')
-  }
 
   return (
     <div className="login-page">
-      {/* Background geometric shapes */}
-      <div className="login-bg-shape shape-1" />
-      <div className="login-bg-shape shape-2" />
-      <div className="login-bg-shape shape-3" />
-
       <div className="login-card">
-        {/* Logo & Branding */}
-        <div className="login-brand">
-          <img src="/kpmg-logo.svg" alt="KPMG" className="login-logo" />
-          <div className="login-brand-divider" />
-          <span className="login-app-name">Finance &amp; Learning Calendar</span>
+        <div className="login-icon-wrapper">
+          <BarChart3 size={32} color="#00338d" strokeWidth={2.5} />
         </div>
-
-        <h1 className="login-title">Welcome back</h1>
-        <p className="login-subtitle">Sign in to access your calendar</p>
-
-        {/* Quick fill demo buttons */}
-        <div className="demo-pills">
-          <span className="demo-label">Quick demo:</span>
-          <button type="button" className="demo-pill pill-user" onClick={() => fillDemo('user')}>
-            👤 User login
-          </button>
-          <button type="button" className="demo-pill pill-admin" onClick={() => fillDemo('admin')}>
-            🔑 Admin login
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label className="form-label">Email</label>
-            <input
-              type="email"
-              className="form-input"
-              placeholder="you@kpmg.com"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Password</label>
-            <input
-              type="password"
-              className="form-input"
-              placeholder="Enter your password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
-          </div>
-
-          {error && (
-            <div className="login-error">
-              <span>⚠</span> {error}
-            </div>
-          )}
-
-          <button type="submit" className="login-btn" disabled={loading}>
-            {loading ? <span className="login-spinner" /> : 'Sign In'}
-          </button>
-        </form>
-
-        <p className="login-footer">
-          Demo credentials are pre-filled. Admin can edit events; Users can only view.
+        
+        <h1 className="login-title">Finance & Learning Calendar</h1>
+        <p className="login-subtitle">
+          Sign in with your organisational account to access the calendar.
         </p>
+        
+        <button className="ms-login-btn" onClick={login}>
+          <svg className="ms-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
+            <path fill="#f25022" d="M1 1h9v9H1z"/>
+            <path fill="#00a4ef" d="M1 11h9v9H1z"/>
+            <path fill="#7fba00" d="M11 1h9v9h-9z"/>
+            <path fill="#ffb900" d="M11 11h9v9h-9z"/>
+          </svg>
+          Sign in with Microsoft
+        </button>
+        
+        <div className="demo-alert">
+          <AlertTriangle size={16} className="alert-icon" />
+          <div className="alert-text">
+            <strong>Demo Mode:</strong> Azure AD not configured yet.<br />
+            Replace AZURE_CONFIG values for real SSO.<br />
+            Click above to log in and test the app.
+          </div>
+        </div>
       </div>
     </div>
   )
 }
+
+export default LoginPage

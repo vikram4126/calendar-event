@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { Plus, ChevronDown, Check } from 'lucide-react'
+import { Plus, ChevronDown, Check, Download } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-function Header({ activeTab, onTabChange, onAddEvent }) {
+function Header({ activeTab, onTabChange, onAddEvent, onExport }) {
   const { currentUser, isAdmin, users, switchUser } = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
@@ -49,9 +49,14 @@ function Header({ activeTab, onTabChange, onAddEvent }) {
       {/* ── Right: Add Event + User Switcher ── */}
       <div className="header-right">
         {isAdmin && (
-          <button className="add-event-btn" onClick={onAddEvent}>
-            <Plus size={15} strokeWidth={3} /> Add Event
-          </button>
+          <div className="admin-actions" style={{ display: 'flex', gap: '10px' }}>
+            <button className="export-btn" onClick={onExport} title="Download current data as JSON">
+              <Download size={15} style={{ marginRight: '6px' }} /> Export JSON
+            </button>
+            <button className="add-event-btn" onClick={onAddEvent}>
+              <Plus size={15} strokeWidth={3} /> Add Event
+            </button>
+          </div>
         )}
 
         {/* User Switcher Dropdown */}

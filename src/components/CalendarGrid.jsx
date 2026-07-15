@@ -144,17 +144,25 @@ function CalendarGrid({ events, activities, activeTab, year, onEventClick, isAdm
                           ...barStyle,
                         }}
                         onClick={() => isAdmin && onEventClick(event)}
-                        title={event.label.replace(/\\n/g, ' ')}
                       >
+                        {/* Custom Tooltip */}
+                        <div className="event-tooltip">
+                          <div className="tooltip-title">{event.label.replace(/\\n/g, ' ')}</div>
+                          <div className="tooltip-date">
+                            {event.startMonth === event.endMonth 
+                              ? `${MONTHS[event.startMonth]} ${event.year}`
+                              : `${MONTHS[event.startMonth]} - ${MONTHS[event.endMonth]} ${event.year}`}
+                          </div>
+                        </div>
+
                         {showDots(event) && barStyle.height > 0 && (
                           <>
                             <div className="event-dot"     style={{ backgroundColor: event.color }} />
                             <div className="event-dot end" style={{ backgroundColor: event.color }} />
                           </>
                         )}
-                        <div className="event-label" style={{ color: event.color }}>
-                          {event.hasIcon && <span className="newsletter-icon" />}
-                          {event.label.replace(/\\n/g, '\n')}
+                        <div className="event-label">
+                          {event.label.replace(/\\n/g, ' ')}
                         </div>
                       </div>
                     )

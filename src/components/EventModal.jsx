@@ -312,15 +312,6 @@ function EventModal({ isOpen, onClose, onSave, onDelete, event, activities, curr
           </div>
         </div>
 
-        {/* Newsletter Icon checkbox */}
-        <div className="form-group">
-          <div className="checkbox-group">
-            <label className="checkbox-label">
-              <input type="checkbox" checked={hasIcon} onChange={e => setHasIcon(e.target.checked)} />
-              Newsletter Icon (■)
-            </label>
-          </div>
-        </div>
 
         {/* Actions */}
         <div className="modal-actions">

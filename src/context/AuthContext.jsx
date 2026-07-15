@@ -17,6 +17,11 @@ export function AuthProvider({ children }) {
     return safe
   })
 
+  // Start with false unless we previously logged in during this session (for demo sake)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true'
+  })
+
   // Persist selected user across refreshes (For Demo Only)
   useEffect(() => {
     localStorage.setItem('calendarCurrentUser', JSON.stringify(currentUser))
@@ -75,11 +80,20 @@ export function AuthProvider({ children }) {
     setCurrentUser(safe)
   }
 
+  const login = () => {
+    setIsLoggedIn(true)
+    localStorage.setItem('isLoggedIn', 'true')
+  }
+
+  const logout = () => {
+    setIsLoggedIn(false)
+    localStorage.removeItem('isLoggedIn')
+  }
+
   const isAdmin   = currentUser?.role === 'admin'
-  const isLoggedIn = !!currentUser
 
   return (
-    <AuthContext.Provider value={{ currentUser, isAdmin, isLoggedIn, switchUser, users: usersData.map(({ password: _pw, ...u }) => u) }}>
+    <AuthContext.Provider value={{ currentUser, switchUser, isAdmin, isLoggedIn, login, logout, loading: false, users: usersData.map(({ password: _pw, ...u }) => u) }}>
       {children}
     </AuthContext.Provider>
   )
