@@ -1,0 +1,18 @@
+[
+  {
+    "id": "u1",
+    "name": "Ses Priya",
+    "email": "ses.priya@kpmg.com",
+    "password": "user123",
+    "role": "user",
+    "avatar": "SK"
+  },
+  {
+    "id": "u2",
+    "name": "Admin KPMG",
+    "email": "admin@kpmg.com",
+    "password": "admin123",
+    "role": "admin",
+    "avatar": "AK"
+  }
+]
