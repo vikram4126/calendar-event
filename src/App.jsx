@@ -21,39 +21,13 @@ function App() {
     fetch('/events.json?t=' + Date.now())
       .then(res => res.json())
       .then(serverData => {
-        const savedEvents = localStorage.getItem('calendarEvents')
-        const savedActivities = localStorage.getItem('calendarActivities')
-        const savedTimestamp = localStorage.getItem('calendarLastUpdated') || 0
-
-        const serverTime = serverData.lastUpdated || 1
-
-        // If local draft is newer than or same as server file, use local draft
-        if (savedEvents && savedActivities && parseInt(savedTimestamp) >= serverTime) {
-          setEvents(JSON.parse(savedEvents))
-          setActivities(JSON.parse(savedActivities))
-        } else {
-          // Server file is newer (Admin uploaded it), so overwrite local drafts
-          setEvents(serverData.events)
-          setActivities(serverData.activities)
-          localStorage.setItem('calendarLastUpdated', serverTime.toString())
-        }
+        setEvents(serverData.events || [])
+        setActivities(serverData.activities || [])
       })
       .catch(err => {
         console.error("Failed to load events.json", err)
-        // Fallback to local storage if offline
-        const savedEvents = localStorage.getItem('calendarEvents')
-        const savedActivities = localStorage.getItem('calendarActivities')
-        if (savedEvents) setEvents(JSON.parse(savedEvents))
-        if (savedActivities) setActivities(JSON.parse(savedActivities))
       })
   }, [])
-
-  // ── Persist on change ─────────────────────────────────────────────
-  useEffect(() => {
-    if (events.length === 0 && activities.length === 0) return
-    localStorage.setItem('calendarEvents', JSON.stringify(events))
-    localStorage.setItem('calendarActivities', JSON.stringify(activities))
-  }, [events, activities])
 
   // ── Handlers (admin only) ─────────────────────────────────────────
   const handleAddEvent = () => {
@@ -91,13 +65,11 @@ function App() {
     } else {
       setEvents([...events, { ...eventToSave, id: `e${Date.now()}` }])
     }
-    localStorage.setItem('calendarLastUpdated', Date.now().toString())
     setIsModalOpen(false)
   }
 
   const handleDeleteEvent = (eventId) => {
     setEvents(events.filter(e => e.id !== eventId))
-    localStorage.setItem('calendarLastUpdated', Date.now().toString())
     setIsModalOpen(false)
   }
 
