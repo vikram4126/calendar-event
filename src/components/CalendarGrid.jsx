@@ -37,7 +37,10 @@ function getBarStyle(event) {
   switch (s) {
     case 'dashed':   return { height: 2, border: 'none', borderTop: `2px dashed ${c}`, background: 'transparent', borderRadius: 0 }
     case 'dotted':   return { height: 2, border: 'none', borderTop: `2px dotted ${c}`, background: 'transparent', borderRadius: 0 }
-    case 'gradient': return { height: 5, background: `linear-gradient(to right,${c},transparent)`, borderRadius: 3 }
+    case 'gradient': // legacy fallback
+    case 'gradient-cp': return { height: 5, background: `linear-gradient(to right, #1e49e2, #7213ea)`, borderRadius: 3 }
+    case 'gradient-pc': return { height: 5, background: `linear-gradient(to right, #00338d, #1e49e2)`, borderRadius: 3 }
+    case 'gradient-cpink': return { height: 5, background: `linear-gradient(to right, #1e49e2, #fd349c)`, borderRadius: 3 }
     case 'outline':  return { height: 5, background: 'transparent', border: `1.5px solid ${c}`, borderRadius: 3 }
     case 'text':     return { height: 0, background: 'transparent', border: 'none' }
     default:         return { height: 5, background: c, borderRadius: 3 }
@@ -46,7 +49,7 @@ function getBarStyle(event) {
 
 function showDots(event) {
   const s = event.lineStyle || (event.isDashed ? 'dashed' : event.isTextOnly ? 'text' : 'solid')
-  return s !== 'text' && s !== 'gradient'
+  return s !== 'text' && !s.startsWith('gradient')
 }
 
 // ─── Component ────────────────────────────────────────────────────

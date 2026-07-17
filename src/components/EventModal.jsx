@@ -49,15 +49,6 @@ const LINE_STYLES = [
     }),
   },
   {
-    key: 'gradient',
-    label: 'Gradient',
-    preview: (color) => ({
-      height: '6px',
-      borderRadius: '3px',
-      background: `linear-gradient(to right, ${color}, transparent)`,
-    }),
-  },
-  {
     key: 'outline',
     label: 'Outline',
     preview: (color) => ({
@@ -83,6 +74,33 @@ const LINE_STYLES = [
       whiteSpace: 'nowrap',
     }),
     isText: true,
+  },
+  {
+    key: 'gradient-cp',
+    label: 'Cobalt+Purple',
+    preview: () => ({
+      height: '6px',
+      borderRadius: '3px',
+      background: `linear-gradient(to right, #1e49e2, #7213ea)`,
+    }),
+  },
+  {
+    key: 'gradient-pc',
+    label: 'Primary+Cobalt',
+    preview: () => ({
+      height: '6px',
+      borderRadius: '3px',
+      background: `linear-gradient(to right, #00338d, #1e49e2)`,
+    }),
+  },
+  {
+    key: 'gradient-cpink',
+    label: 'Cobalt+Pink',
+    preview: () => ({
+      height: '6px',
+      borderRadius: '3px',
+      background: `linear-gradient(to right, #1e49e2, #fd349c)`,
+    }),
   },
 ]
 

@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
-import { Plus, ChevronDown, Check, Download } from 'lucide-react'
+import { Plus, ChevronDown, Check, Download, LogOut } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 function Header({ activeTab, onTabChange, onAddEvent, onExport }) {
-  const { currentUser, isAdmin, users, switchUser } = useAuth()
+  const { currentUser, isAdmin, users, switchUser, logout } = useAuth()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -29,20 +29,6 @@ function Header({ activeTab, onTabChange, onAddEvent, onExport }) {
       <div className="header-left">
         <div className="header-logo">
           <img src="/kpmg-logo.svg" alt="KPMG Logo" />
-        </div>
-        <div className="tabs">
-          <button
-            className={`tab ${activeTab === 'Finance' ? 'active' : ''}`}
-            onClick={() => onTabChange('Finance')}
-          >
-            Finance Calendar
-          </button>
-          <button
-            className={`tab ${activeTab === 'Learning' ? 'active' : ''}`}
-            onClick={() => onTabChange('Learning')}
-          >
-            Learning Calendar
-          </button>
         </div>
       </div>
 
@@ -104,6 +90,11 @@ function Header({ activeTab, onTabChange, onAddEvent, onExport }) {
             </div>
           )}
         </div>
+
+        {/* Logout Button */}
+        <button className="logout-btn" onClick={logout} title="Sign Out" style={{ marginLeft: '4px' }}>
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   )

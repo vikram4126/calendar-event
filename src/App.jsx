@@ -101,19 +101,35 @@ function App() {
   return (
     <div className="app-container">
       <Header
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
         onAddEvent={handleAddEvent}
         onExport={handleExportData}
       />
 
       <main className="calendar-main">
         <div className="calendar-header-top">
-          <h1 className="calendar-title">{activeTab} Calendar</h1>
+          <div className="header-left-col">
+            <h1 className="calendar-title">{activeTab} Calendar</h1>
+          </div>
           <div className="year-selector">
             <button className="year-btn" onClick={() => setSelectedYear(y => y - 1)}>&lt;</button>
             <span className="year-display">{selectedYear}</span>
             <button className="year-btn" onClick={() => setSelectedYear(y => y + 1)}>&gt;</button>
+          </div>
+          <div className="header-right-col">
+            <div className="page-tabs tabs" style={{ marginLeft: 'auto' }}>
+              <button
+                className={`tab ${activeTab === 'Finance' ? 'active' : ''}`}
+                onClick={() => setActiveTab('Finance')}
+              >
+                Finance Calendar
+              </button>
+              <button
+                className={`tab ${activeTab === 'Learning' ? 'active' : ''}`}
+                onClick={() => setActiveTab('Learning')}
+              >
+                Learning Calendar
+              </button>
+            </div>
           </div>
         </div>
 
