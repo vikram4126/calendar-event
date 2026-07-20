@@ -78,12 +78,17 @@
       "label": "Subsidiary audits",
       "startMonth": 1,
       "endMonth": 2,
+      "startDay": 0,
+      "endDay": 4,
       "year": 2024,
       "color": "#22c55e",
+      "borderColor": "#16a34a",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Audit Process",
+      "owner": "Finance Controller",
+      "description": "Quarterly subsidiary audits across all regional offices to ensure compliance."
     },
     {
       "id": "f24-a2",
@@ -91,12 +96,17 @@
       "label": "Interim audit",
       "startMonth": 5,
       "endMonth": 6,
+      "startDay": 0,
+      "endDay": 3,
       "year": 2024,
       "color": "#22c55e",
+      "borderColor": "#16a34a",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Audit Process",
+      "owner": "Internal Audit Team",
+      "description": "Mid-year interim audit review for H1 financial statements."
     },
     {
       "id": "f24-a3",
@@ -104,12 +114,17 @@
       "label": "Final audit",
       "startMonth": 7,
       "endMonth": 8,
+      "startDay": 1,
+      "endDay": 5,
       "year": 2024,
       "color": "#22c55e",
+      "borderColor": "#16a34a",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Audit Process",
+      "owner": "External Auditors",
+      "description": "Year-end final audit and sign-off process with external auditors."
     },
     {
       "id": "f24-fb1",
@@ -117,12 +132,17 @@
       "label": "9+3 Forecast\n25 Jan – 31 Jan",
       "startMonth": 0,
       "endMonth": 0,
+      "startDay": 0,
+      "endDay": 1,
       "year": 2024,
       "color": "#470a68",
+      "borderColor": "#7c3aed",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Forecasting/Budget",
+      "owner": "FP&A Team",
+      "description": "9+3 rolling forecast submission for Q1 planning cycle."
     },
     {
       "id": "f24-fb2",
@@ -130,12 +150,17 @@
       "label": "FY25 Budget\n1 May – 11 Jun",
       "startMonth": 3,
       "endMonth": 4,
+      "startDay": 0,
+      "endDay": 4,
       "year": 2024,
       "color": "#470a68",
+      "borderColor": "#7c3aed",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Forecasting/Budget",
+      "owner": "CFO & FP&A",
+      "description": "Full FY25 budget planning process including departmental submissions and board approval."
     },
     {
       "id": "f24-fb3",
@@ -143,12 +168,17 @@
       "label": "6+6 Forecast\n15 Jul – 25 Jul",
       "startMonth": 6,
       "endMonth": 7,
+      "startDay": 0,
+      "endDay": 2,
       "year": 2024,
       "color": "#00338d",
+      "borderColor": "#1e49e2",
       "lineStyle": "outline",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Forecasting/Budget",
+      "owner": "FP&A Team",
+      "description": "Mid-year 6+6 reforecast incorporating H1 actuals."
     },
     {
       "id": "f24-l1",
@@ -156,12 +186,17 @@
       "label": "3-Year Strategy\nReview",
       "startMonth": 5,
       "endMonth": 7,
+      "startDay": 1,
+      "endDay": 4,
       "year": 2024,
       "color": "#7213ea",
+      "borderColor": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Long term planning",
+      "owner": "Strategy Director",
+      "description": "Annual 3-year strategic plan review and refresh workshops."
     },
     {
       "id": "f24-l2",
@@ -169,12 +204,17 @@
       "label": "Board Presentation\nPrep",
       "startMonth": 9,
       "endMonth": 10,
+      "startDay": 0,
+      "endDay": 3,
       "year": 2024,
       "color": "#510dbc",
+      "borderColor": "#510dbc",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Long term planning",
+      "owner": "CFO",
+      "description": "Preparation and rehearsal for Q4 Board of Directors strategy presentation."
     },
     {
       "id": "f24-p1",
@@ -182,12 +222,17 @@
       "label": "Our Values in Action",
       "startMonth": 1,
       "endMonth": 4,
+      "startDay": 1,
+      "endDay": 6,
       "year": 2024,
       "color": "#00b8f5",
+      "borderColor": "#0284c7",
       "lineStyle": "dashed",
       "isDashed": true,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "People",
+      "owner": "HR Team",
+      "description": "Company-wide campaign reinforcing core values through team activities."
     },
     {
       "id": "f24-p2",
@@ -195,12 +240,17 @@
       "label": "Mid-year pulse survey",
       "startMonth": 3,
       "endMonth": 5,
+      "startDay": 2,
+      "endDay": 5,
       "year": 2024,
       "color": "#00b8f5",
+      "borderColor": "#0284c7",
       "lineStyle": "dashed",
       "isDashed": true,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "People",
+      "owner": "People & Culture",
+      "description": "Mid-year employee engagement pulse survey and results analysis."
     },
     {
       "id": "f24-p3",
@@ -208,12 +258,17 @@
       "label": "GPS Survey opens",
       "startMonth": 7,
       "endMonth": 9,
+      "startDay": 0,
+      "endDay": 4,
       "year": 2024,
       "color": "#00b8f5",
+      "borderColor": "#0284c7",
       "lineStyle": "dashed",
       "isDashed": true,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "People",
+      "owner": "People & Culture",
+      "description": "Global People Survey launch and data collection window."
     },
     {
       "id": "f24-p4",
@@ -221,12 +276,17 @@
       "label": "Finance training day",
       "startMonth": 1,
       "endMonth": 1,
+      "startDay": 3,
+      "endDay": 3,
       "year": 2024,
       "color": "#22c55e",
+      "borderColor": "#16a34a",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "People",
+      "owner": "Finance L&D Lead",
+      "description": "Annual full-day Finance team training and development event."
     },
     {
       "id": "f24-p5",
@@ -234,12 +294,17 @@
       "label": "Q3 Capability calibrations",
       "startMonth": 8,
       "endMonth": 9,
+      "startDay": 0,
+      "endDay": 4,
       "year": 2024,
       "color": "#00338d",
+      "borderColor": "#1e49e2",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "People",
+      "owner": "Finance Director",
+      "description": "Q3 performance and capability calibration sessions for the Finance function."
     },
     {
       "id": "f24-e1",
@@ -247,12 +312,17 @@
       "label": "Training for Finance teams",
       "startMonth": 3,
       "endMonth": 5,
+      "startDay": 0,
+      "endDay": 4,
       "year": 2024,
       "color": "#470a68",
+      "borderColor": "#7c3aed",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Empowered",
+      "owner": "L&D Department",
+      "description": "Structured training program covering tools, processes, and upskilling for finance teams."
     },
     {
       "id": "f24-e2",
@@ -260,12 +330,17 @@
       "label": "Q3 Power BI rollout",
       "startMonth": 6,
       "endMonth": 8,
+      "startDay": 1,
+      "endDay": 5,
       "year": 2024,
       "color": "#00b8f5",
+      "borderColor": "#0284c7",
       "lineStyle": "gradient",
-      "isDashed": false,
+      "isDashed": true,
       "isTextOnly": false,
-      "hasIcon": false
+      "category": "Empowered",
+      "owner": "Digital Finance Team",
+      "description": "Rollout of Power BI dashboards and training across Finance sub-teams."
     },
     {
       "id": "f25-a1",
@@ -277,8 +352,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-a2",
@@ -290,8 +364,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-a3",
@@ -303,8 +376,7 @@
       "color": "#098e7e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-fb1",
@@ -316,8 +388,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-fb2",
@@ -329,8 +400,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-fb3",
@@ -342,8 +412,7 @@
       "color": "#1e49e2",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-l1",
@@ -355,8 +424,7 @@
       "color": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-l2",
@@ -368,8 +436,7 @@
       "color": "#510dbc",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-l3",
@@ -381,8 +448,7 @@
       "color": "#7213ea",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-p1",
@@ -394,8 +460,7 @@
       "color": "#00b8f5",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-p2",
@@ -407,8 +472,7 @@
       "color": "#00b8f5",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-p3",
@@ -420,8 +484,7 @@
       "color": "#00a3a1",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-p4",
@@ -433,8 +496,7 @@
       "color": "#00b8f5",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-e1",
@@ -446,8 +508,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-e2",
@@ -459,8 +520,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f25-e3",
@@ -472,8 +532,7 @@
       "color": "#00c0ae",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-a1",
@@ -485,8 +544,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-a2",
@@ -498,8 +556,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-a3",
@@ -511,8 +568,7 @@
       "color": "#098e7e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-fb1",
@@ -524,8 +580,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-fb2",
@@ -537,8 +592,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-fb3",
@@ -550,8 +604,7 @@
       "color": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-l1",
@@ -563,8 +616,7 @@
       "color": "#00c0ae",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-l2",
@@ -576,8 +628,7 @@
       "color": "#510dbc",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-l3",
@@ -589,8 +640,7 @@
       "color": "#7213ea",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-p1",
@@ -602,8 +652,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-p2",
@@ -615,8 +664,7 @@
       "color": "#00b8f5",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-p3",
@@ -628,8 +676,7 @@
       "color": "#00a3a1",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "f26-p4",
@@ -641,8 +688,7 @@
       "color": "#00b8f5",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-e1",
@@ -654,8 +700,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-e2",
@@ -667,8 +712,7 @@
       "color": "#1e49e2",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "f26-e3",
@@ -680,8 +724,7 @@
       "color": "#00c0ae",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ob1",
@@ -693,8 +736,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ob2",
@@ -706,8 +748,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ob3",
@@ -719,8 +760,7 @@
       "color": "#aceaff",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ld1",
@@ -732,8 +772,7 @@
       "color": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ld2",
@@ -745,8 +784,7 @@
       "color": "#510dbc",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ld3",
@@ -758,8 +796,7 @@
       "color": "#7213ea",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ts1",
@@ -771,8 +808,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ts2",
@@ -784,8 +820,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ts3",
@@ -797,8 +832,7 @@
       "color": "#22c55e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ts4",
@@ -810,8 +844,7 @@
       "color": "#098e7e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ct1",
@@ -823,8 +856,7 @@
       "color": "#470a68",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr24-ct2",
@@ -836,8 +868,7 @@
       "color": "#470a68",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr24-ct3",
@@ -849,8 +880,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ct4",
@@ -862,8 +892,7 @@
       "color": "#470a68",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr24-ss1",
@@ -875,8 +904,7 @@
       "color": "#fd349c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ss2",
@@ -888,8 +916,7 @@
       "color": "#ab0d82",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-ss3",
@@ -901,8 +928,7 @@
       "color": "#fd349c",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-du1",
@@ -914,8 +940,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-du2",
@@ -927,8 +952,7 @@
       "color": "#76d2ff",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr24-du3",
@@ -940,8 +964,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ob1",
@@ -953,8 +976,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ob2",
@@ -966,8 +988,7 @@
       "color": "#1e49e2",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ob3",
@@ -979,8 +1000,7 @@
       "color": "#aceaff",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ld1",
@@ -992,8 +1012,7 @@
       "color": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ld2",
@@ -1005,8 +1024,7 @@
       "color": "#b497ff",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ld3",
@@ -1018,8 +1036,7 @@
       "color": "#510dbc",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ts1",
@@ -1031,8 +1048,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ts2",
@@ -1044,8 +1060,7 @@
       "color": "#22c55e",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ts3",
@@ -1057,8 +1072,7 @@
       "color": "#098e7e",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ct1",
@@ -1070,8 +1084,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ct2",
@@ -1083,8 +1096,7 @@
       "color": "#00b8f5",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ct3",
@@ -1096,8 +1108,7 @@
       "color": "#470a68",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr25-ct4",
@@ -1109,8 +1120,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ss1",
@@ -1122,8 +1132,7 @@
       "color": "#fd349c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ss2",
@@ -1135,8 +1144,7 @@
       "color": "#ab0d82",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-ss3",
@@ -1148,8 +1156,7 @@
       "color": "#fd349c",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr25-ss4",
@@ -1161,8 +1168,7 @@
       "color": "#ab0d82",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-du1",
@@ -1174,8 +1180,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-du2",
@@ -1187,8 +1192,7 @@
       "color": "#76d2ff",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-du3",
@@ -1200,8 +1204,7 @@
       "color": "#1e49e2",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr25-du4",
@@ -1213,8 +1216,7 @@
       "color": "#00c0ae",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ob1",
@@ -1226,8 +1228,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ob2",
@@ -1239,8 +1240,7 @@
       "color": "#1e49e2",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ob3",
@@ -1252,8 +1252,7 @@
       "color": "#aceaff",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ld1",
@@ -1265,8 +1264,7 @@
       "color": "#7213ea",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ld2",
@@ -1278,8 +1276,7 @@
       "color": "#b497ff",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ld3",
@@ -1291,8 +1288,7 @@
       "color": "#510dbc",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ts1",
@@ -1304,8 +1300,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ts2",
@@ -1317,8 +1312,7 @@
       "color": "#22c55e",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ts3",
@@ -1330,8 +1324,7 @@
       "color": "#098e7e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ct1",
@@ -1343,8 +1336,7 @@
       "color": "#470a68",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ct2",
@@ -1356,8 +1348,7 @@
       "color": "#22c55e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ct3",
@@ -1369,8 +1360,7 @@
       "color": "#470a68",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ct4",
@@ -1382,8 +1372,7 @@
       "color": "#00b8f5",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr26-ss1",
@@ -1395,8 +1384,7 @@
       "color": "#fd349c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ss2",
@@ -1408,8 +1396,7 @@
       "color": "#ab0d82",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ss3",
@@ -1421,8 +1408,7 @@
       "color": "#fd349c",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-ss4",
@@ -1434,8 +1420,7 @@
       "color": "#ab0d82",
       "lineStyle": "text",
       "isDashed": false,
-      "isTextOnly": true,
-      "hasIcon": false
+      "isTextOnly": true
     },
     {
       "id": "lr26-du1",
@@ -1447,8 +1432,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-du2",
@@ -1460,8 +1444,7 @@
       "color": "#1e49e2",
       "lineStyle": "dotted",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-du3",
@@ -1473,8 +1456,7 @@
       "color": "#76d2ff",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "lr26-du4",
@@ -1486,8 +1468,7 @@
       "color": "#00c0ae",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2024-1",
@@ -1499,8 +1480,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2024-2",
@@ -1512,8 +1492,7 @@
       "color": "#1e49e2",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2024-3",
@@ -1525,8 +1504,7 @@
       "color": "#098e7e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2024-1",
@@ -1538,8 +1516,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2024-2",
@@ -1551,8 +1528,7 @@
       "color": "#ab0d82",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2024-3",
@@ -1564,8 +1540,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2024-1",
@@ -1577,8 +1552,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2024-2",
@@ -1590,8 +1564,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2024-3",
@@ -1603,8 +1576,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2025-1",
@@ -1616,8 +1588,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2025-2",
@@ -1629,8 +1600,7 @@
       "color": "#1e49e2",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2025-3",
@@ -1642,8 +1612,7 @@
       "color": "#098e7e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2025-1",
@@ -1655,8 +1624,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2025-2",
@@ -1668,8 +1636,7 @@
       "color": "#ab0d82",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2025-3",
@@ -1681,8 +1648,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2025-1",
@@ -1694,8 +1660,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2025-2",
@@ -1707,8 +1672,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2025-3",
@@ -1720,8 +1684,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2026-1",
@@ -1733,8 +1696,7 @@
       "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2026-2",
@@ -1746,8 +1708,7 @@
       "color": "#1e49e2",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "c2026-3",
@@ -1759,8 +1720,7 @@
       "color": "#098e7e",
       "lineStyle": "outline",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2026-1",
@@ -1772,8 +1732,7 @@
       "color": "#00b8f5",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2026-2",
@@ -1785,8 +1744,7 @@
       "color": "#ab0d82",
       "lineStyle": "dashed",
       "isDashed": true,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "o2026-3",
@@ -1798,8 +1756,7 @@
       "color": "#00b8f5",
       "lineStyle": "gradient",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2026-1",
@@ -1811,8 +1768,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2026-2",
@@ -1824,8 +1780,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     },
     {
       "id": "ac2026-3",
@@ -1837,8 +1792,7 @@
       "color": "#0c233c",
       "lineStyle": "solid",
       "isDashed": false,
-      "isTextOnly": false,
-      "hasIcon": false
+      "isTextOnly": false
     }
   ],
   "lastUpdated": 1815672721589
