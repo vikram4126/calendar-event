@@ -90,8 +90,25 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
   )
 
   const activeEvents = useMemo(
-    () => events.filter(e => e.year === year && tabActivities.some(a => a.id === e.activityId)),
-    [events, year, tabActivities]
+    () => events.filter(e => {
+      const matchesActivity = tabActivities.some(a => a.id === e.activityId);
+      if (!matchesActivity) return false;
+
+      if (viewMode === 'Weekly') {
+        const weekStart = new Date(currentWeekStart);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekEnd.getDate() + 6);
+
+        const evStart = new Date(e.year, e.startMonth, 1);
+        const evEnd = new Date(e.year, e.endMonth + 1, 0); 
+        evEnd.setHours(23, 59, 59, 999);
+
+        return weekStart <= evEnd && weekEnd >= evStart;
+      }
+      
+      return e.year === year;
+    }),
+    [events, year, tabActivities, viewMode, currentWeekStart]
   )
 
   const visibleActivities = useMemo(
