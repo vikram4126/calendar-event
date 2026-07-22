@@ -93,12 +93,26 @@ function App() {
             className={`nav-tab ${activeTab === 'Finance' ? 'active' : ''}`}
             onClick={() => setActiveTab('Finance')}
           >
+            {/* Finance icon — replace SVG path later */}
+            <svg className="nav-tab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.8"/>
+              <path d="M3 9h18" stroke="currentColor" strokeWidth="1.8"/>
+              <path d="M8 4v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M16 4v5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M8 13h4M8 17h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
             Finance Calender
           </button>
           <button
             className={`nav-tab ${activeTab === 'Learning' ? 'active' : ''}`}
             onClick={() => setActiveTab('Learning')}
           >
+            {/* Learning icon — replace SVG path later */}
+            <svg className="nav-tab-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L2 8l10 5 10-5-10-5z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+              <path d="M2 8v6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              <path d="M6 10.5v5.5a6 6 0 0 0 12 0v-5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
             Learning Calender
           </button>
         </div>
