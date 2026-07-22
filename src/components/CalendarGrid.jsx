@@ -11,22 +11,14 @@ const ROW_PAD_T = 14   // top padding inside row
 const ROW_PAD_B = 8    // bottom padding
 
 // ─── Greedy lane-assignment ───────────────────────────────────────
-// Uses startDay/endDay for weekly view, startMonth/endMonth for monthly
-function assignLanes(events, isWeekly = false) {
-  const getStart = (ev) => isWeekly
-    ? (ev.startDay !== undefined ? ev.startDay : ev.startMonth % 7)
-    : ev.startMonth
-  const getEnd = (ev) => isWeekly
-    ? (ev.endDay !== undefined ? ev.endDay : ev.endMonth % 7)
-    : ev.endMonth
-
-  const sorted = [...events].sort((a, b) => getStart(a) - getStart(b))
+function assignLanes(events) {
+  const sorted = [...events].sort((a, b) => a._start - b._start)
   const laneEnd = []
   const result  = []
 
   for (const ev of sorted) {
-    const start = getStart(ev)
-    const end   = Math.max(getEnd(ev), start) // prevent negative width
+    const start = ev._start
+    const end   = Math.max(ev._end, start) // prevent negative width
 
     let lane = -1
     for (let i = 0; i < laneEnd.length; i++) {
@@ -34,7 +26,7 @@ function assignLanes(events, isWeekly = false) {
     }
     if (lane === -1) { lane = laneEnd.length; laneEnd.push(-1) }
     laneEnd[lane] = end
-    result.push({ ...ev, lane, _start: start, _end: end })
+    result.push({ ...ev, lane })
   }
 
   return { laned: result, laneCount: Math.max(laneEnd.length, 1) }
@@ -90,24 +82,56 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
   )
 
   const activeEvents = useMemo(
-    () => events.filter(e => {
-      const matchesActivity = tabActivities.some(a => a.id === e.activityId);
-      if (!matchesActivity) return false;
+    () => {
+      const tabActivitiesIds = new Set(tabActivities.map(a => a.id));
 
       if (viewMode === 'Weekly') {
-        const weekStart = new Date(currentWeekStart);
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekEnd.getDate() + 6);
+        const currentYear = currentWeekStart.getFullYear();
+        const currentMonth = currentWeekStart.getMonth() + 1; // 1-indexed (1 to 12)
+        const currentDay = currentWeekStart.getDate();
+        const currentWeekIdx = Math.ceil(currentDay / 7); // 1 to 5
 
-        const evStart = new Date(e.year, e.startMonth, 1);
-        const evEnd = new Date(e.year, e.endMonth + 1, 0); 
-        evEnd.setHours(23, 59, 59, 999);
+        const filtered = [];
+        for (const e of events) {
+          if (!tabActivitiesIds.has(e.activityId)) continue;
 
-        return weekStart <= evEnd && weekEnd >= evStart;
+          // Check if year matches
+          if (e.year !== currentYear) continue;
+
+          // Check if current week falls within the event's month and week range
+          const startMonth = e.startMonth;
+          const endMonth = e.endMonth || startMonth;
+          const startWeek = e.startWeek !== undefined ? parseInt(e.startWeek) : 1;
+          const endWeek = e.endWeek !== undefined ? parseInt(e.endWeek) : 5;
+
+          const isAfterStart = currentMonth > startMonth || (currentMonth === startMonth && currentWeekIdx >= startWeek);
+          const isBeforeEnd = currentMonth < endMonth || (currentMonth === endMonth && currentWeekIdx <= endWeek);
+
+          if (isAfterStart && isBeforeEnd) {
+            // Renders across columns 0 to 4 (Monday to Friday) by default for week-based scheduling
+            filtered.push({
+              ...e,
+              _start: 0,
+              _end: 4
+            });
+          }
+        }
+        return filtered;
       }
-      
-      return e.year === year;
-    }),
+
+      // Monthly View
+      return events
+        .filter(e => {
+          if (!tabActivitiesIds.has(e.activityId)) return false;
+          return e.year === year;
+        })
+        .map(e => ({
+          ...e,
+          // Precompute start/end months as 0-indexed columns (0 to 11)
+          _start: e.startMonth - 1,
+          _end: (e.endMonth || e.startMonth) - 1
+        }));
+    },
     [events, year, tabActivities, viewMode, currentWeekStart]
   )
 
@@ -153,7 +177,7 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
           <tbody>
             {visibleActivities.map(activity => {
               const rowEvents = activeEvents.filter(e => e.activityId === activity.id)
-              const { laned, laneCount } = assignLanes(rowEvents, isWeekly)
+              const { laned, laneCount } = assignLanes(rowEvents)
               const rowH = ROW_PAD_T + laneCount * LANE_H + ROW_PAD_B
 
               return (

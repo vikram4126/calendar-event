@@ -9,42 +9,102 @@ export default function ExcelImportModal({ isOpen, onClose }) {
 
   const downloadTemplate = async () => {
     try {
-      const XLSX = await import('xlsx');
-      const wb = XLSX.utils.book_new();
+      const ExcelJS = await import('exceljs');
+      const workbook = new ExcelJS.Workbook();
+      
+      const wsActivities = workbook.addWorksheet('Activities');
+      const wsEvents = workbook.addWorksheet('Events');
 
-      const activitiesData = [
+      // Define columns for Activities
+      wsActivities.columns = [
+        { header: 'id', key: 'id', width: 10 },
+        { header: 'name', key: 'name', width: 25 },
+        { header: 'calendarType', key: 'calendarType', width: 15 }
+      ];
+      
+      wsActivities.addRows([
         { id: 'a1', name: 'Communications', calendarType: 'Finance' },
         { id: 'l1', name: 'Onboarding', calendarType: 'Learning' }
+      ]);
+
+      // Define columns for Events
+      wsEvents.columns = [
+        { header: 'id', key: 'id', width: 12 },
+        { header: 'activityId', key: 'activityId', width: 12 },
+        { header: 'label', key: 'label', width: 25 },
+        { header: 'startMonth', key: 'startMonth', width: 15 },
+        { header: 'endMonth', key: 'endMonth', width: 15 },
+        { header: 'startWeek', key: 'startWeek', width: 12 },
+        { header: 'endWeek', key: 'endWeek', width: 12 },
+        { header: 'year', key: 'year', width: 10 },
+        { header: 'color', key: 'color', width: 12 },
+        { header: 'borderColor', key: 'borderColor', width: 15 },
+        { header: 'lineStyle', key: 'lineStyle', width: 12 },
+        { header: 'isDashed', key: 'isDashed', width: 12 },
+        { header: 'isTextOnly', key: 'isTextOnly', width: 12 },
+        { header: 'category', key: 'category', width: 15 },
+        { header: 'owner', key: 'owner', width: 15 },
+        { header: 'description', key: 'description', width: 30 }
       ];
 
-      const eventsData = [
-        {
-          id: 'ev-1',
-          activityId: 'a1',
-          label: 'Q1 Comm Plan',
-          startMonth: 0,
-          endMonth: 2,
-          startDay: 0,
-          endDay: 4,
-          year: 2024,
-          color: '#22c55e',
-          borderColor: '#16a34a',
-          lineStyle: 'solid',
-          isDashed: false,
-          isTextOnly: false,
-          category: 'Planning',
-          owner: 'John Doe',
-          description: 'Initial planning for Q1.'
-        }
-      ];
+      // Add a sample row in Events (using 1-indexed month names and weeks)
+      wsEvents.addRow({
+        id: 'ev-1',
+        activityId: 'a1',
+        label: 'Q1 Comm Plan',
+        startMonth: 'Jan',
+        endMonth: 'Mar',
+        startWeek: 1,
+        endWeek: 3,
+        year: 2024,
+        color: '#22c55e',
+        borderColor: '#16a34a',
+        lineStyle: 'solid',
+        isDashed: false,
+        isTextOnly: false,
+        category: 'Planning',
+        owner: 'John Doe',
+        description: 'Initial planning for Q1.'
+      });
 
-      const wsActivities = XLSX.utils.json_to_sheet(activitiesData);
-      const wsEvents = XLSX.utils.json_to_sheet(eventsData);
+      // Data validation dropdown lists
+      const monthListString = '"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"';
+      const weekListString = '"1,2,3,4,5"';
 
-      XLSX.utils.book_append_sheet(wb, wsActivities, 'Activities');
-      XLSX.utils.book_append_sheet(wb, wsEvents, 'Events');
+      // Apply Month validations to rows 2 to 100 in Events (columns D and E)
+      wsEvents.dataValidations.add('D2:D100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [monthListString]
+      });
+      wsEvents.dataValidations.add('E2:E100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [monthListString]
+      });
 
-      XLSX.writeFile(wb, 'Calendar_Template.xlsx');
+      // Apply Week validations to rows 2 to 100 in Events (columns F and G)
+      wsEvents.dataValidations.add('F2:F100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [weekListString]
+      });
+      wsEvents.dataValidations.add('G2:G100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [weekListString]
+      });
+
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Calendar_Template.xlsx';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error(err);
       setError("Failed to load Excel generator.");
@@ -72,17 +132,60 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         const activities = XLSX.utils.sheet_to_json(activitiesSheet);
         const events = XLSX.utils.sheet_to_json(eventsSheet);
 
-        // Transform boolean/empty values to correct types if necessary
-        const formattedEvents = events.map(event => ({
-          ...event,
-          isDashed: event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE',
-          isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
-          startMonth: parseInt(event.startMonth) || 0,
-          endMonth: parseInt(event.endMonth) || 0,
-          startDay: event.startDay !== undefined ? parseInt(event.startDay) : undefined,
-          endDay: event.endDay !== undefined ? parseInt(event.endDay) : undefined,
-          year: parseInt(event.year) || new Date().getFullYear(),
-        }));
+        const parseMonth = (val) => {
+          if (val === undefined || val === null || val === '') return 1;
+          if (typeof val === 'string') {
+            const s = val.trim().toLowerCase();
+            const shortMonths = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+            const longMonths = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+            
+            let idx = shortMonths.indexOf(s);
+            if (idx !== -1) return idx + 1; // 1-indexed
+            
+            idx = longMonths.indexOf(s);
+            if (idx !== -1) return idx + 1; // 1-indexed
+            
+            const num = parseInt(s);
+            if (!isNaN(num)) {
+              return num >= 1 && num <= 12 ? num : (num >= 0 && num <= 11 ? num + 1 : 1);
+            }
+            return 1;
+          }
+          if (typeof val === 'number') {
+            return val >= 1 && val <= 12 ? val : (val >= 0 && val <= 11 ? val + 1 : 1);
+          }
+          return 1;
+        };
+
+        const parseWeek = (val) => {
+          if (val === undefined || val === null || val === '') return undefined;
+          if (typeof val === 'string') {
+            const s = val.trim();
+            const num = parseInt(s);
+            return !isNaN(num) && num >= 1 && num <= 5 ? num : undefined;
+          }
+          if (typeof val === 'number') {
+            return val >= 1 && val <= 5 ? val : undefined;
+          }
+          return undefined;
+        };
+
+        // Transform data to 1-indexed calendar structure
+        const formattedEvents = events.map(event => {
+          const startMonthVal = parseMonth(event.startMonth);
+          const endMonthVal = parseMonth(event.endMonth || event.startMonth);
+
+          return {
+            ...event,
+            isDashed: event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE',
+            isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
+            startMonth: startMonthVal,
+            endMonth: endMonthVal,
+            startWeek: parseWeek(event.startWeek),
+            endWeek: parseWeek(event.endWeek || event.startWeek),
+            year: parseInt(event.year) || new Date().getFullYear(),
+          };
+        });
 
         const finalJson = {
           lastUpdated: Date.now(),
@@ -139,9 +242,6 @@ export default function ExcelImportModal({ isOpen, onClose }) {
             <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Download size={18} /> Step 1: Download Template
             </h3>
-            <p style={{ margin: '0 0 12px 0', fontSize: '14px', opacity: 0.8 }}>
-              Download the Excel template. Fill your activities in the "Activities" sheet and events in the "Events" sheet.
-            </p>
             <button 
               onClick={downloadTemplate}
               style={{
@@ -157,10 +257,6 @@ export default function ExcelImportModal({ isOpen, onClose }) {
             <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Upload size={18} /> Step 2: Upload Excel
             </h3>
-            <p style={{ margin: '0 0 12px 0', fontSize: '14px', opacity: 0.8 }}>
-              Upload the filled Excel file. A new <code>events.json</code> file will be downloaded. 
-              Replace the old <code>public/events.json</code> with this new file.
-            </p>
             <input 
               type="file" 
               accept=".xlsx, .xls"

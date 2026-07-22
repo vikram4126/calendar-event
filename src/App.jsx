@@ -35,6 +35,15 @@ function App() {
 
   // Handlers
 
+  const handleYearChange = (newYear) => {
+    setSelectedYear(newYear)
+    if (currentWeekStart.getFullYear() !== newYear) {
+      const nextDate = new Date(currentWeekStart)
+      nextDate.setFullYear(newYear)
+      setCurrentWeekStart(nextDate)
+    }
+  }
+
   const handleExportData = () => {
     const dataToExport = {
       lastUpdated: Date.now(),
@@ -59,6 +68,11 @@ function App() {
     const nextDate = new Date(currentWeekStart)
     nextDate.setDate(nextDate.getDate() + days)
     setCurrentWeekStart(nextDate)
+    
+    const nextYear = nextDate.getFullYear()
+    if (nextYear !== selectedYear) {
+      setSelectedYear(nextYear)
+    }
   }
 
   const formatWeekRange = (start) => {
@@ -92,7 +106,7 @@ function App() {
         <div className="calendar-header-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: viewMode === 'Weekly' ? '12px' : '20px' }}>
           <div className="header-left-col" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <h1 className="calendar-title" style={{ fontSize: '18px', fontWeight: 'bold', margin: 0 }}>{activeTab} Calender</h1>
-            <YearSelector selectedYear={selectedYear} onChange={setSelectedYear} />
+            <YearSelector selectedYear={selectedYear} onChange={handleYearChange} />
           </div>
           
           <div className="header-right-col">

@@ -21,9 +21,11 @@ function Header({ onExport }) {
             <Upload size={15} style={{ marginRight: '6px' }} /> Import Excel
           </button>
         )}
-        <button className="export-btn" onClick={onExport} title="Download current data as JSON">
-          <Download size={15} style={{ marginRight: '6px' }} /> Export JSON
-        </button>
+        {import.meta.env.DEV && (
+          <button className="export-btn" onClick={onExport} title="Download current data as JSON">
+            <Download size={15} style={{ marginRight: '6px' }} /> Export JSON
+          </button>
+        )}
       </div>
 
       <ExcelImportModal isOpen={isImportOpen} onClose={() => setIsImportOpen(false)} />
