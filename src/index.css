@@ -1570,8 +1570,16 @@ h6,
 }
 
 .nav-tab.active {
-  color: var(--kpmg-primary-blue);
-  border-bottom: 3px solid var(--kpmg-primary-blue);
+  color: var(--kpmg-cobalt-blue);
+  border-bottom: 3px solid var(--kpmg-cobalt-blue);
+}
+
+.nav-tab.active .nav-tab-icon,
+.nav-tab.active svg,
+.tab.active svg,
+.cat-tab.active svg {
+  color: var(--kpmg-cobalt-blue);
+  stroke: var(--kpmg-cobalt-blue);
 }
 
 .view-mode-tabs {
