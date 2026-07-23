@@ -17,23 +17,23 @@ function EventPopup({ event, anchorRect, onClose }) {
 
   if (!event || !anchorRect) return null
 
-  // Position popup below/above the event bar
+  // Position popup below or above the event bar based on viewport space
   const viewportH = window.innerHeight
-  const popupH = 220
+  const viewportW = window.innerWidth
+  const estimatedH = 180
   const gap = 8
 
-  let top = anchorRect.bottom + gap + window.scrollY
-  let left = anchorRect.left + window.scrollX
+  const flipAbove = anchorRect.bottom + estimatedH + gap > viewportH
 
-  // Flip above if not enough space below
-  if (anchorRect.bottom + popupH + gap > viewportH) {
-    top = anchorRect.top - popupH - gap + window.scrollY
-  }
+  let top = flipAbove ? anchorRect.top - gap : anchorRect.bottom + gap
+  let left = anchorRect.left
 
-  // Keep within viewport width
   const popupW = 300
-  if (left + popupW > window.innerWidth - 16) {
-    left = window.innerWidth - popupW - 16
+  if (left + popupW > viewportW - 16) {
+    left = viewportW - popupW - 16
+  }
+  if (left < 16) {
+    left = 16
   }
 
   const dateStr = event.startMonth === event.endMonth
@@ -45,8 +45,9 @@ function EventPopup({ event, anchorRect, onClose }) {
       ref={popupRef}
       style={{
         position: 'fixed',
-        top: top - window.scrollY,
-        left: left - window.scrollX,
+        top: top,
+        left: left,
+        transform: flipAbove ? 'translateY(-100%)' : 'none',
         width: popupW,
         background: '#fff',
         borderRadius: '8px',
