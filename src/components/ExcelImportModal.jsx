@@ -71,6 +71,31 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         description: 'Initial planning for Q1.'
       });
 
+      // Style header rows (Cobalt Blue background, White text, 30px height)
+      const formatHeaderRow = (sheet) => {
+        const headerRow = sheet.getRow(1);
+        headerRow.height = 30;
+        headerRow.eachCell((cell) => {
+          cell.font = {
+            bold: true,
+            color: { argb: 'FFFFFFFF' },
+            size: 11
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF1E49E2' }
+          };
+          cell.alignment = {
+            vertical: 'middle',
+            horizontal: 'center'
+          };
+        });
+      };
+
+      formatHeaderRow(wsActivities);
+      formatHeaderRow(wsEvents);
+
       // Data validation dropdown lists
       const monthListString = '"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"';
       const dayListString = '"Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"';
