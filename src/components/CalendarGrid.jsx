@@ -5,6 +5,22 @@ import { ActivityIcon } from './icons'
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+const DAY_MAP = {
+  'monday': 0, 'mon': 0, '1': 0,
+  'tuesday': 1, 'tue': 1, '2': 1,
+  'wednesday': 2, 'wed': 2, '3': 2,
+  'thursday': 3, 'thu': 3, '4': 3,
+  'friday': 4, 'fri': 4, '5': 4,
+  'saturday': 5, 'sat': 5, '6': 5,
+  'sunday': 6, 'sun': 6, '7': 6
+}
+
+function getDayCol(val, defaultCol) {
+  if (val === undefined || val === null || val === '') return defaultCol;
+  const key = String(val).trim().toLowerCase();
+  return DAY_MAP[key] !== undefined ? DAY_MAP[key] : defaultCol;
+}
+
 const LABEL_OFFSET = 4
 const LANE_HEIGHT = 34
 const ROW_PADDING_TOP = 14
@@ -103,10 +119,12 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
           const isBeforeEnd = currentMonth < endMonth || (currentMonth === endMonth && currentWeekIdx <= endWeek);
 
           if (isAfterStart && isBeforeEnd) {
+            const startCol = getDayCol(e.startDay, 0);
+            const endCol = getDayCol(e.endDay, 4);
             filtered.push({
               ...e,
-              _start: 0,
-              _end: 4
+              _start: Math.min(startCol, endCol),
+              _end: Math.max(startCol, endCol)
             });
           }
         }

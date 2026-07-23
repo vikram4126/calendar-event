@@ -34,11 +34,13 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         { header: 'label', key: 'label', width: 25 },
         { header: 'startMonth', key: 'startMonth', width: 15 },
         { header: 'endMonth', key: 'endMonth', width: 15 },
+        { header: 'startDay', key: 'startDay', width: 15 },
+        { header: 'endDay', key: 'endDay', width: 15 },
         { header: 'startWeek', key: 'startWeek', width: 12 },
         { header: 'endWeek', key: 'endWeek', width: 12 },
         { header: 'year', key: 'year', width: 10 },
-        { header: 'color', key: 'color', width: 12 },
-        { header: 'borderColor', key: 'borderColor', width: 15 },
+        { header: 'color', key: 'color', width: 16 },
+        { header: 'borderColor', key: 'borderColor', width: 16 },
         { header: 'lineStyle', key: 'lineStyle', width: 12 },
         { header: 'isDashed', key: 'isDashed', width: 12 },
         { header: 'isTextOnly', key: 'isTextOnly', width: 12 },
@@ -47,18 +49,20 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         { header: 'description', key: 'description', width: 30 }
       ];
 
-      // Add a sample row in Events (using 1-indexed month names and weeks)
+      // Add a sample row in Events
       wsEvents.addRow({
         id: 'ev-1',
         activityId: 'a1',
         label: 'Q1 Comm Plan',
         startMonth: 'Jan',
         endMonth: 'Mar',
+        startDay: 'Monday',
+        endDay: 'Friday',
         startWeek: 1,
         endWeek: 3,
         year: 2024,
-        color: '#22c55e',
-        borderColor: '#16a34a',
+        color: 'Teal Green',
+        borderColor: 'Dark Green',
         lineStyle: 'solid',
         isDashed: false,
         isTextOnly: false,
@@ -69,7 +73,9 @@ export default function ExcelImportModal({ isOpen, onClose }) {
 
       // Data validation dropdown lists
       const monthListString = '"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"';
+      const dayListString = '"Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"';
       const weekListString = '"1,2,3,4,5"';
+      const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Pacific Blue,Purple,Pink,Teal Green,Dark Green"';
 
       // Apply Month validations to rows 2 to 100 in Events (columns D and E)
       wsEvents.dataValidations.add('D2:D100', {
@@ -83,16 +89,40 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         formulae: [monthListString]
       });
 
-      // Apply Week validations to rows 2 to 100 in Events (columns F and G)
+      // Apply Weekday Name validations to rows 2 to 100 in Events (columns F and G)
       wsEvents.dataValidations.add('F2:F100', {
         type: 'list',
         allowBlank: true,
-        formulae: [weekListString]
+        formulae: [dayListString]
       });
       wsEvents.dataValidations.add('G2:G100', {
         type: 'list',
         allowBlank: true,
+        formulae: [dayListString]
+      });
+
+      // Apply Week Number validations to rows 2 to 100 in Events (columns H and I)
+      wsEvents.dataValidations.add('H2:H100', {
+        type: 'list',
+        allowBlank: true,
         formulae: [weekListString]
+      });
+      wsEvents.dataValidations.add('I2:I100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [weekListString]
+      });
+
+      // Apply Color validations to rows 2 to 100 in Events (columns K and L)
+      wsEvents.dataValidations.add('K2:K100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [colorListString]
+      });
+      wsEvents.dataValidations.add('L2:L100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [colorListString]
       });
 
       const buffer = await workbook.xlsx.writeBuffer();
@@ -170,10 +200,42 @@ export default function ExcelImportModal({ isOpen, onClose }) {
           return undefined;
         };
 
+        const COLOR_MAP = {
+          'primary blue': '#00338d',
+          'blue': '#00338d',
+          'cobalt blue': '#1e49e2',
+          'dark blue': '#0c233c',
+          'pacific blue': '#00b8f5',
+          'purple': '#7213ea',
+          'pink': '#fd349c',
+          'teal green': '#00c0ae',
+          'dark green': '#098e7e',
+        };
+
+        const parseColor = (val) => {
+          if (!val) return undefined;
+          const s = String(val).trim().toLowerCase();
+          if (COLOR_MAP[s]) return COLOR_MAP[s];
+          if (s.startsWith('#')) return String(val).trim();
+          return undefined;
+        };
+
+        const parseDay = (val) => {
+          if (val === undefined || val === null || val === '') return undefined;
+          const s = String(val).trim();
+          const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+          const found = validDays.find(d => d.toLowerCase() === s.toLowerCase());
+          if (found) return found;
+          return s;
+        };
+
         // Transform data to 1-indexed calendar structure
         const formattedEvents = events.map(event => {
           const startMonthVal = parseMonth(event.startMonth);
           const endMonthVal = parseMonth(event.endMonth || event.startMonth);
+
+          const parsedColor = parseColor(event.color);
+          const parsedBorderColor = parseColor(event.borderColor);
 
           return {
             ...event,
@@ -181,8 +243,12 @@ export default function ExcelImportModal({ isOpen, onClose }) {
             isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
             startMonth: startMonthVal,
             endMonth: endMonthVal,
+            startDay: parseDay(event.startDay),
+            endDay: parseDay(event.endDay || event.startDay),
             startWeek: parseWeek(event.startWeek),
             endWeek: parseWeek(event.endWeek || event.startWeek),
+            color: parsedColor || event.color || '#00338d',
+            borderColor: parsedBorderColor || event.borderColor || parsedColor || event.color || '#00338d',
             year: parseInt(event.year) || new Date().getFullYear(),
           };
         });
@@ -253,7 +319,7 @@ export default function ExcelImportModal({ isOpen, onClose }) {
             </button>
           </div>
 
-          <div style={{ padding: '16px', background: 'rgba(34, 197, 94, 0.1)', borderRadius: '6px' }}>
+          <div style={{ padding: '16px', background: 'rgba(0, 192, 174, 0.1)', borderRadius: '6px' }}>
             <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Upload size={18} /> Step 2: Upload Excel
             </h3>
@@ -266,7 +332,7 @@ export default function ExcelImportModal({ isOpen, onClose }) {
           </div>
 
           {error && <div style={{ color: '#ef4444', fontSize: '14px', marginTop: '8px' }}>{error}</div>}
-          {success && <div style={{ color: '#22c55e', fontSize: '14px', marginTop: '8px' }}>Successfully generated events.json! Check your downloads.</div>}
+          {success && <div style={{ color: '#098e7e', fontSize: '14px', marginTop: '8px' }}>Successfully generated events.json! Check your downloads.</div>}
         </div>
       </div>
     </div>
