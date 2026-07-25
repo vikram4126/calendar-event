@@ -87,25 +87,9 @@ function App() {
   // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="app-container">
-      <Header onExport={handleExportData} />
+      <Header onExport={handleExportData} activeTab={activeTab} setActiveTab={setActiveTab} />
 
       <main className="calendar-main">
-        <div className="main-nav-tabs">
-          <button
-            className={`nav-tab ${activeTab === 'Finance' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Finance')}
-          >
-            <NavTabIcon type="Finance" />
-            Finance Calender
-          </button>
-          <button
-            className={`nav-tab ${activeTab === 'Learning' ? 'active' : ''}`}
-            onClick={() => setActiveTab('Learning')}
-          >
-            <NavTabIcon type="Learning" />
-            Learning Calender
-          </button>
-        </div>
 
         <div className="calendar-header-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: viewMode === 'Weekly' ? '12px' : '20px' }}>
           <div className="header-left-col" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>

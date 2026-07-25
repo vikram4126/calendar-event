@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Download, Upload } from 'lucide-react'
 import ExcelImportModal from './ExcelImportModal'
+import { NavTabIcon } from './icons'
 
-function Header({ onExport }) {
+function Header({ onExport, activeTab, setActiveTab }) {
   const [isImportOpen, setIsImportOpen] = useState(false);
 
   return (
@@ -11,6 +12,27 @@ function Header({ onExport }) {
       <div className="header-left">
         <div className="header-logo">
           <img src="/kpmg-logo.svg" alt="KPMG Logo" />
+        </div>
+      </div>
+
+      {/* ── Center: Tabs ── */}
+      <div className="header-center">
+        <div className="main-nav-tabs-pill">
+          <button
+            className={`header-nav-tab ${activeTab === 'Finance' ? 'active' : ''}`}
+            onClick={() => setActiveTab && setActiveTab('Finance')}
+          >
+
+            Finance Calender
+          </button>
+          <div className="tab-divider"></div>
+          <button
+            className={`header-nav-tab ${activeTab === 'Learning' ? 'active' : ''}`}
+            onClick={() => setActiveTab && setActiveTab('Learning')}
+          >
+
+            Learning Calender
+          </button>
         </div>
       </div>
 
