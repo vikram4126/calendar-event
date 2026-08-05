@@ -3,7 +3,7 @@ import Header from './components/Header'
 import CalendarGrid from './components/CalendarGrid'
 import YearSelector from './components/YearSelector'
 
-import { NavTabIcon } from './components/icons'
+
 
 function App() {
   const [activeTab, setActiveTab]     = useState('Finance')
@@ -14,7 +14,7 @@ function App() {
   const [events, setEvents]           = useState([])
   const [activities, setActivities]   = useState([])
 
-  // ── Initialization ────────────────────────────────────────────────
+  // Initialization
   useEffect(() => {
     import('../public/events.json').then(defaultEvents => {
       // Fetch using relative path so it works on subdirectories
@@ -84,7 +84,6 @@ function App() {
     return `Week of ${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}, ${start.getFullYear()}`
   }
 
-  // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="app-container">
       <Header onExport={handleExportData} activeTab={activeTab} setActiveTab={setActiveTab} />

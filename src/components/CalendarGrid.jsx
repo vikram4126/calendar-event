@@ -47,7 +47,7 @@ function assignLanes(events) {
   return { laned: result, laneCount: Math.max(laneEnd.length, 1) }
 }
 
-// ─── Bar inline styles ─────────────────────────────────────────────
+// Bar inline styles
 // isDashed: true  → dashed left border (dotted line effect)
 // isTextOnly: true → transparent bar, only text label visible
 function getBarStyle(event) {
