@@ -1,0 +1,3537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KPMG Calendar</title>
+
+    <!-- Favicon (inline SVG as data URI) -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0wIDAgSDMyIFYzMiBIMCBWMFoiIGZpbGw9InVybCgjcGFpbnQwX2xpbmVhcl8xXzEyMCkiIC8+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfMV8xMjAiIHgxPSIwIiB5MT0iMTYiIHgyPSIzMiIgeTI9IjE2IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgICAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiM3MjEzRUEiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzFFNDlFMiIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPC9kZWZzPgo8L3N2Zz4=" />
+
+    <!-- Open Sans from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES — KPMG Brand Design Tokens
+        ============================================================ */
+        :root {
+            --kpmg-primary-blue: #00338d;
+            --kpmg-cobalt-blue: #1e49e2;
+            --kpmg-dark-blue: #0c233c;
+            --kpmg-light-blue: #aceaff;
+            --kpmg-pacific-blue: #00b8f5;
+            --kpmg-purple: #7213ea;
+            --kpmg-pink: #fd349c;
+            --kpmg-secondary-dark-pink: #ab0d82;
+            --kpmg-secondary-blue: #76d2ff;
+            --kpmg-secondary-dark-green: #098e7e;
+            --kpmg-secondary-green: #00c0ae;
+
+            --bg-color: #f4f6fb;
+            --text-main: #0c233c;
+            --text-muted: #4b5e7a;
+            --border-color: #d0d9ea;
+            --grid-line: #e8eef8;
+
+            --font-main: 'Open Sans', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Open Sans Condensed', 'Open Sans', system-ui, sans-serif;
+        }
+
+        /* ============================================================
+           RESET
+        ============================================================ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        button {
+            font-family: var(--font-main);
+            cursor: pointer;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-heading);
+        }
+
+        /* ============================================================
+           APP SHELL
+        ============================================================ */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+        .header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--kpmg-primary-blue);
+            padding: 0 24px;
+            height: 64px;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 51, 141, 0.3);
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            height: 100%;
+        }
+
+        /* Logo sits flush left */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            padding-right: 24px;
+            height: 36px;
+        }
+
+        .header-logo svg {
+            height: 26px;
+            width: auto;
+        }
+
+        /* Finance / Learning pill tabs — perfectly centered */
+        .header-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-nav-tabs-pill {
+            display: flex;
+            align-items: center;
+            background: #040e1d;
+            padding: 6px 10px;
+            border-radius: 8px;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.00);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .header-nav-tab {
+            background: transparent;
+            border: none;
+            padding: 7px 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            cursor: pointer;
+            font-family: var(--font-main);
+            transition: all 0.2s ease;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 4px;
+        }
+
+        .header-nav-tab:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .header-nav-tab.active {
+            background: var(--kpmg-cobalt-blue);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(30, 73, 226, 0.4);
+        }
+
+        .header-nav-tab svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+            flex-shrink: 0;
+        }
+
+        .tab-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            margin: 0 2px;
+        }
+
+        /* Right side — placeholder to balance the flex layout */
+        .header-right {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+           CALENDAR MAIN AREA
+        ============================================================ */
+        .calendar-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 24px;
+            overflow: hidden;
+            gap: 16px;
+        }
+
+        /* Top controls bar */
+        .calendar-header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .header-left-col,
+        .header-right-col {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-right-col {
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Page title */
+        .calendar-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            font-family: var(--font-main);
+        }
+
+        /* Month / Week tab switch (Pill Style with gap) */
+        .page-tabs {
+            display: flex;
+            gap: 12px;
+            background: transparent;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            overflow: hidden;
+            height: auto;
+        }
+
+        .page-tab {
+            background: transparent;
+            border: 1px solid var(--kpmg-primary-blue);
+            border-radius: 100px;
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--font-main);
+            color: var(--kpmg-primary-blue);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .page-tab:hover {
+            background: rgba(0, 51, 141, 0.05);
+        }
+
+        .page-tab.active {
+            color: white;
+            background: var(--kpmg-primary-blue);
+        }
+
+        /* Week Navigator */
+        .week-navigator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .week-nav-btn {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 4px 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .week-nav-btn:hover {
+            background: #f0f6ff;
+            border-color: var(--kpmg-primary-blue);
+        }
+
+        .week-nav-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-muted);
+            fill: none;
+        }
+
+        .week-nav-btn:hover svg {
+            stroke: var(--kpmg-primary-blue);
+        }
+
+        .week-nav-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* ============================================================
+           YEAR SELECTOR — dropdown picker matching React version
+        ============================================================ */
+        .year-selector-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Year trigger — lighter compact style matching screenshot ("2024 ˅") */
+        .year-trigger {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            padding: 0;
+            font-size: 14px;
+            font-weight: 400;
+            font-family: var(--font-main);
+            color: #666;
+            cursor: pointer;
+        }
+
+        .year-trigger:hover {
+            color: var(--kpmg-primary-blue);
+        }
+
+        .year-trigger svg {
+            width: 14px;
+            height: 14px;
+            stroke: #666;
+            fill: none;
+        }
+
+        /* Dropdown panel */
+        .year-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            z-index: 200;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 16px;
+            width: 260px;
+        }
+
+        .year-dropdown.open {
+            display: block;
+        }
+
+        .year-dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .year-range-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .year-range-label svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--text-muted);
+            fill: none;
+        }
+
+        .year-block-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .year-nav-btn {
+            background: transparent;
+            border: none;
+            padding: 2px 4px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            transition: background 0.15s;
+        }
+
+        .year-nav-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .year-nav-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-muted);
+            fill: none;
+        }
+
+        /* 4×3 year grid */
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            text-align: center;
+        }
+
+        .year-option {
+            font-size: 13px;
+            padding: 6px 4px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: background 0.12s, color 0.12s;
+        }
+
+        .year-option:hover {
+            background: var(--bg-color);
+        }
+
+        .year-option.selected {
+            background: var(--kpmg-primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           CALENDAR GRID
+        ============================================================ */
+        .calendar-grid-wrapper {
+            flex: 1;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: auto;
+            box-shadow: 0 4px 16px rgba(0, 51, 141, 0.07);
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .calendar-table thead tr {
+            position: sticky;
+            top: 0;
+            z-index: 15;
+        }
+
+        .calendar-table th {
+            background: #fcfcfc;
+            color: var(--text-main);
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            border-bottom: 1px solid var(--grid-line);
+        }
+
+        .calendar-table th.activity-col {
+            text-align: left;
+            width: 200px;
+            padding-left: 16px;
+            background: #fcfcfc;
+            position: sticky;
+            left: 0;
+            z-index: 20;
+            box-shadow: 1px 0 0 var(--grid-line);
+        }
+
+        .calendar-table td {
+            border-bottom: 1px solid var(--grid-line);
+            border-right: 1px solid var(--grid-line);
+            position: relative;
+            overflow: visible;
+            padding: 0;
+        }
+
+        /* Activity name cell (sticky left) */
+        .calendar-table td.activity-name {
+            padding: 0 12px 0 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--kpmg-dark-blue);
+            background: #fcfcfc;
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            border-right: 1px solid var(--grid-line);
+            box-shadow: 1px 0 0 var(--grid-line);
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Activity icon badge */
+        .activity-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            background: rgba(0, 51, 141, 0);
+            color: var(--kpmg-primary-blue);
+            border: 1px solid var(--kpmg-cobalt-blue);
+        }
+
+        .activity-icon svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+        }
+
+        /* ============================================================
+           EVENT BARS
+        ============================================================ */
+        .event-bar {
+            position: absolute;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            box-sizing: border-box;
+            transition: outline 0.15s ease;
+            overflow: visible;
+        }
+
+        .event-bar:hover {
+            z-index: 500;
+            outline: 2px solid var(--bar-color);
+            outline-offset: 1px;
+        }
+
+        .event-bar.style-dashed {
+            background: transparent !important;
+            border-top: 3px dashed;
+            height: 3px !important;
+        }
+
+        .event-bar.style-dotted {
+            background: transparent !important;
+            border-top: 3px dotted;
+            height: 3px !important;
+        }
+
+        /* Text label inside bar */
+        .event-label {
+            color: inherit;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            pointer-events: none;
+            z-index: 2;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 1.2;
+            overflow: hidden;
+        }
+
+        /* ============================================================
+           HOVER TOOLTIP
+        ============================================================ */
+        .event-tooltip {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            background: #fff;
+            color: #111;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+            border: 1px solid #eee;
+            width: 300px;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.15s ease-in-out;
+            transition-delay: 0.1s;
+            z-index: 600;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: var(--font-main);
+            text-align: left;
+            white-space: normal;
+        }
+        .event-tooltip.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(5px);
+            pointer-events: auto;
+            transition-delay: 0s;
+        }
+
+        .tooltip-top-bar {
+            height: 4px;
+            width: 100%;
+        }
+
+        .tooltip-content {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tooltip-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 14px;
+        }
+
+        .tooltip-grid {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 10px 8px;
+            font-size: 13px;
+        }
+
+        .tooltip-grid-label {
+            color: #888;
+        }
+
+        .tooltip-grid-value {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tooltip-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .tooltip-desc {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.5;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 10px;
+        }
+
+        .event-tooltip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent #fff transparent;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- ============================================================
+         HEADER
+    ============================================================ -->
+        <header class="header">
+
+            <!-- Left: KPMG Logo (exact SVG from Header.jsx) -->
+            <div class="header-left">
+                <div class="header-logo">
+                    <svg fill="none" height="30" viewBox="0 0 77 30" width="77" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="m59.4297.0894165v14.8992835l-.1935.157-.1935.157-.1855.1649-.1773.1648-.1693.1649-.1693.1727-.1613.1727-.1612.1727v-16.2259835h-16.9549v13.5647835h-1.4028v-13.5647835h-16.9549v13.5883835h-1.4028v-13.5883835h-16.95487v15.4880835l-4.329426 14.0436h3.805376l1.91075-6.2172h.54823l3.16039 6.2172h4.59545l-3.0636-6.2172h6.9496l-1.9269 6.2172h4.1521l1.9027-6.2015h.9191v-.0157h1.306.1049 7.8445l-1.8382 6.2015h4.1924l1.7817-6.2015h1.8866l.0483 6.2015h3.5152l4.0391-6.2015h2.6444l-1.3705 6.2015h4.1278l1.3464-6.2015h2.3864l-.0161.3533.0086.3611.0161.3453.0322.3455.0242.1648.0241.1649.0322.1648.0323.1649.0402.1648.0403.157.0484.157.0483.157.0565.157.0565.1492.0644.1491.0646.1413.0726.1492.0725.1413.0807.1334.0807.1413.0887.1335.0967.1256.0968.1334.1048.1178.1048.1256.1048.1177.1209.1178.121.1099.1531.1256.1532.1256.1613.1177.1693.1099.1693.1099.1693.1021.1774.0863.1854.0942.1774.0785.1854.0784.1854.0707.1935.0707.1935.0628.1935.055.1935.0549.1935.0471.387.0863.395.0629.387.0549.387.0471.3789.0314.3709.0157.3628.0158h.3466l.4677-.0075.4676-.0074.4756-.0236.4757-.0236.4757-.0392.4757-.0393.4756-.0471.4757-.055.4837-.0628.4838-.0707.4837-.0785.4837-.0785.4838-.0863.4837-.0942.4837-.0942.4918-.1099 1.4351-5.6284h4.7084v-23.3145573h-16.9549zm-53.50905 22.7335835.02417-.0863.05649.0863zm14.77005-8.3524-.2419.7929-2.2574 7.3005-.0887.259h-7.4173l-.5724-1.1932 7.9897-7.952h-5.1357l-6.2482 6.5547 2.02361-6.5547h-3.78924v-12.999627h15.73743v13.792427zm4.3777 6.1701-.1209.0075-.1129.0074-.1209.0075h-.129-.1693-.1451l-.1371.0074h-.129l-1.0077-.0074.4676-1.6799.2176-.8321.5322-1.9547h.1693.1773l.1693-.0074h.1613.782l.4757.0074.4353.0158.1935.0074.1855.0157.1773.0236.1613.0236.1451.0235.1371.0393.129.0393.1128.0471.0968.0471.0887.0629.0806.0628.0645.0785.0403.0629.0322.0628.0322.0707.0242.0785.0161.0863.0085.0863v.0942.102l-.0085.1099-.0076.1099-.0242.1256-.0241.1256-.0726.2669-.0887.2983-.0887.2512-.0968.2434-.1048.2276-.1129.212-.0565.0942-.0564.0942-.0646.0942-.0726.0863-.0726.0863-.0726.0785-.0806.0785-.0807.0706-.0887.0629-.0887.0707-.0967.0549-.1049.0628-.1048.055-.1128.0471-.1129.0471-.1209.0393-.129.0471-.1371.0314-.1451.0314-.1451.0313-.1613.0236-.1612.0236-.1693.0157-.1774.0157zm11.4645 2.1823 1.6528-5.7305.0645 5.7305h-1.7172zm2.5155-9.1688h-3.9344l-2.7089 9.1688h-4.1763l.1935-.0784.1935-.0785.1855-.0785.1854-.0863.1774-.0864.1693-.102.1693-.0942.1612-.1021.1613-.1099.1531-.1099.1452-.1098.1451-.1257.137-.1177.129-.1335.129-.1256.121-.1413.1209-.1334.1129-.1492.1048-.1413.1048-.157.0967-.157.0887-.1569.0888-.1649.0806-.1727.0807-.1727.0726-.1727.0644-.1806.0645-.1884.0484-.1884.0565-.1884.0402-.2041.0403-.1962.0565-.314.0483-.2983.0323-.2826.0241-.2669.0086-.2669-.0086-.2434-.0075-.2433-.0323-.2277-.0322-.2119-.0565-.212-.0565-.1962-.0806-.1884-.0887-.1806-.0968-.1805-.1128-.1649-.129-.157-.1049-.1099-.1048-.1099-.1128-.0942-.121-.0863-.129-.0863-.129-.0785-.137-.0706-.1371-.0629-.1451-.0628-.1451-.0471-.1532-.0472-.1532-.0471-.1612-.0393-.1613-.0313-.1612-.0314-.1693-.0236-.3467-.0471-.3467-.0235-.3547-.0236-.3628-.0074h-.7256-.7175-.2258-.4031-.4999-.5563-.5401-.4596-.3225-.1209v-12.976108h15.7375v12.976108zm9.5617 9.1688h-2.3622l3.5796-5.495zm8.7959-8.9097-.0085 3.1792-.2015.2748-.1855.2826-.1854.2826-.1693.2826-.1613.2826-.1612.2904-.1371.2826-.137.2826-.129.2748-.1129.2826-.1129.2747-.0967.2669-.0887.2669-.0807.2591-.0726.2512-.0645.2512-.0403.1648-.0403.1727-.0402.1649-.0323.1727-.0322.1648-.0242.1649-.0241.1648-.0161.1727h-2.3139l1.9753-9.1452-6.6594-.0075-5.958 9.1531h-.4354v-22.144827h15.7455v13.235127zm9.0781 12.6542-.3305.0549-.3387.0471-.3386.0471-.3305.0393-.3306.0314-.3305.0236-.3225.0157h-.3225-.2096l-.2096-.0074-.2016-.0158-.2015-.0235-.1935-.0314-.1855-.0314-.1854-.0393-.1774-.0471-.1693-.0549-.1693-.055-.1612-.0706-.1532-.0707-.1532-.0863-.1451-.0863-.1371-.0942-.129-.0942-.129-.1099-.1128-.1178-.1129-.1177-.1048-.1335-.0968-.1334-.0887-.1492-.0806-.1491-.0807-.157-.0645-.1649-.0565-.1805-.0483-.1806-.0484-.1884-.0322-.1962-.0242-.2041-.0161-.212-.0085-.2198h7.3366l-.8062 3.1636zm9.3038-3.7445h-3.9666l.653-2.5591h-7.9493l-.6531 2.5591h-3.8456v-.5259l.0483-.2198.0403-.2198.0483-.2355.0483-.2355.0726-.2591.0726-.259.0807-.2591.0887-.2512.0967-.2512.1049-.2512.1128-.2433.1129-.2434.129-.2433.129-.2277.1371-.2355.1531-.2198.1532-.2198.1532-.2119.1693-.2041.1774-.1963.1854-.1884.1854-.1727.2016-.1727.2015-.1648.2097-.1492.2257-.1413.2258-.1256.2338-.1177.2418-.1099.2499-.0942.258-.0785.2661-.0629.2741-.0549.2822-.0393.2902-.0235.2983-.0075.2338.0075.2338.0157.2338.0314.2258.0471.1129.0314.1048.0313.1048.0314.0967.0471.0968.0393.0967.055.0887.0549.0887.0549.0807.0707.0806.0707.0726.0706.0726.0863.0646.0785.0565.0942.0483.1021.0483.102.0403.1099.0322.1178.0242.1177.0242.1335.0085.1334v.1413.1492l-.0161.157h4.7406l.0726-.3219.0645-.3689.0322-.1963.0162-.2119.0161-.212v-.2198l-.0076-.2276-.0242-.2355-.0241-.1099-.0162-.1178-.0322-.1177-.0322-.1178-.0403-.1256-.0403-.1177-.0483-.1178-.0565-.1177-.0565-.1178-.0726-.1177-.0726-.1178-.0806-.1177-.0968-.1256-.1048-.1178-.1048-.1177-.1129-.1099-.1209-.1099-.129-.1021-.129-.0942-.137-.0942-.1452-.0942-.1451-.0785-.1532-.0784-.1612-.0785-.1612-.0707-.1694-.0707-.1773-.0628-.1774-.0629-.1774-.0549-.1935-.0471-.1854-.0471-.2015-.0471-.2016-.0393-.2016-.0393-.2096-.0314-.2177-.0236-.4434-.0471-.4515-.0393-.4756-.0157-.4838-.0074-.3628.0074-.3789.0075-.395.0235-.4112.0314-.4273.0471-.4354.0549-.4434.0707-.4515.0942-.2257.0471-.2338.0549-.2258.0629-.2338.0628-.2338.0707-.2338.0785-.2338.0785-.2257.0863-.2338.0942-.2338.102-.2258.1021-.2338.1099-.2257.1177-.2258.1256-.2257.1256-.2258.1413v-13.894463h15.7617v22.144863z"
+                            fill="white" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Center: Finance / Learning tab pills — text only, no icons -->
+            <div class="header-center">
+                <div class="main-nav-tabs-pill">
+                    <button class="header-nav-tab active" id="tab-Finance" onclick="switchTab('Finance')">Finance
+                        Calender</button>
+                    <div class="tab-divider"></div>
+                    <button class="header-nav-tab" id="tab-Learning" onclick="switchTab('Learning')">Learning
+                        Calender</button>
+                </div>
+            </div>
+
+            <!-- Right: balanced spacer -->
+            <div class="header-right" style="min-width: 200px;"></div>
+
+        </header>
+
+        <!-- ============================================================
+         CALENDAR MAIN
+    ============================================================ -->
+        <main class="calendar-main">
+
+            <!-- Controls row:
+             LEFT  = Title + Year dropdown
+             RIGHT = Month / Week toggle
+        -->
+            <div class="calendar-header-top">
+
+                <!-- Left: Title stacked above year selector -->
+                <div class="header-left-col">
+                    <div>
+                        <h1 class="calendar-title" id="page-title">Finance Calender</h1>
+
+                        <!-- Year selector with dropdown picker (below title) -->
+                        <div class="year-selector-container" id="year-selector-container" style="margin-top:4px;">
+                            <button class="year-trigger" id="year-trigger-btn" onclick="toggleYearDropdown()">
+                                <span id="year-trigger-label">2024</span>
+                                <svg id="year-chevron-down" viewBox="0 0 24 24">
+                                    <polyline points="6 9 12 15 18 9" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                                <svg id="year-chevron-up" viewBox="0 0 24 24" style="display:none;">
+                                    <polyline points="18 15 12 9 6 15" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+
+                            <div class="year-dropdown" id="year-dropdown">
+                                <div class="year-dropdown-header">
+                                    <div class="year-range-label" id="year-range-label" onclick="toggleYearDropdown()">
+                                        <span id="year-block-range"></span>
+                                        <svg viewBox="0 0 24 24">
+                                            <polyline points="18 15 12 9 6 15" stroke-width="2" stroke-linecap="round"
+                                                stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div class="year-block-nav">
+                                        <button class="year-nav-btn" onclick="changeYearBlock(-1)">
+                                            <svg viewBox="0 0 24 24">
+                                                <polyline points="15 18 9 12 15 6" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                        <button class="year-nav-btn" onclick="changeYearBlock(1)">
+                                            <svg viewBox="0 0 24 24">
+                                                <polyline points="9 18 15 12 9 6" stroke-width="2"
+                                                    stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="year-grid" id="year-grid"></div>
+                            </div>
+                        </div>
+
+                        <!-- Week Navigator (Visible only in Weekly view) -->
+                        <div class="week-navigator" id="week-navigator" style="display:none;">
+                            <button class="week-nav-btn" onclick="changeWeek(-1)">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="15 18 9 12 15 6" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                            <span class="week-nav-label" id="week-nav-label">Week of Jan 15 - Jan 21, 2024</span>
+                            <button class="week-nav-btn" onclick="changeWeek(1)">
+                                <svg viewBox="0 0 24 24">
+                                    <polyline points="9 18 15 12 9 6" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Month / Week toggle -->
+                <div class="header-right-col">
+                    <div class="page-tabs">
+                        <button class="page-tab active" id="view-Month" onclick="switchView('Month')">Monthly</button>
+                        <button class="page-tab" id="view-Week" onclick="switchView('Week')">Weekly</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Calendar table -->
+            <div class="calendar-grid-wrapper">
+                <table class="calendar-table" id="calendar-table">
+                    <thead id="calendar-thead"></thead>
+                    <tbody id="calendar-tbody"></tbody>
+                </table>
+            </div>
+
+        </main>
+
+    </div><!-- end .app-container -->
+
+    <!-- ============================================================
+     EVENTS DATA — Edit this section to update the calendar
+============================================================ -->
+    <script>
+        // ================================================================
+        // CALENDAR DATA
+        // Add, remove, or edit activities and events below.
+        // Each event needs: id, activityId, label, startMonth, endMonth,
+        //                   year, color, lineStyle
+        // lineStyle options: "solid", "dashed", "dotted", "outline", "gradient"
+        // ================================================================
+        var CALENDAR_DATA = {
+  "activities": [
+    {
+      "id": "a1",
+      "name": "Communications",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a2",
+      "name": "Audit process",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a3",
+      "name": "Forecasting/Budget",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a4",
+      "name": "Long term planning",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a5",
+      "name": "People",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a6",
+      "name": "Empowered",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a7",
+      "name": "Ops Exec",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "a8",
+      "name": "Audit Committee",
+      "calendarType": "Finance"
+    },
+    {
+      "id": "l1",
+      "name": "Onboarding",
+      "calendarType": "Learning"
+    },
+    {
+      "id": "l2",
+      "name": "Leadership Development",
+      "calendarType": "Learning"
+    },
+    {
+      "id": "l3",
+      "name": "Technical Skills",
+      "calendarType": "Learning"
+    },
+    {
+      "id": "l4",
+      "name": "Compliance Training",
+      "calendarType": "Learning"
+    },
+    {
+      "id": "l5",
+      "name": "Soft Skills",
+      "calendarType": "Learning"
+    },
+    {
+      "id": "l6",
+      "name": "Digital Upskilling",
+      "calendarType": "Learning"
+    }
+  ],
+  "events": [
+    {
+      "id": "f24-a1",
+      "activityId": "a2",
+      "label": "Subsidiary audits",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2024,
+      "color": "#00c0ae",
+      "borderColor": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Audit Process",
+      "owner": "Finance Controller",
+      "description": "Quarterly subsidiary audits across all regional offices to ensure compliance.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-a2",
+      "activityId": "a2",
+      "label": "Interim audit",
+      "startMonth": 6,
+      "endMonth": 7,
+      "year": 2024,
+      "color": "#00c0ae",
+      "borderColor": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Audit Process",
+      "owner": "Internal Audit Team",
+      "description": "Mid-year interim audit review for H1 financial statements.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-a3",
+      "activityId": "a2",
+      "label": "Final audit",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#00c0ae",
+      "borderColor": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Audit Process",
+      "owner": "External Auditors",
+      "description": "Year-end final audit and sign-off process with external auditors.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-fb1",
+      "activityId": "a3",
+      "label": "9+3 Forecast\n25 Jan – 31 Jan",
+      "startMonth": 1,
+      "endMonth": 1,
+      "year": 2024,
+      "color": "#470a68",
+      "borderColor": "#7c3aed",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Forecasting/Budget",
+      "owner": "FP&A Team",
+      "description": "9+3 rolling forecast submission for Q1 planning cycle.",
+      "startWeek": 4,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-fb2",
+      "activityId": "a3",
+      "label": "FY25 Budget\n1 May – 11 Jun",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#470a68",
+      "borderColor": "#7c3aed",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Forecasting/Budget",
+      "owner": "CFO & FP&A",
+      "description": "Full FY25 budget planning process including departmental submissions and board approval.",
+      "startWeek": 1,
+      "endWeek": 2
+    },
+    {
+      "id": "f24-fb3",
+      "activityId": "a3",
+      "label": "6+6 Forecast\n15 Jul – 25 Jul",
+      "startMonth": 7,
+      "endMonth": 7,
+      "year": 2024,
+      "color": "#00338d",
+      "borderColor": "#1e49e2",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Forecasting/Budget",
+      "owner": "FP&A Team",
+      "description": "Mid-year 6+6 reforecast incorporating H1 actuals.",
+      "startWeek": 3,
+      "endWeek": 4
+    },
+    {
+      "id": "f24-l1",
+      "activityId": "a4",
+      "label": "3-Year Strategy\nReview",
+      "startMonth": 6,
+      "endMonth": 8,
+      "year": 2024,
+      "color": "#7213ea",
+      "borderColor": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Long term planning",
+      "owner": "Strategy Director",
+      "description": "Annual 3-year strategic plan review and refresh workshops.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-l2",
+      "activityId": "a4",
+      "label": "Board Presentation\nPrep",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2024,
+      "color": "#510dbc",
+      "borderColor": "#510dbc",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Long term planning",
+      "owner": "CFO",
+      "description": "Preparation and rehearsal for Q4 Board of Directors strategy presentation.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-p1",
+      "activityId": "a5",
+      "label": "Our Values in Action",
+      "startMonth": 2,
+      "endMonth": 5,
+      "year": 2024,
+      "color": "#00b8f5",
+      "borderColor": "#0284c7",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "category": "People",
+      "owner": "HR Team",
+      "description": "Company-wide campaign reinforcing core values through team activities.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-p2",
+      "activityId": "a5",
+      "label": "Mid-year pulse survey",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#00b8f5",
+      "borderColor": "#0284c7",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "category": "People",
+      "owner": "People & Culture",
+      "description": "Mid-year employee engagement pulse survey and results analysis.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-p3",
+      "activityId": "a5",
+      "label": "GPS Survey opens",
+      "startMonth": 8,
+      "endMonth": 10,
+      "year": 2024,
+      "color": "#00b8f5",
+      "borderColor": "#0284c7",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "category": "People",
+      "owner": "People & Culture",
+      "description": "Global People Survey launch and data collection window.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-p4",
+      "activityId": "a5",
+      "label": "Finance training day",
+      "startMonth": 2,
+      "endMonth": 2,
+      "year": 2024,
+      "color": "#00c0ae",
+      "borderColor": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "People",
+      "owner": "Finance L&D Lead",
+      "description": "Annual full-day Finance team training and development event.",
+      "startWeek": 3,
+      "endWeek": 3
+    },
+    {
+      "id": "f24-p5",
+      "activityId": "a5",
+      "label": "Q3 Capability calibrations",
+      "startMonth": 9,
+      "endMonth": 10,
+      "year": 2024,
+      "color": "#00338d",
+      "borderColor": "#1e49e2",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "People",
+      "owner": "Finance Director",
+      "description": "Q3 performance and capability calibration sessions for the Finance function.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-e1",
+      "activityId": "a6",
+      "label": "Training for Finance teams",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#470a68",
+      "borderColor": "#7c3aed",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "category": "Empowered",
+      "owner": "L&D Department",
+      "description": "Structured training program covering tools, processes, and upskilling for finance teams.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f24-e2",
+      "activityId": "a6",
+      "label": "Q3 Power BI rollout",
+      "startMonth": 7,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#00b8f5",
+      "borderColor": "#0284c7",
+      "lineStyle": "gradient",
+      "isDashed": true,
+      "isTextOnly": false,
+      "category": "Empowered",
+      "owner": "Digital Finance Team",
+      "description": "Rollout of Power BI dashboards and training across Finance sub-teams.",
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-a1",
+      "activityId": "a2",
+      "label": "Internal Audit Q1",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-a2",
+      "activityId": "a2",
+      "label": "Subsidiary audits",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-a3",
+      "activityId": "a2",
+      "label": "External audit\nfinal sign-off",
+      "startMonth": 9,
+      "endMonth": 10,
+      "year": 2025,
+      "color": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-fb1",
+      "activityId": "a3",
+      "label": "9+3 Forecast",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-fb2",
+      "activityId": "a3",
+      "label": "FY26 Budget\nPlanning",
+      "startMonth": 5,
+      "endMonth": 7,
+      "year": 2025,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-fb3",
+      "activityId": "a3",
+      "label": "6+6 Forecast",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2025,
+      "color": "#1e49e2",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-l1",
+      "activityId": "a4",
+      "label": "5-Year Vision\nWorkshop",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2025,
+      "color": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-l2",
+      "activityId": "a4",
+      "label": "Digital\nTransformation Plan",
+      "startMonth": 7,
+      "endMonth": 10,
+      "year": 2025,
+      "color": "#510dbc",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-l3",
+      "activityId": "a4",
+      "label": "Investor Relations\nStrategy",
+      "startMonth": 11,
+      "endMonth": 12,
+      "year": 2025,
+      "color": "#7213ea",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-p1",
+      "activityId": "a5",
+      "label": "Performance Reviews\nH1",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-p2",
+      "activityId": "a5",
+      "label": "Employee Engagement\nSurvey",
+      "startMonth": 4,
+      "endMonth": 5,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-p3",
+      "activityId": "a5",
+      "label": "Talent Review\nProcess",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2025,
+      "color": "#00a3a1",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-p4",
+      "activityId": "a5",
+      "label": "Performance Reviews\nH2",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-e1",
+      "activityId": "a6",
+      "label": "Finance Hackathon",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-e2",
+      "activityId": "a6",
+      "label": "Process\nAutomation Drive",
+      "startMonth": 5,
+      "endMonth": 8,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f25-e3",
+      "activityId": "a6",
+      "label": "Innovation\nChallenge",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2025,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-a1",
+      "activityId": "a2",
+      "label": "Q1 Internal Review",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-a2",
+      "activityId": "a2",
+      "label": "Mid-year\nsubsidiary audits",
+      "startMonth": 5,
+      "endMonth": 7,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-a3",
+      "activityId": "a2",
+      "label": "Year-end\nexternal audit",
+      "startMonth": 10,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-fb1",
+      "activityId": "a3",
+      "label": "FY26 Reforecast",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2026,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-fb2",
+      "activityId": "a3",
+      "label": "FY27 Budget\nKickoff",
+      "startMonth": 6,
+      "endMonth": 8,
+      "year": 2026,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-fb3",
+      "activityId": "a3",
+      "label": "3-Year Plan\nRefresh",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2026,
+      "color": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-l1",
+      "activityId": "a4",
+      "label": "ESG Strategy\nReview",
+      "startMonth": 2,
+      "endMonth": 4,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-l2",
+      "activityId": "a4",
+      "label": "M&A Pipeline\nAssessment",
+      "startMonth": 6,
+      "endMonth": 9,
+      "year": 2026,
+      "color": "#510dbc",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-l3",
+      "activityId": "a4",
+      "label": "Board Offsite\nStrategy",
+      "startMonth": 11,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#7213ea",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-p1",
+      "activityId": "a5",
+      "label": "Goal Setting\nWorkshop",
+      "startMonth": 1,
+      "endMonth": 1,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-p2",
+      "activityId": "a5",
+      "label": "Wellbeing\nCampaign",
+      "startMonth": 3,
+      "endMonth": 5,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-p3",
+      "activityId": "a5",
+      "label": "Pulse Survey",
+      "startMonth": 6,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#00a3a1",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-p4",
+      "activityId": "a5",
+      "label": "Year-end Reviews",
+      "startMonth": 10,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-e1",
+      "activityId": "a6",
+      "label": "AI Tools\nAdoption Drive",
+      "startMonth": 1,
+      "endMonth": 4,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-e2",
+      "activityId": "a6",
+      "label": "Finance\nExpo 2026",
+      "startMonth": 6,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#1e49e2",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "f26-e3",
+      "activityId": "a6",
+      "label": "ERP Upgrade\nGo-Live",
+      "startMonth": 9,
+      "endMonth": 11,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ob1",
+      "activityId": "l1",
+      "label": "Jan Cohort\nInduction",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2024,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ob2",
+      "activityId": "l1",
+      "label": "Jul Cohort\nInduction",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2024,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ob3",
+      "activityId": "l1",
+      "label": "Buddy Allocation",
+      "startMonth": 1,
+      "endMonth": 12,
+      "year": 2024,
+      "color": "#aceaff",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ld1",
+      "activityId": "l2",
+      "label": "Leadership\nEssentials Program",
+      "startMonth": 2,
+      "endMonth": 5,
+      "year": 2024,
+      "color": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ld2",
+      "activityId": "l2",
+      "label": "Executive\nCoaching Sessions",
+      "startMonth": 6,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#510dbc",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ld3",
+      "activityId": "l2",
+      "label": "Leadership Summit",
+      "startMonth": 11,
+      "endMonth": 11,
+      "year": 2024,
+      "color": "#7213ea",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ts1",
+      "activityId": "l3",
+      "label": "Excel Advanced\nTraining",
+      "startMonth": 1,
+      "endMonth": 1,
+      "year": 2024,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ts2",
+      "activityId": "l3",
+      "label": "Power BI\nCertification",
+      "startMonth": 3,
+      "endMonth": 5,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ts3",
+      "activityId": "l3",
+      "label": "Python for Finance",
+      "startMonth": 7,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#00c0ae",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ts4",
+      "activityId": "l3",
+      "label": "SQL Fundamentals",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2024,
+      "color": "#098e7e",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ct1",
+      "activityId": "l4",
+      "label": "GDPR Refresher",
+      "startMonth": 1,
+      "endMonth": 1,
+      "year": 2024,
+      "color": "#470a68",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ct2",
+      "activityId": "l4",
+      "label": "Anti-Bribery\nAwareness",
+      "startMonth": 3,
+      "endMonth": 3,
+      "year": 2024,
+      "color": "#470a68",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ct3",
+      "activityId": "l4",
+      "label": "Mandatory Compliance\nBundle",
+      "startMonth": 6,
+      "endMonth": 8,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ct4",
+      "activityId": "l4",
+      "label": "IFRS Update\nSession",
+      "startMonth": 10,
+      "endMonth": 10,
+      "year": 2024,
+      "color": "#470a68",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ss1",
+      "activityId": "l5",
+      "label": "Presentation Skills\nWorkshop",
+      "startMonth": 2,
+      "endMonth": 2,
+      "year": 2024,
+      "color": "#fd349c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ss2",
+      "activityId": "l5",
+      "label": "Negotiation\nMasterclass",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#ab0d82",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-ss3",
+      "activityId": "l5",
+      "label": "Storytelling with\nData",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#fd349c",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-du1",
+      "activityId": "l6",
+      "label": "AI Fundamentals",
+      "startMonth": 3,
+      "endMonth": 4,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-du2",
+      "activityId": "l6",
+      "label": "RPA Awareness\nWorkshop",
+      "startMonth": 6,
+      "endMonth": 7,
+      "year": 2024,
+      "color": "#76d2ff",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr24-du3",
+      "activityId": "l6",
+      "label": "Cloud Tools\n(Azure/M365)",
+      "startMonth": 9,
+      "endMonth": 11,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ob1",
+      "activityId": "l1",
+      "label": "Jan Cohort\nInduction",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ob2",
+      "activityId": "l1",
+      "label": "Graduate Intake\nProgram",
+      "startMonth": 6,
+      "endMonth": 8,
+      "year": 2025,
+      "color": "#1e49e2",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ob3",
+      "activityId": "l1",
+      "label": "Buddy Programme\n(ongoing)",
+      "startMonth": 1,
+      "endMonth": 12,
+      "year": 2025,
+      "color": "#aceaff",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ld1",
+      "activityId": "l2",
+      "label": "Future Leaders\nAcademy",
+      "startMonth": 1,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ld2",
+      "activityId": "l2",
+      "label": "Mentoring\nCircles Program",
+      "startMonth": 4,
+      "endMonth": 9,
+      "year": 2025,
+      "color": "#b497ff",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ld3",
+      "activityId": "l2",
+      "label": "Annual Leadership\nConference",
+      "startMonth": 11,
+      "endMonth": 11,
+      "year": 2025,
+      "color": "#510dbc",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ts1",
+      "activityId": "l3",
+      "label": "Power BI Advanced",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ts2",
+      "activityId": "l3",
+      "label": "Tableau\nCertification",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#00c0ae",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ts3",
+      "activityId": "l3",
+      "label": "Financial Modelling\nBootcamp",
+      "startMonth": 8,
+      "endMonth": 10,
+      "year": 2025,
+      "color": "#098e7e",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ct1",
+      "activityId": "l4",
+      "label": "Annual Compliance\nCertification",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ct2",
+      "activityId": "l4",
+      "label": "ESG Reporting\nStandards",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ct3",
+      "activityId": "l4",
+      "label": "Data Privacy\nRefresher",
+      "startMonth": 9,
+      "endMonth": 9,
+      "year": 2025,
+      "color": "#470a68",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ct4",
+      "activityId": "l4",
+      "label": "IFRS 17\nDeep Dive",
+      "startMonth": 11,
+      "endMonth": 12,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ss1",
+      "activityId": "l5",
+      "label": "Influencing Skills",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#fd349c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ss2",
+      "activityId": "l5",
+      "label": "Critical Thinking",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#ab0d82",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ss3",
+      "activityId": "l5",
+      "label": "Resilience\nat Work",
+      "startMonth": 8,
+      "endMonth": 8,
+      "year": 2025,
+      "color": "#fd349c",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-ss4",
+      "activityId": "l5",
+      "label": "Communication\nfor Finance",
+      "startMonth": 10,
+      "endMonth": 11,
+      "year": 2025,
+      "color": "#ab0d82",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-du1",
+      "activityId": "l6",
+      "label": "Copilot for M365\nWorkshop",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-du2",
+      "activityId": "l6",
+      "label": "Prompt Engineering\nBasics",
+      "startMonth": 4,
+      "endMonth": 5,
+      "year": 2025,
+      "color": "#76d2ff",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-du3",
+      "activityId": "l6",
+      "label": "AI in Finance\nSummit",
+      "startMonth": 9,
+      "endMonth": 9,
+      "year": 2025,
+      "color": "#1e49e2",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr25-du4",
+      "activityId": "l6",
+      "label": "ERP & Automation\nUpskill",
+      "startMonth": 11,
+      "endMonth": 12,
+      "year": 2025,
+      "color": "#00c0ae",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ob1",
+      "activityId": "l1",
+      "label": "Jan Cohort\nInduction",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2026,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ob2",
+      "activityId": "l1",
+      "label": "Mid-year\nGraduate Intake",
+      "startMonth": 7,
+      "endMonth": 9,
+      "year": 2026,
+      "color": "#1e49e2",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ob3",
+      "activityId": "l1",
+      "label": "Buddy Programme",
+      "startMonth": 1,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#aceaff",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ld1",
+      "activityId": "l2",
+      "label": "Senior Leader\nDevelopment Path",
+      "startMonth": 2,
+      "endMonth": 7,
+      "year": 2026,
+      "color": "#7213ea",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ld2",
+      "activityId": "l2",
+      "label": "360 Feedback\nRound",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#b497ff",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ld3",
+      "activityId": "l3",
+      "label": "Leadership\nConference 2026",
+      "startMonth": 10,
+      "endMonth": 10,
+      "year": 2026,
+      "color": "#510dbc",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ts1",
+      "activityId": "l3",
+      "label": "Advanced Analytics\nProgram",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ts2",
+      "activityId": "l3",
+      "label": "AI-Driven\nForecasting",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ts3",
+      "activityId": "l3",
+      "label": "Cloud Finance\nPlatforms",
+      "startMonth": 8,
+      "endMonth": 10,
+      "year": 2026,
+      "color": "#098e7e",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ct1",
+      "activityId": "l4",
+      "label": "Mandatory Annual\nCompliance",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2026,
+      "color": "#470a68",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ct2",
+      "activityId": "l4",
+      "label": "Sustainability\nReporting",
+      "startMonth": 4,
+      "endMonth": 5,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ct3",
+      "activityId": "l4",
+      "label": "Cybersecurity\nAwareness",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2026,
+      "color": "#470a68",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ct4",
+      "activityId": "l4",
+      "label": "Tax Compliance\nUpdate",
+      "startMonth": 10,
+      "endMonth": 10,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ss1",
+      "activityId": "l5",
+      "label": "Executive Presence",
+      "startMonth": 1,
+      "endMonth": 2,
+      "year": 2026,
+      "color": "#fd349c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ss2",
+      "activityId": "l5",
+      "label": "Change Management\nEssentials",
+      "startMonth": 4,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#ab0d82",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ss3",
+      "activityId": "l5",
+      "label": "Coaching Skills\nfor Managers",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2026,
+      "color": "#fd349c",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-ss4",
+      "activityId": "l5",
+      "label": "Year-end Team\nRetreat",
+      "startMonth": 12,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#ab0d82",
+      "lineStyle": "text",
+      "isDashed": false,
+      "isTextOnly": true,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-du1",
+      "activityId": "l6",
+      "label": "GenAI in Finance\nWorkshop",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-du2",
+      "activityId": "l6",
+      "label": "Agentic AI\nPilot Program",
+      "startMonth": 5,
+      "endMonth": 7,
+      "year": 2026,
+      "color": "#1e49e2",
+      "lineStyle": "dotted",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-du3",
+      "activityId": "l6",
+      "label": "Digital Skills\nChallenge",
+      "startMonth": 9,
+      "endMonth": 10,
+      "year": 2026,
+      "color": "#76d2ff",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "lr26-du4",
+      "activityId": "l6",
+      "label": "AI Certification\nPathway",
+      "startMonth": 11,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#00c0ae",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2024-1",
+      "activityId": "a1",
+      "label": "Q1 Communications Plan",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2024,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2024-2",
+      "activityId": "a1",
+      "label": "Annual Report Rollout",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#1e49e2",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2024-3",
+      "activityId": "a1",
+      "label": "Q3 Townhall Prep",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2024,
+      "color": "#098e7e",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2024-1",
+      "activityId": "a7",
+      "label": "Ops Exec H1 Review",
+      "startMonth": 2,
+      "endMonth": 4,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2024-2",
+      "activityId": "a7",
+      "label": "Strategic Ops Alignment",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2024,
+      "color": "#ab0d82",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2024-3",
+      "activityId": "a7",
+      "label": "Year-End Ops Planning",
+      "startMonth": 10,
+      "endMonth": 12,
+      "year": 2024,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2024-1",
+      "activityId": "a8",
+      "label": "Audit Committee Q1",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2024,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2024-2",
+      "activityId": "a8",
+      "label": "Audit Committee Q2",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2024,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2024-3",
+      "activityId": "a8",
+      "label": "Audit Committee Q3/Q4",
+      "startMonth": 9,
+      "endMonth": 11,
+      "year": 2024,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2025-1",
+      "activityId": "a1",
+      "label": "Q1 Communications Plan",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2025,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2025-2",
+      "activityId": "a1",
+      "label": "Annual Report Rollout",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#1e49e2",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2025-3",
+      "activityId": "a1",
+      "label": "Q3 Townhall Prep",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2025,
+      "color": "#098e7e",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2025-1",
+      "activityId": "a7",
+      "label": "Ops Exec H1 Review",
+      "startMonth": 2,
+      "endMonth": 4,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2025-2",
+      "activityId": "a7",
+      "label": "Strategic Ops Alignment",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2025,
+      "color": "#ab0d82",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2025-3",
+      "activityId": "a7",
+      "label": "Year-End Ops Planning",
+      "startMonth": 10,
+      "endMonth": 12,
+      "year": 2025,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2025-1",
+      "activityId": "a8",
+      "label": "Audit Committee Q1",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2025,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2025-2",
+      "activityId": "a8",
+      "label": "Audit Committee Q2",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2025,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2025-3",
+      "activityId": "a8",
+      "label": "Audit Committee Q3/Q4",
+      "startMonth": 9,
+      "endMonth": 11,
+      "year": 2025,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2026-1",
+      "activityId": "a1",
+      "label": "Q1 Communications Plan",
+      "startMonth": 1,
+      "endMonth": 3,
+      "year": 2026,
+      "color": "#00338d",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2026-2",
+      "activityId": "a1",
+      "label": "Annual Report Rollout",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#1e49e2",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "c2026-3",
+      "activityId": "a1",
+      "label": "Q3 Townhall Prep",
+      "startMonth": 8,
+      "endMonth": 9,
+      "year": 2026,
+      "color": "#098e7e",
+      "lineStyle": "outline",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2026-1",
+      "activityId": "a7",
+      "label": "Ops Exec H1 Review",
+      "startMonth": 2,
+      "endMonth": 4,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2026-2",
+      "activityId": "a7",
+      "label": "Strategic Ops Alignment",
+      "startMonth": 7,
+      "endMonth": 8,
+      "year": 2026,
+      "color": "#ab0d82",
+      "lineStyle": "dashed",
+      "isDashed": true,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "o2026-3",
+      "activityId": "a7",
+      "label": "Year-End Ops Planning",
+      "startMonth": 10,
+      "endMonth": 12,
+      "year": 2026,
+      "color": "#00b8f5",
+      "lineStyle": "gradient",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2026-1",
+      "activityId": "a8",
+      "label": "Audit Committee Q1",
+      "startMonth": 2,
+      "endMonth": 3,
+      "year": 2026,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2026-2",
+      "activityId": "a8",
+      "label": "Audit Committee Q2",
+      "startMonth": 5,
+      "endMonth": 6,
+      "year": 2026,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    },
+    {
+      "id": "ac2026-3",
+      "activityId": "a8",
+      "label": "Audit Committee Q3/Q4",
+      "startMonth": 9,
+      "endMonth": 11,
+      "year": 2026,
+      "color": "#0c233c",
+      "lineStyle": "solid",
+      "isDashed": false,
+      "isTextOnly": false,
+      "startWeek": 1,
+      "endWeek": 5
+    }
+  ],
+  "lastUpdated": 1815672721589
+};
+
+
+        var currentTab = 'Finance';
+        var currentView = 'Month';
+        var currentYear = 2024;
+        var currentWeekStart = new Date(2024, 0, 15);
+        var MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        var ACTIVITY_ICONS = {
+            a1: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            a2: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            a3: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="1.8"/><path d="M12 6v6l4 2" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            a4: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke-width="1.8"/><path d="M17.5 14v7M14 17.5h7" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            a5: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="9" cy="7" r="4" stroke-width="1.8"/><path d="M2 21v-1a7 7 0 0 1 14 0v1" stroke-width="1.8" stroke-linecap="round"/><path d="M19 8c1.1 0 2 .9 2 2s-.9 2-2 2" stroke-width="1.8" stroke-linecap="round"/><path d="M22 21v-.5a3.5 3.5 0 0 0-3-3.47" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            a6: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            a7: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" stroke-width="1.8"/><path d="M8 21h8M12 17v4" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            a8: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke-width="1.8" stroke-linecap="round"/></svg>',
+            l1: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M14 12H3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            l2: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            l3: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="16 18 22 12 16 6" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="8 6 2 12 8 18" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+            l4: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            l5: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke-width="1.8" stroke-linejoin="round"/></svg>',
+            l6: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.8"/><line x1="2" y1="12" x2="22" y2="12" stroke-width="1.8"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z" stroke-width="1.8"/></svg>'
+        };
+
+
+        // ------------------------------------------------------------------
+        // Switch between Finance and Learning tabs
+        // ------------------------------------------------------------------
+        function switchTab(tabName) {
+            currentTab = tabName;
+            document.getElementById('tab-Finance').classList.toggle('active', tabName === 'Finance');
+            document.getElementById('tab-Learning').classList.toggle('active', tabName === 'Learning');
+            document.getElementById('page-title').textContent = tabName + ' Calendar';
+            renderCalendar();
+        }
+
+
+        // ------------------------------------------------------------------
+        // Switch between Month and Week views
+        // ------------------------------------------------------------------
+        function switchView(viewName) {
+            currentView = viewName;
+            document.getElementById('view-Month').classList.toggle('active', viewName === 'Month');
+            document.getElementById('view-Week').classList.toggle('active', viewName === 'Week');
+
+            // Show/hide week navigator
+            document.getElementById('week-navigator').style.display = viewName === 'Week' ? 'flex' : 'none';
+
+            renderCalendar();
+        }
+
+        // ------------------------------------------------------------------
+        // Week Navigator
+        // ------------------------------------------------------------------
+        function changeWeek(delta) {
+            currentWeekStart.setDate(currentWeekStart.getDate() + (delta * 7));
+            // Keep year in sync if week goes out of current year
+            if (currentWeekStart.getFullYear() !== currentYear) {
+                selectYear(currentWeekStart.getFullYear(), true);
+            } else {
+                renderCalendar();
+            }
+        }
+
+        function updateWeekNavLabel() {
+            var endOfWeek = new Date(currentWeekStart);
+            endOfWeek.setDate(endOfWeek.getDate() + 6);
+
+            var startStr = MONTHS_SHORT[currentWeekStart.getMonth()] + ' ' + currentWeekStart.getDate();
+            var endStr = MONTHS_SHORT[endOfWeek.getMonth()] + ' ' + endOfWeek.getDate();
+
+            document.getElementById('week-nav-label').textContent = 'Week of ' + startStr + ' - ' + endStr + ', ' + currentYear;
+        }
+
+
+        // ------------------------------------------------------------------
+        // Year dropdown — toggle open/close
+        // ------------------------------------------------------------------
+        function toggleYearDropdown() {
+            var dropdown = document.getElementById('year-dropdown');
+            var isOpen = dropdown.classList.toggle('open');
+
+            document.getElementById('year-chevron-down').style.display = isOpen ? 'none' : '';
+            document.getElementById('year-chevron-up').style.display = isOpen ? '' : 'none';
+
+            if (isOpen) {
+                renderYearGrid();
+            }
+        }
+
+        // Close dropdown when clicking outside it
+        document.addEventListener('click', function (e) {
+            var container = document.getElementById('year-selector-container');
+            if (container && !container.contains(e.target)) {
+                var dropdown = document.getElementById('year-dropdown');
+                dropdown.classList.remove('open');
+                document.getElementById('year-chevron-down').style.display = '';
+                document.getElementById('year-chevron-up').style.display = 'none';
+            }
+            
+            // Close all tooltips on outside click
+            document.querySelectorAll('.event-tooltip.show').forEach(function(tt) {
+                tt.classList.remove('show');
+            });
+        });
+
+        // Navigate the year block (prev / next 12-year block)
+        function changeYearBlock(delta) {
+            yearBlockStart += delta * 12;
+            renderYearGrid();
+        }
+
+        // Select a year from the dropdown grid
+        function selectYear(year, skipWeekReset) {
+            currentYear = year;
+            yearBlockStart = Math.floor(year / 12) * 12;
+
+            document.getElementById('year-trigger-label').textContent = year;
+            document.getElementById('year-dropdown').classList.remove('open');
+            document.getElementById('year-chevron-down').style.display = '';
+            document.getElementById('year-chevron-up').style.display = 'none';
+
+            if (!skipWeekReset) {
+                currentWeekStart = new Date(currentYear, 0, 15);
+                while (currentWeekStart.getDay() !== 1) {
+                    currentWeekStart.setDate(currentWeekStart.getDate() - 1);
+                }
+            }
+
+            renderCalendar();
+        }
+
+        // Render the 4×3 year grid inside the dropdown
+        function renderYearGrid() {
+            var blockEnd = yearBlockStart + 11;
+
+            document.getElementById('year-block-range').textContent = yearBlockStart + ' – ' + blockEnd;
+
+            var grid = document.getElementById('year-grid');
+            var html = '';
+
+            for (var y = yearBlockStart; y <= blockEnd; y++) {
+                var isSelected = (y === currentYear);
+                html += '<div class="year-option' + (isSelected ? ' selected' : '') + '" onclick="selectYear(' + y + ')">' + y + '</div>';
+            }
+
+            grid.innerHTML = html;
+        }
+
+
+        // ------------------------------------------------------------------
+        // Main render — builds the whole table
+        // ------------------------------------------------------------------
+        function renderCalendar() {
+            var activities = CALENDAR_DATA.activities.filter(function (a) {
+                return a.calendarType === currentTab;
+            });
+
+            if (currentView === 'Month') {
+                var events = CALENDAR_DATA.events.filter(function (e) {
+                    return e.year === currentYear;
+                });
+                renderMonthView(activities, events);
+            } else {
+                updateWeekNavLabel();
+                renderWeekView(activities, CALENDAR_DATA.events);
+            }
+        }
+
+
+        // ------------------------------------------------------------------
+        // Month view — 12 columns (one per month)
+        // ------------------------------------------------------------------
+        function renderMonthView(activities, events) {
+            var thead = document.getElementById('calendar-thead');
+            var tbody = document.getElementById('calendar-tbody');
+
+            // Header row — month columns show "Jan 24", "Feb 24" etc. like the React app
+            var yearShort = String(currentYear).slice(2); // e.g. 2025 -> "25"
+            var headerHTML = '<tr><th class="activity-col">Activity</th>';
+            for (var m = 0; m < 12; m++) {
+                headerHTML += '<th>' + MONTHS_SHORT[m] + ' ' + yearShort + '</th>';
+            }
+            headerHTML += '</tr>';
+            thead.innerHTML = headerHTML;
+
+            // Find relevant events and format them for lane calculation
+            var relevantEvents = events.filter(function (ev) {
+                return activities.some(function (a) { return a.id === ev.activityId; });
+            });
+
+            var formattedEvents = relevantEvents.map(function (ev) {
+                var newEv = Object.assign({}, ev);
+                newEv._start = ev.startMonth - 1;
+                newEv._end = (ev.endMonth || ev.startMonth) - 1;
+                return newEv;
+            });
+
+            var lanedEvents = [];
+
+            // Body rows — one per activity
+            var bodyHTML = '';
+            for (var i = 0; i < activities.length; i++) {
+                var act = activities[i];
+                var icon = ACTIVITY_ICONS[act.id] || '';
+
+                // Assign lanes for this row
+                var actEvents = formattedEvents.filter(function (e) { return e.activityId === act.id; });
+                var laneInfo = assignLanes(actEvents);
+                lanedEvents = lanedEvents.concat(laneInfo.laned);
+
+                // Calculate row height based on lanes
+                var ROW_PADDING_TOP = 14;
+                var ROW_PADDING_BOTTOM = 8;
+                var LANE_HEIGHT = 34;
+                var rowH = ROW_PADDING_TOP + (laneInfo.laneCount * LANE_HEIGHT) + ROW_PADDING_BOTTOM;
+
+                bodyHTML += '<tr>';
+                bodyHTML += '<td class="activity-name" style="height: ' + rowH + 'px;">';
+                bodyHTML += '  <span class="activity-icon">' + icon + '</span>';
+                bodyHTML += '  ' + act.name;
+                bodyHTML += '</td>';
+
+                for (var m = 0; m < 12; m++) {
+                    bodyHTML += '<td id="cell-' + act.id + '-' + m + '" style="position:relative;"></td>';
+                }
+
+                bodyHTML += '</tr>';
+            }
+            tbody.innerHTML = bodyHTML;
+
+            // Place event bars using calculated lanes
+            for (var j = 0; j < lanedEvents.length; j++) {
+                placeMonthBar(lanedEvents[j]);
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // Layout utility: Stacks overlapping events into lanes
+        // ------------------------------------------------------------------
+        function assignLanes(eventsArray) {
+            var sorted = eventsArray.slice().sort(function (a, b) {
+                return a._start - b._start;
+            });
+
+            var laneEnd = [];
+            var result = [];
+
+            for (var i = 0; i < sorted.length; i++) {
+                var ev = sorted[i];
+                var start = ev._start;
+                var end = Math.max(ev._end, start);
+
+                var lane = -1;
+                for (var l = 0; l < laneEnd.length; l++) {
+                    if (start > laneEnd[l]) {
+                        lane = l;
+                        break;
+                    }
+                }
+
+                if (lane === -1) {
+                    lane = laneEnd.length;
+                    laneEnd.push(-1);
+                }
+
+                laneEnd[lane] = end;
+
+                var evWithLane = Object.assign({}, ev);
+                evWithLane.lane = lane;
+                result.push(evWithLane);
+            }
+
+            return {
+                laned: result,
+                laneCount: Math.max(laneEnd.length, 1)
+            };
+        }
+
+
+        // ------------------------------------------------------------------
+        // Place a single event bar across month cells.
+        // ------------------------------------------------------------------
+        function placeMonthBar(event) {
+            var startIdx = event.startMonth - 1;
+            var endIdx = event.endMonth - 1;
+
+            var startCell = document.getElementById('cell-' + event.activityId + '-' + startIdx);
+            if (!startCell) return;
+
+            // Sum widths of all spanned cells
+            var totalWidth = 0;
+            for (var m = startIdx; m <= endIdx; m++) {
+                var cell = document.getElementById('cell-' + event.activityId + '-' + m);
+                if (cell) totalWidth += cell.offsetWidth;
+            }
+
+            // Light background = color hex + "26" (15% opacity in hex)
+            var mainColor = event.color || '#2563eb';
+            var borderColor = event.borderColor || mainColor;
+            var lightBg = (mainColor.length === 7) ? mainColor + '26' : 'rgba(0,0,0,0.05)';
+
+            var ROW_PADDING_TOP = 14;
+            var LANE_HEIGHT = 34;
+            var LABEL_OFFSET = 4;
+            var barHeight = 24;
+
+            // Calculate top based on lane assigned in assignLanes
+            var barTop = ROW_PADDING_TOP + (event.lane * LANE_HEIGHT) + LABEL_OFFSET;
+
+            var bar = document.createElement('div');
+            bar.className = 'event-bar';
+
+            if (event.isDashed || event.lineStyle === 'dashed') {
+                bar.style.background = lightBg;
+                bar.style.borderLeft = '4px dashed ' + borderColor;
+                bar.style.color = '#111';
+            } else if (event.isTextOnly) {
+                bar.style.background = 'transparent';
+                bar.style.border = 'none';
+                bar.style.color = borderColor;
+            } else {
+                bar.style.background = lightBg;
+                bar.style.borderLeft = '4px solid ' + borderColor;
+                bar.style.color = '#111';
+            }
+
+            bar.style.borderRadius = '4px';
+            bar.style.top = barTop + 'px';
+            bar.style.left = '4px';
+            bar.style.width = Math.max(0, totalWidth - 8) + 'px';
+            bar.style.height = barHeight + 'px';
+            
+            // Pass border color to CSS for hover outline
+            bar.style.setProperty('--bar-color', borderColor);
+
+            // Label text
+            var label = document.createElement('span');
+            label.className = 'event-label';
+            label.textContent = event.label;
+            bar.appendChild(label);
+
+            // Hover tooltip
+            var tooltip = document.createElement('div');
+            tooltip.className = 'event-tooltip';
+            
+            var tHtml = '<div class="tooltip-top-bar" style="background: ' + borderColor + '"></div>' +
+                        '<div class="tooltip-content">' +
+                          '<div class="tooltip-title">' + event.label + '</div>' +
+                          '<div class="tooltip-grid">';
+            
+            if (event.category) {
+                tHtml += '<div class="tooltip-grid-label">Category</div>' +
+                         '<div class="tooltip-grid-value">' +
+                           '<span class="tooltip-dot" style="background: ' + borderColor + '"></span>' +
+                           event.category +
+                         '</div>';
+            }
+            
+            tHtml += '<div class="tooltip-grid-label">Duration</div>' +
+                     '<div class="tooltip-grid-value">' + buildDateString(event) + '</div>';
+
+            if (event.owner) {
+                tHtml += '<div class="tooltip-grid-label">Owner</div>' +
+                         '<div class="tooltip-grid-value">' + event.owner + '</div>';
+            }
+
+            tHtml += '</div>'; // end grid
+
+            if (event.description) {
+                tHtml += '<div class="tooltip-desc">' + event.description + '</div>';
+            }
+
+            tHtml += '</div>'; // end content
+            tooltip.innerHTML = tHtml;
+            bar.appendChild(tooltip);
+
+            // Add click listener to toggle tooltip
+            bar.addEventListener('click', function(e) {
+                e.stopPropagation(); // prevent document click
+                
+                // close other open tooltips
+                document.querySelectorAll('.event-tooltip.show').forEach(function(tt) {
+                    if (tt !== tooltip) {
+                        tt.classList.remove('show');
+                    }
+                });
+                
+                tooltip.classList.toggle('show');
+            });
+
+            // Prevent clicks inside tooltip from closing it
+            tooltip.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            startCell.style.position = 'relative';
+            startCell.appendChild(bar);
+        }
+
+
+        // ------------------------------------------------------------------
+        // Week view — 7 columns (Monday to Sunday)
+        // ------------------------------------------------------------------
+        var WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+        function renderWeekView(activities, allEvents) {
+            var thead = document.getElementById('calendar-thead');
+            var tbody = document.getElementById('calendar-tbody');
+
+            // Header row: Activity + 7 Days
+            var headerHTML = '<tr><th class="activity-col">Activity</th>';
+            for (var i = 0; i < 7; i++) {
+                headerHTML += '<th style="width: 12%;">' + WEEK_DAYS[i] + '</th>';
+            }
+            headerHTML += '</tr>';
+            thead.innerHTML = headerHTML;
+
+            // Filter events for this specific week
+            var currentMonth = currentWeekStart.getMonth() + 1;
+            var currentDay = currentWeekStart.getDate();
+            var currentWeekIdx = Math.ceil(currentDay / 7);
+
+            var weekEvents = allEvents.filter(function (e) {
+                if (e.year !== currentYear) return false;
+
+                var startM = e.startMonth;
+                var endM = e.endMonth || startM;
+                var startW = e.startWeek !== undefined ? parseInt(e.startWeek) : 1;
+                var endW = e.endWeek !== undefined ? parseInt(e.endWeek) : 5;
+
+                var isAfterStart = currentMonth > startM || (currentMonth === startM && currentWeekIdx >= startW);
+                var isBeforeEnd = currentMonth < endM || (currentMonth === endM && currentWeekIdx <= endW);
+
+                return isAfterStart && isBeforeEnd;
+            });
+
+            // Filter activities that have events in this week
+            var visibleActivities = activities.filter(function (act) {
+                return weekEvents.some(function (ev) { return ev.activityId === act.id; });
+            });
+
+            // Show empty state if no events
+            if (visibleActivities.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:40px; color:var(--text-muted);">There are no events for the ' + currentTab + ' calendar this week.</td></tr>';
+                return;
+            }
+
+            // Prepare events for lane calculation
+            var formattedWeekEvents = weekEvents.map(function (ev) {
+                var startCol = (ev.startDay !== undefined) ? parseInt(ev.startDay) : 0;
+                var endCol = (ev.endDay !== undefined) ? parseInt(ev.endDay) : 4;
+                startCol = Math.max(0, Math.min(6, startCol));
+                endCol = Math.max(0, Math.min(6, endCol));
+                if (startCol > endCol) {
+                    var temp = startCol; startCol = endCol; endCol = temp;
+                }
+
+                var newEv = Object.assign({}, ev);
+                newEv._start = startCol;
+                newEv._end = endCol;
+                return newEv;
+            });
+
+            var lanedWeekEvents = [];
+
+            // Body rows
+            var bodyHTML = '';
+            for (var i = 0; i < visibleActivities.length; i++) {
+                var act = visibleActivities[i];
+                var icon = ACTIVITY_ICONS[act.id] || '';
+
+                // Assign lanes for this row
+                var actEvents = formattedWeekEvents.filter(function (e) { return e.activityId === act.id; });
+                var laneInfo = assignLanes(actEvents);
+                lanedWeekEvents = lanedWeekEvents.concat(laneInfo.laned);
+
+                // Calculate row height based on lanes
+                var ROW_PADDING_TOP = 14;
+                var ROW_PADDING_BOTTOM = 8;
+                var LANE_HEIGHT = 34;
+                var rowH = ROW_PADDING_TOP + (laneInfo.laneCount * LANE_HEIGHT) + ROW_PADDING_BOTTOM;
+
+                bodyHTML += '<tr>';
+                bodyHTML += '<td class="activity-name" style="height: ' + rowH + 'px;">';
+                bodyHTML += '  <span class="activity-icon">' + icon + '</span>';
+                bodyHTML += '  ' + act.name;
+                bodyHTML += '</td>';
+
+                for (var d = 0; d < 7; d++) {
+                    // border-right for all except last cell
+                    var bStyle = (d < 6) ? 'border-right: 1px solid var(--grid-line);' : '';
+                    bodyHTML += '<td id="wcell-' + act.id + '-' + d + '" style="position:relative; padding:0; ' + bStyle + '"></td>';
+                }
+
+                bodyHTML += '</tr>';
+            }
+            tbody.innerHTML = bodyHTML;
+
+            // Place event bars
+            for (var j = 0; j < lanedWeekEvents.length; j++) {
+                placeWeekBar(lanedWeekEvents[j]);
+            }
+        }
+
+
+        // ------------------------------------------------------------------
+        // Place a single event bar in week view
+        // ------------------------------------------------------------------
+        function placeWeekBar(event) {
+            var startCol = event._start;
+            var endCol = event._end;
+
+            var startCell = document.getElementById('wcell-' + event.activityId + '-' + startCol);
+            if (!startCell) return;
+
+            var totalWidth = 0;
+            for (var w = startCol; w <= endCol; w++) {
+                var cell = document.getElementById('wcell-' + event.activityId + '-' + w);
+                if (cell) totalWidth += cell.offsetWidth;
+            }
+
+            var mainColor = event.color || '#2563eb';
+            var borderColor = event.borderColor || mainColor;
+            var lightBg = (mainColor.length === 7) ? mainColor + '26' : 'rgba(0,0,0,0.05)';
+
+            var ROW_PADDING_TOP = 14;
+            var LANE_HEIGHT = 34;
+            var LABEL_OFFSET = 4;
+            var barHeight = 24;
+
+            var barTop = ROW_PADDING_TOP + (event.lane * LANE_HEIGHT) + LABEL_OFFSET;
+
+            var bar = document.createElement('div');
+            bar.className = 'event-bar';
+
+            if (event.isDashed || event.lineStyle === 'dashed') {
+                bar.style.background = lightBg;
+                bar.style.borderLeft = '4px dashed ' + borderColor;
+                bar.style.color = '#111';
+            } else if (event.isTextOnly) {
+                bar.style.background = 'transparent';
+                bar.style.border = 'none';
+                bar.style.color = borderColor;
+            } else {
+                bar.style.background = lightBg;
+                bar.style.borderLeft = '4px solid ' + borderColor;
+                bar.style.color = '#111';
+            }
+
+            bar.style.borderRadius = '4px';
+            bar.style.top = barTop + 'px';
+            bar.style.left = '4px';
+            bar.style.width = Math.max(0, totalWidth - 8) + 'px';
+            bar.style.height = barHeight + 'px';
+
+            // Pass border color to CSS for hover outline
+            bar.style.setProperty('--bar-color', borderColor);
+
+            // Label text
+            var label = document.createElement('span');
+            label.className = 'event-label';
+            label.textContent = event.label;
+            bar.appendChild(label);
+
+            // Hover tooltip
+            var tooltip = document.createElement('div');
+            tooltip.className = 'event-tooltip';
+            
+            var tHtml = '<div class="tooltip-top-bar" style="background: ' + borderColor + '"></div>' +
+                        '<div class="tooltip-content">' +
+                          '<div class="tooltip-title">' + event.label + '</div>' +
+                          '<div class="tooltip-grid">';
+            
+            if (event.category) {
+                tHtml += '<div class="tooltip-grid-label">Category</div>' +
+                         '<div class="tooltip-grid-value">' +
+                           '<span class="tooltip-dot" style="background: ' + borderColor + '"></span>' +
+                           event.category +
+                         '</div>';
+            }
+            
+            tHtml += '<div class="tooltip-grid-label">Duration</div>' +
+                     '<div class="tooltip-grid-value">' + buildDateString(event) + '</div>';
+
+            if (event.owner) {
+                tHtml += '<div class="tooltip-grid-label">Owner</div>' +
+                         '<div class="tooltip-grid-value">' + event.owner + '</div>';
+            }
+
+            tHtml += '</div>'; // end grid
+
+            if (event.description) {
+                tHtml += '<div class="tooltip-desc">' + event.description + '</div>';
+            }
+
+            tHtml += '</div>'; // end content
+            tooltip.innerHTML = tHtml;
+            bar.appendChild(tooltip);
+
+            // Add click listener to toggle tooltip
+            bar.addEventListener('click', function(e) {
+                e.stopPropagation(); // prevent document click
+                
+                // close other open tooltips
+                document.querySelectorAll('.event-tooltip.show').forEach(function(tt) {
+                    if (tt !== tooltip) {
+                        tt.classList.remove('show');
+                    }
+                });
+                
+                tooltip.classList.toggle('show');
+            });
+
+            // Prevent clicks inside tooltip from closing it
+            tooltip.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            startCell.style.position = 'relative';
+            startCell.appendChild(bar);
+        }
+
+
+        // ------------------------------------------------------------------
+        // Helpers
+        // ------------------------------------------------------------------
+
+        // Build "Jan – Mar 2025" style date string
+        function buildDateString(event) {
+            if (event.startMonth === event.endMonth) {
+                return MONTHS_SHORT[event.startMonth - 1] + ' ' + event.year;
+            }
+            return MONTHS_SHORT[event.startMonth - 1] + ' – ' + MONTHS_SHORT[event.endMonth - 1] + ' ' + event.year;
+        }
+
+        // Return white or dark based on background luminance
+        function getContrastColor(hex) {
+            if (!hex || hex.length < 7) return '#fff';
+            var r = parseInt(hex.slice(1, 3), 16);
+            var g = parseInt(hex.slice(3, 5), 16);
+            var b = parseInt(hex.slice(5, 7), 16);
+            var lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return lum > 0.6 ? '#1a1a1a' : '#ffffff';
+        }
+
+        // Lighten a hex color by adding a fixed amount to each channel
+        function lightenHex(hex, amount) {
+            if (!hex || hex.length < 7) return hex;
+            var r = Math.min(255, parseInt(hex.slice(1, 3), 16) + amount);
+            var g = Math.min(255, parseInt(hex.slice(3, 5), 16) + amount);
+            var b = Math.min(255, parseInt(hex.slice(5, 7), 16) + amount);
+            return '#' + r.toString(16).padStart(2, '0') +
+                g.toString(16).padStart(2, '0') +
+                b.toString(16).padStart(2, '0');
+        }
+
+
+        // ------------------------------------------------------------------
+        // Boot
+        // ------------------------------------------------------------------
+        window.addEventListener('load', function () {
+            renderCalendar();
+        });
+
+    </script>
+
+</body>
+
+</html>

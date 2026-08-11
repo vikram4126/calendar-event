@@ -150,6 +150,26 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         formulae: [colorListString]
       });
 
+      // Apply validations for lineStyle (M), isDashed (N), isTextOnly (O)
+      const lineStyleListString = '"solid,dashed,dotted,gradient"';
+      const booleanListString = '"true,false"';
+
+      wsEvents.dataValidations.add('M2:M100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [lineStyleListString]
+      });
+      wsEvents.dataValidations.add('N2:N100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [booleanListString]
+      });
+      wsEvents.dataValidations.add('O2:O100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [booleanListString]
+      });
+
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = window.URL.createObjectURL(blob);
