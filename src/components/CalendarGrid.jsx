@@ -29,11 +29,11 @@ const ROW_PADDING_BOTTOM = 8
 function assignLanes(events) {
   const sorted = [...events].sort((a, b) => a._start - b._start)
   const laneEnd = []
-  const result  = []
+  const result = []
 
   for (const ev of sorted) {
     const start = ev._start
-    const end   = Math.max(ev._end, start)
+    const end = Math.max(ev._end, start)
 
     let lane = -1
     for (let i = 0; i < laneEnd.length; i++) {
@@ -47,7 +47,7 @@ function assignLanes(events) {
   return { laned: result, laneCount: Math.max(laneEnd.length, 1) }
 }
 
-// Bar inline styles
+// ─── Bar inline styles ─────────────────────────────────────────────
 // isDashed: true  → dashed left border (dotted line effect)
 // isTextOnly: true → transparent bar, only text label visible
 function getBarStyle(event) {
@@ -208,12 +208,12 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
 
                     {laned.map(event => {
                       const startVal = event._start
-                      const endVal   = event._end
+                      const endVal = event._end
 
-                      const leftPct  = (startVal / numCols) * 100
+                      const leftPct = (startVal / numCols) * 100
                       const widthPct = ((endVal - startVal + 1) / numCols) * 100
                       const barStyle = getBarStyle(event)
-                      const laneTop  = ROW_PADDING_TOP + event.lane * LANE_HEIGHT + LABEL_OFFSET
+                      const laneTop = ROW_PADDING_TOP + event.lane * LANE_HEIGHT + LABEL_OFFSET
                       const isActive = popup?.event.id === event.id
 
                       return (
@@ -223,9 +223,9 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
                           onClick={(e) => handleBarClick(e, event)}
                           style={{
                             position: 'absolute',
-                            left:   `calc(${leftPct}% + 4px)`,
-                            width:  `calc(${widthPct}% - 8px)`,
-                            top:    laneTop,
+                            left: `calc(${leftPct}% + 4px)`,
+                            width: `calc(${widthPct}% - 8px)`,
+                            top: laneTop,
                             cursor: 'pointer',
                             outline: isActive ? `2px solid ${event.borderColor || event.color}` : 'none',
                             outlineOffset: '1px',

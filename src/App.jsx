@@ -3,18 +3,18 @@ import Header from './components/Header'
 import CalendarGrid from './components/CalendarGrid'
 import YearSelector from './components/YearSelector'
 
-
+import { NavTabIcon } from './components/icons'
 
 function App() {
-  const [activeTab, setActiveTab]     = useState('Finance')
-  const [viewMode, setViewMode]       = useState('Monthly')
+  const [activeTab, setActiveTab] = useState('Finance')
+  const [viewMode, setViewMode] = useState('Monthly')
   const [selectedYear, setSelectedYear] = useState(2024)
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date(2024, 0, 15)) // Jan 15 is Monday
 
-  const [events, setEvents]           = useState([])
-  const [activities, setActivities]   = useState([])
+  const [events, setEvents] = useState([])
+  const [activities, setActivities] = useState([])
 
-  // Initialization
+  // ── Initialization ────────────────────────────────────────────────
   useEffect(() => {
     import('../public/events.json').then(defaultEvents => {
       // Fetch using relative path so it works on subdirectories
@@ -54,13 +54,13 @@ function App() {
     }
     const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
-    
+
     const a = document.createElement('a')
     a.href = url
     a.download = 'events.json'
     document.body.appendChild(a)
     a.click()
-    
+
     // Cleanup
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
@@ -70,7 +70,7 @@ function App() {
     const nextDate = new Date(currentWeekStart)
     nextDate.setDate(nextDate.getDate() + days)
     setCurrentWeekStart(nextDate)
-    
+
     const nextYear = nextDate.getFullYear()
     if (nextYear !== selectedYear) {
       setSelectedYear(nextYear)
@@ -84,6 +84,7 @@ function App() {
     return `Week of ${start.toLocaleDateString('en-US', options)} - ${end.toLocaleDateString('en-US', options)}, ${start.getFullYear()}`
   }
 
+  // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="app-container">
       <Header onExport={handleExportData} activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -95,7 +96,7 @@ function App() {
             <h1 className="calendar-title" style={{ fontSize: '18px', fontWeight: 'bold', margin: 0 }}>{activeTab} Calender</h1>
             <YearSelector selectedYear={selectedYear} onChange={handleYearChange} />
           </div>
-          
+
           <div className="header-right-col">
             <div className="view-mode-tabs tabs">
               <button
