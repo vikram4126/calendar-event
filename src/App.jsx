@@ -16,6 +16,13 @@ function App() {
 
   // ── Initialization ────────────────────────────────────────────────
   useEffect(() => {
+    if (window.INLINE_EVENTS_DATA) {
+      console.log("Using inline events data");
+      setEvents(window.INLINE_EVENTS_DATA.events || []);
+      setActivities(window.INLINE_EVENTS_DATA.activities || []);
+      return;
+    }
+
     import('../public/events.json').then(defaultEvents => {
       // Fetch using relative path so it works on subdirectories
       fetch('./events.json?t=' + Date.now())

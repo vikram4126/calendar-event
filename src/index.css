@@ -1,82 +1,7 @@
 /* ================================================================
-   KPMG BRAND FONTS — Open Sans from /public/Open_Sans 2/
+   KPMG BRAND FONTS — Open Sans (Loaded via Google Fonts)
    ================================================================ */
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
 
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-LightItalic.ttf') format('truetype');
-  font-weight: 300;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-Semibold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-SemiboldItalic.ttf') format('truetype');
-  font-weight: 600;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  src: url('/Open_Sans 2/OpenSans-ExtraBold.ttf') format('truetype');
-  font-weight: 800;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans Condensed';
-  src: url('/Open_Sans 2/OpenSans-CondLight.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Open Sans Condensed';
-  src: url('/Open_Sans 2/OpenSans-CondBold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
 
 /* ================================================================
    KPMG BRAND COLORS — CSS Custom Properties
@@ -259,7 +184,7 @@ h6,
   height: 36px;
 }
 
-.header-logo img {
+.header-logo img, .header-logo svg {
   height: 26px;
   width: auto;
   filter: brightness(0) invert(1);

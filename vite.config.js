@@ -5,4 +5,12 @@ import { viteSingleFile } from 'vite-plugin-singlefile'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), viteSingleFile()],
+  build: {
+    target: 'es2015',
+    rollupOptions: {
+      output: {
+        format: 'iife'
+      }
+    }
+  }
 })
