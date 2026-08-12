@@ -2892,8 +2892,17 @@
 
         // ------------------------------------------------------------------
         // Switch between Finance and Learning tabs
+        function closeAllTooltips() {
+            document.querySelectorAll('.event-tooltip.show').forEach(function(tt) {
+                tt.classList.remove('show');
+            });
+        }
+
+        // ------------------------------------------------------------------
+        // Switch between Finance and Learning tabs
         // ------------------------------------------------------------------
         function switchTab(tabName) {
+            closeAllTooltips();
             currentTab = tabName;
             document.getElementById('tab-Finance').classList.toggle('active', tabName === 'Finance');
             document.getElementById('tab-Learning').classList.toggle('active', tabName === 'Learning');
@@ -2906,6 +2915,7 @@
         // Switch between Month and Week views
         // ------------------------------------------------------------------
         function switchView(viewName) {
+            closeAllTooltips();
             currentView = viewName;
             document.getElementById('view-Month').classList.toggle('active', viewName === 'Month');
             document.getElementById('view-Week').classList.toggle('active', viewName === 'Week');
@@ -2920,6 +2930,7 @@
         // Week Navigator
         // ------------------------------------------------------------------
         function changeWeek(delta) {
+            closeAllTooltips();
             currentWeekStart.setDate(currentWeekStart.getDate() + (delta * 7));
             // Keep year in sync if week goes out of current year
             if (currentWeekStart.getFullYear() !== currentYear) {
@@ -2955,20 +2966,26 @@
             }
         }
 
-        // Close dropdown when clicking outside it
-        document.addEventListener('click', function (e) {
-            var container = document.getElementById('year-selector-container');
-            if (container && !container.contains(e.target)) {
-                var dropdown = document.getElementById('year-dropdown');
-                dropdown.classList.remove('open');
-                document.getElementById('year-chevron-down').style.display = '';
-                document.getElementById('year-chevron-up').style.display = 'none';
-            }
-            
-            // Close all tooltips on outside click
-            document.querySelectorAll('.event-tooltip.show').forEach(function(tt) {
-                tt.classList.remove('show');
-            });
+        // Close dropdown & tooltips when clicking outside (capture phase for Edge dialog app support)
+        ['pointerdown', 'mousedown', 'click', 'touchstart'].forEach(function (evtType) {
+            document.addEventListener(evtType, function (e) {
+                var container = document.getElementById('year-selector-container');
+                if (container && !container.contains(e.target)) {
+                    var dropdown = document.getElementById('year-dropdown');
+                    if (dropdown) {
+                        dropdown.classList.remove('open');
+                        var chevDown = document.getElementById('year-chevron-down');
+                        var chevUp = document.getElementById('year-chevron-up');
+                        if (chevDown) chevDown.style.display = '';
+                        if (chevUp) chevUp.style.display = 'none';
+                    }
+                }
+
+                var isInsideTooltipOrBar = e.target.closest && (e.target.closest('.event-bar') || e.target.closest('.event-tooltip'));
+                if (!isInsideTooltipOrBar) {
+                    closeAllTooltips();
+                }
+            }, true);
         });
 
         // Navigate the year block (prev / next 12-year block)
@@ -3019,6 +3036,7 @@
         // Main render — builds the whole table
         // ------------------------------------------------------------------
         function renderCalendar() {
+            closeAllTooltips();
             var activities = CALENDAR_DATA.activities.filter(function (a) {
                 return a.calendarType === currentTab;
             });

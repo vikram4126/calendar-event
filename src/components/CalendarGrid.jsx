@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react'
+import { useMemo, useState, useCallback, useEffect } from 'react'
 import { CalendarDays } from 'lucide-react'
 import EventPopup from './EventPopup'
 import { ActivityIcon } from './icons'
@@ -89,6 +89,11 @@ function getBarStyle(event) {
 
 function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWeekStart }) {
   const [popup, setPopup] = useState(null)
+
+  // Auto-close popup when switching view mode, tab, year, or week
+  useEffect(() => {
+    setPopup(null)
+  }, [viewMode, activeTab, year, currentWeekStart])
 
   const tabActivities = useMemo(
     () => activities.filter(a => a.calendarType === activeTab),

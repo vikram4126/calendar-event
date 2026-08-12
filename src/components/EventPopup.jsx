@@ -7,12 +7,32 @@ function EventPopup({ event, anchorRect, onClose }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (popupRef.current && !popupRef.current.contains(e.target)) {
+      if (!popupRef.current) return
+      const path = e.composedPath ? e.composedPath() : []
+      const isInsidePopup = popupRef.current.contains(e.target) || path.includes(popupRef.current)
+      const isEventBar = e.target.closest && e.target.closest('.event-bar')
+
+      if (!isInsidePopup && !isEventBar) {
         onClose()
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    const handleClose = () => {
+      onClose()
+    }
+
+    const events = ['pointerdown', 'mousedown', 'click', 'touchstart']
+    events.forEach(evt => document.addEventListener(evt, handleClickOutside, true))
+
+    window.addEventListener('blur', handleClose)
+    window.addEventListener('resize', handleClose)
+    window.addEventListener('scroll', handleClose, true)
+
+    return () => {
+      events.forEach(evt => document.removeEventListener(evt, handleClickOutside, true))
+      window.removeEventListener('blur', handleClose)
+      window.removeEventListener('resize', handleClose)
+      window.removeEventListener('scroll', handleClose, true)
+    }
   }, [onClose])
 
   if (!event || !anchorRect) return null
