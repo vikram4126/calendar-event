@@ -32,26 +32,39 @@ function buildStandalone() {
         window.INLINE_EVENTS_DATA = ${eventsData};
     </script>`;
 
-  let finalHtml = html.replace('<title>temp-app</title>', `<title>temp-app</title>\n${scriptTag}`);
+  // Inlining data safely without JS string replace $ issues
+  html = html.replace('<title>temp-app</title>', () => `<title>temp-app</title>\n${scriptTag}`);
 
+  // Inlining favicon safely
   if (fs.existsSync(faviconPath)) {
     const fav = fs.readFileSync(faviconPath);
     const favB64 = fav.toString('base64');
     const favDataUri = `data:image/svg+xml;base64,${favB64}`;
-    finalHtml = finalHtml.replace(/href="[^"]*favicon\.svg"/g, `href="${favDataUri}"`);
+    html = html.replace(/href="[^"]*favicon\.svg"/g, () => `href="${favDataUri}"`);
   }
 
-  const scriptMatch = finalHtml.match(/<script type="module" crossorigin>[\s\S]*?<\/script>/);
-  if (scriptMatch) {
-    const scriptContent = scriptMatch[0];
-    finalHtml = finalHtml.replace(scriptContent, '');
-    finalHtml = finalHtml.replace('</body>', scriptContent.replace('<script type="module" crossorigin>', '<script>') + '\n</body>');
-  } else {
-    finalHtml = finalHtml.replace('<script type="module" crossorigin>', '<script>');
+  // Extract bundled module script tag safely using substring indices
+  const scriptStartMarker = '<script type="module" crossorigin>';
+  const scriptEndMarker = '</script>';
+  
+  const startIdx = html.indexOf(scriptStartMarker);
+  const endIdx = html.indexOf(scriptEndMarker, startIdx);
+
+  if (startIdx !== -1 && endIdx !== -1) {
+    const jsCode = html.substring(startIdx + scriptStartMarker.length, endIdx);
+    // Remove original script tag from head
+    html = html.substring(0, startIdx) + html.substring(endIdx + scriptEndMarker.length);
+    
+    // Place script tag right before </body>
+    const bodyEndIdx = html.indexOf('</body>');
+    if (bodyEndIdx !== -1) {
+      const newScriptTag = `<script>${jsCode}</script>`;
+      html = html.substring(0, bodyEndIdx) + newScriptTag + '\n' + html.substring(bodyEndIdx);
+    }
   }
 
-  fs.writeFileSync(outputPath, finalHtml);
-  console.log('✅ standalone.html successfully built/updated with latest public/events.json!');
+  fs.writeFileSync(outputPath, html);
+  console.log('✅ standalone.html successfully built/updated!');
 }
 
 buildStandalone();

@@ -115,10 +115,20 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
           if (!tabActivitiesIds.has(e.activityId)) continue;
           if (e.year !== currentYear) continue;
 
-          const startMonth = e.startMonth;
-          const endMonth = e.endMonth || startMonth;
-          const startWeek = e.startWeek !== undefined ? parseInt(e.startWeek) : 1;
-          const endWeek = e.endWeek !== undefined ? parseInt(e.endWeek) : 5;
+          const rawStartMonth = parseInt(e.startMonth, 10) || 1;
+          const rawEndMonth = parseInt(e.endMonth || e.startMonth, 10) || rawStartMonth;
+          const startMonth = Math.min(rawStartMonth, rawEndMonth);
+          const endMonth = Math.max(rawStartMonth, rawEndMonth);
+
+          let startWeek = e.startWeek !== undefined ? parseInt(e.startWeek, 10) : 1;
+          let endWeek = e.endWeek !== undefined ? parseInt(e.endWeek, 10) : 5;
+
+          // Only normalize weeks if it is within the SAME month
+          if (startMonth === endMonth && startWeek > endWeek) {
+            const temp = startWeek;
+            startWeek = endWeek;
+            endWeek = temp;
+          }
 
           const isAfterStart = currentMonth > startMonth || (currentMonth === startMonth && currentWeekIdx >= startWeek);
           const isBeforeEnd = currentMonth < endMonth || (currentMonth === endMonth && currentWeekIdx <= endWeek);

@@ -73,24 +73,6 @@
   ],
   "events": [
     {
-      "id": "f24-a1",
-      "activityId": "a2",
-      "label": "Subsidiary audits",
-      "startMonth": 2,
-      "endMonth": 3,
-      "year": 2024,
-      "color": "#00c0ae",
-      "borderColor": "#098e7e",
-      "lineStyle": "solid",
-      "isDashed": false,
-      "isTextOnly": false,
-      "category": "Audit Process",
-      "owner": "Finance Controller",
-      "description": "Quarterly subsidiary audits across all regional offices to ensure compliance.",
-      "startWeek": 1,
-      "endWeek": 5
-    },
-    {
       "id": "f24-a2",
       "activityId": "a2",
       "label": "Interim audit",
@@ -348,20 +330,6 @@
       "label": "Internal Audit Q1",
       "startMonth": 1,
       "endMonth": 2,
-      "year": 2025,
-      "color": "#00c0ae",
-      "lineStyle": "solid",
-      "isDashed": false,
-      "isTextOnly": false,
-      "startWeek": 1,
-      "endWeek": 5
-    },
-    {
-      "id": "f25-a2",
-      "activityId": "a2",
-      "label": "Subsidiary audits",
-      "startMonth": 4,
-      "endMonth": 6,
       "year": 2025,
       "color": "#00c0ae",
       "lineStyle": "solid",
@@ -1661,7 +1629,7 @@
     {
       "id": "c2024-1",
       "activityId": "a1",
-      "label": "Q1 Communications Plan",
+      "label": "Q1 Communications Plan test",
       "startMonth": 1,
       "endMonth": 3,
       "year": 2024,
@@ -1669,8 +1637,8 @@
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
-      "startWeek": 1,
-      "endWeek": 5
+      "startWeek": 3,
+      "endWeek": 1
     },
     {
       "id": "c2024-2",
@@ -1785,20 +1753,6 @@
       "endWeek": 5
     },
     {
-      "id": "c2025-1",
-      "activityId": "a1",
-      "label": "Q1 Communications Plan",
-      "startMonth": 1,
-      "endMonth": 3,
-      "year": 2025,
-      "color": "#00338d",
-      "lineStyle": "solid",
-      "isDashed": false,
-      "isTextOnly": false,
-      "startWeek": 1,
-      "endWeek": 5
-    },
-    {
       "id": "c2025-2",
       "activityId": "a1",
       "label": "Annual Report Rollout",
@@ -1904,20 +1858,6 @@
       "endMonth": 11,
       "year": 2025,
       "color": "#0c233c",
-      "lineStyle": "solid",
-      "isDashed": false,
-      "isTextOnly": false,
-      "startWeek": 1,
-      "endWeek": 5
-    },
-    {
-      "id": "c2026-1",
-      "activityId": "a1",
-      "label": "Q1 Communications Plan",
-      "startMonth": 1,
-      "endMonth": 3,
-      "year": 2026,
-      "color": "#00338d",
       "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
