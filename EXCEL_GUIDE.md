@@ -1,14 +1,30 @@
-# 📊 Excel Data Update Guide (Simple & Easy)
+# 📊 Excel Data Update & Deployment Guide (Simple & Easy)
 
-Yeh document aapko batata hai ki Calendar App ke liye Excel sheet (`Calendar_Template.xlsx`) kaise fill aur update karni hai.
+Yeh document aapko batata hai ki Calendar App ke liye Excel sheet (`Calendar_Template.xlsx`) kaise update karni hai aur naya data poore app mein kaise deploy karna hai.
 
 ---
 
-## ⚡ 3-Step Quick Start Process
+## 🔁 Complete 5-Step Data Update & Deployment Workflow
 
-1. **Template Download Karein**: App khol kar **"Import Excel"** par click karein aur **"Download Template"** dabayein.
-2. **Excel Fill / Update Karein**: Excel sheet mein 2 tabs hote hain: **`Activities`** aur **`Events`**. (Neeche bataye tarike se data bharein).
-3. **Upload Karein**: Updated Excel file ko app mein **"Upload Excel"** button se select karke upload kar dein.
+1. **Excel Sheet Update & Upload**:
+   - App khol kar **"Import Excel"** par click karein aur **"Upload Excel"** button se apni updated Excel file select karke upload kar dein.
+
+2. **`events.json` Download Karein**:
+   - Upload hote hi browser automatically ek naya **`events.json`** file download kar dega.
+
+3. **`public/events.json` Replace Karein**:
+   - Downloaded `events.json` file ko apne project ke **`public/events.json`** folder mein replace/paste kar dein.
+
+4. **Build Standalone Command Chalayein**:
+   - Terminal mein command chalayein:
+     ```bash
+     npm run build:standalone
+     ```
+   - Yeh command project ko compile karke root directory mein updated **`standalone.html`** file bana dega.
+
+5. **Paste `standalone.html` into Dialog App**:
+   - Generated **`standalone.html`** file ka code copy karke Dialog app / embed container mein paste kar dein.
+   - Ab **Dev mode (`npm run dev`)**, **Production Build**, aur **Single-file Standalone HTML** teeno jagah naya data successfully update ho jaayega!
 
 ---
 
@@ -19,15 +35,16 @@ Yeh tab tay karta hai ki calendar mein left side par kaun-kaun se rows (categori
 | Column | Naam | Required? | Aasan Bhasha Mein Matlab | Example |
 | :---: | :--- | :---: | :--- | :--- |
 | **A** | **`id`** | **Haan** | Unique ID code. (Events ko isse jodte hain). | `a1`, `a2`, `l1` |
-| **B** | **`calendarType`** | **Haan** | Kaunse tab mein dikhana hai? <br>Kewal **`Finance`** ya **`Learning`** likhein. | `Finance` |
+| **B** | **`calendarType`** | **Haan** | Kaunse tab mein dikhana hai? <br>(Dropdown se select karein: **`Finance`** ya **`Learning`**). | `Finance` |
 | **C** | **`name`** | **Haan** | Left column mein dikhne waala Activity ka Naam. | `Communications`, `Onboarding` |
+| **D** | **`icon`** | Nahi | Left icon set karne ke liye. <br>[Lucide Icons (lucide.dev/icons)](https://lucide.dev/icons) se koi bhi icon name copy-paste kar sakte hain. <br>Examples: `MessageSquare`, `Calendar`, `UserCheck`, `Sparkles`, `Shield`, `Globe`, `FileText`, `Phone`, etc. | `MessageSquare` |
 
 ### Sample `Activities` Data:
-| id | calendarType | name |
-| :--- | :--- | :--- |
-| `a1` | Finance | Communications |
-| `a2` | Finance | Strategic Planning |
-| `l1` | Learning | Employee Onboarding |
+| id | calendarType | name | icon |
+| :--- | :--- | :--- | :--- |
+| `a1` | Finance | Communications | `message` |
+| `a2` | Finance | Strategic Planning | `grid` |
+| `l1` | Learning | Employee Onboarding | `onboarding` |
 
 ---
 
@@ -52,18 +69,16 @@ Yeh tab calendar grid par dikhne waale rang-birange event bars ko tay karta hai.
 - **Column J (`year`)** *(Required)*: Event ka saal (Dropdown se select karein: `2024`, `2025`, `2026`, etc.).
 
 #### 3. Styling (Color & Line Design)
-- **Column K (`color`)**: Bar ka background color cell (Excel cell mein color preview/fill ke saath dikhta hai). <br>Allowed Colors: `Primary Blue`, `Cobalt Blue`, `Dark Blue`, `Pacific Blue`, `Purple`, `Pink`, `Teal Green`, `Dark Green` (ya hex code jaise `#00338d`).
-- **Column L (`borderColor`)**: Left border color cell.
-- **Column M (`lineStyle`)**: Border design. Values: `solid`, `dashed`, `dotted`, `gradient`.
-- **Column N (`isDashed`)**: Left border dashed rakhne ke liye: `true` ya `false`.
-- **Column O (`isTextOnly`)**: Kewal text dikhana ho (transparent bar): `true` ya `false`.
+- **Column K (`color`)**: Main Event Color (Select karein: `Primary Blue`, `Cobalt Blue`, `Dark Blue`, `Pacific Blue`, `Purple`, `Pink`, `Teal Green`, `Dark Green` ya Hex Code). <br>*Note: Background auto-light shade ban jayega aur border same color ka rahega!*
+- **Column L (`lineStyle`)**: Border design. Values: `solid`, `dashed`, `dotted`. *(Dashed line style lagane ke liye yahan `dashed` select karein)*.
+- **Column M (`isTextOnly`)**: Kewal text dikhana ho (transparent bar): `true` ya `false`.
 
 #### 4. Popup Card Info (Click karne par kya dikhega?)
-- **Column P (`ctaText`)**: CTA Button text. Example: `View Plan`, `Open Link`
-- **Column Q (`ctaLink`)**: CTA URL / Link. Example: `https://example.com/doc`
-- **Column R (`category`)**: Category name. Example: `Planning`
-- **Column S (`owner`)**: Event ka in-charge / Owner name. Example: `John Doe`
-- **Column T (`description`)**: Event ke baare mein poori jankari. Example: `Q1 Strategy Review Meeting`.
+- **Column O (`ctaText`)**: CTA Button text. Example: `View Plan`, `Open Link`
+- **Column P (`ctaLink`)**: CTA URL / Link. Example: `https://example.com/doc`
+- **Column Q (`category`)**: Category name. Example: `Planning`
+- **Column R (`owner`)**: Event ka in-charge / Owner name. Example: `John Doe`
+- **Column S (`description`)**: Event ke baare mein poori jankari. Example: `Q1 Strategy Review Meeting`.
 
 ---
 

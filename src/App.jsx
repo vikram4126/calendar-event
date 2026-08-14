@@ -94,7 +94,7 @@ function App() {
   // ── Render ────────────────────────────────────────────────────────
   return (
     <div className="app-container">
-      <Header onExport={handleExportData} activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header onExport={handleExportData} activeTab={activeTab} setActiveTab={setActiveTab} events={events} activities={activities} />
 
       <main className="calendar-main">
 

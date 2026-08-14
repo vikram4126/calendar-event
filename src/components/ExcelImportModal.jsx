@@ -1,13 +1,40 @@
 import { useState } from 'react';
 import { X, Upload, Download } from 'lucide-react';
 
-export default function ExcelImportModal({ isOpen, onClose }) {
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+const formatMonthForExcel = (val) => {
+  if (typeof val === 'number') {
+    return MONTH_NAMES[val - 1] || val;
+  }
+  return val || 'Jan';
+};
+
+const COLOR_NAME_MAP = {
+  '#00338d': 'Primary Blue',
+  '#1e49e2': 'Cobalt Blue',
+  '#0c233c': 'Dark Blue',
+  '#aceaff': 'Light Blue',
+  '#00b8f5': 'Pacific Blue',
+  '#7213ea': 'Purple',
+  '#fd349c': 'Pink',
+};
+
+const formatColorForExcel = (val) => {
+  if (!val) return 'Primary Blue';
+  const s = String(val).trim().toLowerCase();
+  if (COLOR_NAME_MAP[s]) return COLOR_NAME_MAP[s];
+  return val;
+};
+
+export default function ExcelImportModal({ isOpen, onClose, events = [], activities = [] }) {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
   if (!isOpen) return null;
 
   const downloadTemplate = async () => {
+    setError(null);
     try {
       const ExcelJS = await import('exceljs');
       const workbook = new ExcelJS.Workbook();
@@ -15,19 +42,31 @@ export default function ExcelImportModal({ isOpen, onClose }) {
       const wsActivities = workbook.addWorksheet('Activities');
       const wsEvents = workbook.addWorksheet('Events');
 
-      // Define columns for Activities (calendarType moved before name as requested)
+      // Define columns for Activities (calendarType moved before name, icon column added)
       wsActivities.columns = [
         { header: 'id', key: 'id', width: 10 },
         { header: 'calendarType', key: 'calendarType', width: 15 },
-        { header: 'name', key: 'name', width: 25 }
+        { header: 'name', key: 'name', width: 25 },
+        { header: 'icon', key: 'icon', width: 15 }
       ];
       
-      wsActivities.addRows([
-        { id: 'a1', calendarType: 'Finance', name: 'Communications' },
-        { id: 'l1', calendarType: 'Learning', name: 'Onboarding' }
-      ]);
+      if (activities && activities.length > 0) {
+        activities.forEach(act => {
+          wsActivities.addRow({
+            id: act.id,
+            calendarType: act.calendarType || 'Finance',
+            name: act.name || '',
+            icon: act.icon || ''
+          });
+        });
+      } else {
+        wsActivities.addRows([
+          { id: 'a1', calendarType: 'Finance', name: 'Communications', icon: 'message' },
+          { id: 'l1', calendarType: 'Learning', name: 'Onboarding', icon: 'onboarding' }
+        ]);
+      }
 
-      // Define columns for Events (added ctaText and ctaLink)
+      // Define columns for Events (borderColor and isDashed columns removed)
       wsEvents.columns = [
         { header: 'id', key: 'id', width: 12 },
         { header: 'activityId', key: 'activityId', width: 12 },
@@ -40,9 +79,7 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         { header: 'endWeek', key: 'endWeek', width: 12 },
         { header: 'year', key: 'year', width: 10 },
         { header: 'color', key: 'color', width: 18 },
-        { header: 'borderColor', key: 'borderColor', width: 18 },
         { header: 'lineStyle', key: 'lineStyle', width: 12 },
-        { header: 'isDashed', key: 'isDashed', width: 12 },
         { header: 'isTextOnly', key: 'isTextOnly', width: 12 },
         { header: 'ctaText', key: 'ctaText', width: 18 },
         { header: 'ctaLink', key: 'ctaLink', width: 30 },
@@ -51,46 +88,51 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         { header: 'description', key: 'description', width: 30 }
       ];
 
-      // Add a sample row in Events
-      const sampleRow = wsEvents.addRow({
-        id: 'ev-1',
-        activityId: 'a1',
-        label: 'Q1 Comm Plan',
-        startMonth: 'Jan',
-        endMonth: 'Mar',
-        startDay: 'Monday',
-        endDay: 'Friday',
-        startWeek: 1,
-        endWeek: 3,
-        year: 2024,
-        color: 'Teal Green',
-        borderColor: 'Dark Green',
-        lineStyle: 'solid',
-        isDashed: false,
-        isTextOnly: false,
-        ctaText: 'View Details',
-        ctaLink: 'https://example.com/details',
-        category: 'Planning',
-        owner: 'John Doe',
-        description: 'Initial planning for Q1.'
-      });
-
-      // Style color cell with background color fill preview so user sees visual color in Excel
-      const colorCell = sampleRow.getCell('color');
-      colorCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FF00C0AE' }
-      };
-      colorCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
-
-      const borderCell = sampleRow.getCell('borderColor');
-      borderCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FF098E7E' }
-      };
-      borderCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+      if (events && events.length > 0) {
+        events.forEach(ev => {
+          wsEvents.addRow({
+            id: ev.id,
+            activityId: ev.activityId,
+            label: ev.label ? ev.label.replace(/\\n/g, '\n') : '',
+            startMonth: formatMonthForExcel(ev.startMonth),
+            endMonth: formatMonthForExcel(ev.endMonth || ev.startMonth),
+            startDay: ev.startDay || '',
+            endDay: ev.endDay || ev.startDay || '',
+            startWeek: ev.startWeek || '',
+            endWeek: ev.endWeek || ev.startWeek || '',
+            year: ev.year || 2024,
+            color: formatColorForExcel(ev.color),
+            lineStyle: ev.lineStyle || (ev.isDashed ? 'dashed' : 'solid'),
+            isTextOnly: ev.isTextOnly ? true : false,
+            ctaText: ev.ctaText || ev.cta_text || '',
+            ctaLink: ev.ctaLink || ev.cta_link || ev.ctaUrl || ev.link || '',
+            category: ev.category || '',
+            owner: ev.owner || '',
+            description: ev.description || ''
+          });
+        });
+      } else {
+        wsEvents.addRow({
+          id: 'ev-1',
+          activityId: 'a1',
+          label: 'Q1 Comm Plan',
+          startMonth: 'Jan',
+          endMonth: 'Mar',
+          startDay: 'Monday',
+          endDay: 'Friday',
+          startWeek: 1,
+          endWeek: 3,
+          year: 2024,
+          color: 'Teal Green',
+          lineStyle: 'solid',
+          isTextOnly: false,
+          ctaText: 'View Details',
+          ctaLink: 'https://example.com/details',
+          category: 'Planning',
+          owner: 'John Doe',
+          description: 'Initial planning for Q1.'
+        });
+      }
 
       // Style header rows (Cobalt Blue background, White text, 30px height)
       const formatHeaderRow = (sheet) => {
@@ -122,7 +164,17 @@ export default function ExcelImportModal({ isOpen, onClose }) {
       const dayListString = '"Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"';
       const weekListString = '"1,2,3,4,5"';
       const yearListString = '"2024,2025,2026,2027,2028,2029,2030"';
-      const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Pacific Blue,Purple,Pink,Teal Green,Dark Green"';
+      const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Light Blue,Pacific Blue,Purple,Pink"';
+      const lineStyleListString = '"solid,dashed,dotted"';
+      const booleanListString = '"true,false"';
+      const calendarTypeListString = '"Finance,Learning"';
+
+      // Apply calendarType validation to rows 2 to 100 in Activities (column B)
+      wsActivities.dataValidations.add('B2:B100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [calendarTypeListString]
+      });
 
       // Apply Month validations to rows 2 to 100 in Events (columns D and E)
       wsEvents.dataValidations.add('D2:D100', {
@@ -167,37 +219,56 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         formulae: [yearListString]
       });
 
-      // Apply Color validations to rows 2 to 100 in Events (columns K and L)
+      // Apply Color validation to rows 2 to 100 in Events (column K)
       wsEvents.dataValidations.add('K2:K100', {
         type: 'list',
         allowBlank: true,
         formulae: [colorListString]
       });
+
+      // Apply validations for lineStyle (L), isTextOnly (M)
       wsEvents.dataValidations.add('L2:L100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [colorListString]
-      });
-
-      // Apply validations for lineStyle (M), isDashed (N), isTextOnly (O)
-      const lineStyleListString = '"solid,dashed,dotted,gradient"';
-      const booleanListString = '"true,false"';
-
-      wsEvents.dataValidations.add('M2:M100', {
         type: 'list',
         allowBlank: true,
         formulae: [lineStyleListString]
       });
-      wsEvents.dataValidations.add('N2:N100', {
+      wsEvents.dataValidations.add('M2:M100', {
         type: 'list',
         allowBlank: true,
         formulae: [booleanListString]
       });
-      wsEvents.dataValidations.add('O2:O100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [booleanListString]
-      });
+
+      // Apply Excel Conditional Formatting safely
+      try {
+        const COLOR_PALETTE = [
+          { name: 'Primary Blue', hex: 'FF00338D' },
+          { name: 'Cobalt Blue', hex: 'FF1E49E2' },
+          { name: 'Dark Blue', hex: 'FF0C233C' },
+          { name: 'Light Blue', hex: 'FFACEAFF' },
+          { name: 'Pacific Blue', hex: 'FF00B8F5' },
+          { name: 'Purple', hex: 'FF7213EA' },
+          { name: 'Pink', hex: 'FFFD349C' },
+        ];
+
+        COLOR_PALETTE.forEach(c => {
+          wsEvents.addConditionalFormatting({
+            ref: 'K2:K100',
+            rules: [
+              {
+                type: 'cellIs',
+                operator: 'equal',
+                formulae: [`"${c.name}"`],
+                style: {
+                  fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: c.hex }, bgColor: { argb: c.hex } },
+                  font: { color: { argb: 'FFFFFFFF' }, bold: true }
+                }
+              }
+            ]
+          });
+        });
+      } catch (cfError) {
+        console.warn("Conditional formatting skipped:", cfError);
+      }
 
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -211,7 +282,7 @@ export default function ExcelImportModal({ isOpen, onClose }) {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error(err);
-      setError("Failed to load Excel generator.");
+      setError(err?.message || "Failed to load Excel generator.");
     }
   };
 
@@ -276,14 +347,17 @@ export default function ExcelImportModal({ isOpen, onClose }) {
 
         const COLOR_MAP = {
           'primary blue': '#00338d',
-          'blue': '#00338d',
+          'primary_blue': '#00338d',
           'cobalt blue': '#1e49e2',
+          'cobalt_blue': '#1e49e2',
           'dark blue': '#0c233c',
+          'dark_blue': '#0c233c',
+          'light blue': '#aceaff',
+          'light_blue': '#aceaff',
           'pacific blue': '#00b8f5',
+          'pacific_blue': '#00b8f5',
           'purple': '#7213ea',
           'pink': '#fd349c',
-          'teal green': '#00c0ae',
-          'dark green': '#098e7e',
         };
 
         const parseColor = (val) => {
@@ -309,14 +383,19 @@ export default function ExcelImportModal({ isOpen, onClose }) {
           const endMonthVal = parseMonth(event.endMonth || event.startMonth);
 
           const parsedColor = parseColor(event.color);
-          const parsedBorderColor = parseColor(event.borderColor);
+          const mainColor = parsedColor || event.color || '#00338d';
 
-          const isDashedVal = event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE' || event.lineStyle === 'dashed';
+          const rawLineStyle = String(event.lineStyle || '').trim().toLowerCase();
+          let lineStyleVal = ['solid', 'dashed', 'dotted'].includes(rawLineStyle) ? rawLineStyle : 'solid';
+          
+          if (event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE') {
+            lineStyleVal = 'dashed';
+          }
 
           return {
             ...event,
-            isDashed: isDashedVal,
-            lineStyle: event.lineStyle || (isDashedVal ? 'dashed' : 'solid'),
+            isDashed: lineStyleVal === 'dashed',
+            lineStyle: lineStyleVal,
             isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
             ctaText: event.ctaText || event.cta_text || '',
             ctaLink: event.ctaLink || event.cta_link || event.ctaUrl || event.link || '',
@@ -326,15 +405,23 @@ export default function ExcelImportModal({ isOpen, onClose }) {
             endDay: parseDay(event.endDay || event.startDay),
             startWeek: parseWeek(event.startWeek),
             endWeek: parseWeek(event.endWeek || event.startWeek),
-            color: parsedColor || event.color || '#00338d',
-            borderColor: parsedBorderColor || event.borderColor || parsedColor || event.color || '#00338d',
+            color: mainColor,
+            borderColor: mainColor,
             year: parseInt(event.year) || new Date().getFullYear(),
           };
         });
 
+        const formattedActivities = activities.map(act => ({
+          ...act,
+          id: String(act.id || '').trim(),
+          calendarType: String(act.calendarType || 'Finance').trim(),
+          name: String(act.name || '').trim(),
+          icon: String(act.icon || '').trim()
+        }));
+
         const finalJson = {
           lastUpdated: Date.now(),
-          activities: activities,
+          activities: formattedActivities,
           events: formattedEvents
         };
 

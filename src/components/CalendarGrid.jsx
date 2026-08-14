@@ -51,9 +51,9 @@ function assignLanes(events) {
 // isDashed: true  → dashed left border (dotted line effect)
 // isTextOnly: true → transparent bar, only text label visible
 function getBarStyle(event) {
-  const c = event.color || '#2563eb'
+  const c = event.color || '#00338d'
   const borderC = event.borderColor || c
-  const lightBg = c.length === 7 ? `${c}26` : 'rgba(0,0,0,0.05)'
+  const lightBg = c.length === 7 ? `${c}26` : 'rgba(0,51,141,0.12)'
 
   if (event.isTextOnly) {
     return {
@@ -61,29 +61,20 @@ function getBarStyle(event) {
       background: 'transparent',
       border: 'none',
       borderRadius: '4px',
-      color: borderC,
+      color: c,
     }
   }
 
-  if (event.isDashed || event.lineStyle === 'dashed') {
-    return {
-      height: 24,
-      background: lightBg,
-      border: 'none',
-      borderLeft: `4px dashed ${borderC}`,
-      borderRadius: '4px',
-      color: '#111',
-    }
-  }
+  const lineStyle = event.lineStyle || (event.isDashed ? 'dashed' : 'solid');
+  const borderLeftStr = lineStyle === 'dotted' ? `4px dotted ${borderC}` : (lineStyle === 'dashed' ? `4px dashed ${borderC}` : `4px solid ${borderC}`);
 
-  // Default solid style
   return {
     height: 24,
     background: lightBg,
     border: 'none',
-    borderLeft: `4px solid ${borderC}`,
+    borderLeft: borderLeftStr,
     borderRadius: '4px',
-    color: '#111',
+    color: '#0c233c',
   }
 }
 
@@ -209,7 +200,7 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
                 <tr key={activity.id}>
                   <td className="activity-name" style={{ height: rowH }}>
                     <span className="activity-icon">
-                      <ActivityIcon id={activity.id} />
+                      <ActivityIcon id={activity.id} icon={activity.icon} />
                     </span>
                     {activity.name}
                   </td>
