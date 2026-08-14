@@ -87,6 +87,8 @@
       "category": "Audit Process",
       "owner": "Internal Audit Team",
       "description": "Mid-year interim audit review for H1 financial statements.",
+      "ctaText": "View Audit Guidelines",
+      "ctaLink": "https://example.com/audit-guidelines",
       "startWeek": 1,
       "endWeek": 5
     },
@@ -105,6 +107,8 @@
       "category": "Audit Process",
       "owner": "External Auditors",
       "description": "Year-end final audit and sign-off process with external auditors.",
+      "ctaText": "View Audit Portal",
+      "ctaLink": "https://example.com/audit-portal",
       "startWeek": 1,
       "endWeek": 5
     },

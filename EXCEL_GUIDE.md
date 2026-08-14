@@ -19,15 +19,15 @@ Yeh tab tay karta hai ki calendar mein left side par kaun-kaun se rows (categori
 | Column | Naam | Required? | Aasan Bhasha Mein Matlab | Example |
 | :---: | :--- | :---: | :--- | :--- |
 | **A** | **`id`** | **Haan** | Unique ID code. (Events ko isse jodte hain). | `a1`, `a2`, `l1` |
-| **B** | **`name`** | **Haan** | Left column mein dikhne waala Activity ka Naam. | `Communications`, `Onboarding` |
-| **C** | **`calendarType`** | **Haan** | Kaunse tab mein dikhana hai? <br>Kewal **`Finance`** ya **`Learning`** likhein. | `Finance` |
+| **B** | **`calendarType`** | **Haan** | Kaunse tab mein dikhana hai? <br>Kewal **`Finance`** ya **`Learning`** likhein. | `Finance` |
+| **C** | **`name`** | **Haan** | Left column mein dikhne waala Activity ka Naam. | `Communications`, `Onboarding` |
 
 ### Sample `Activities` Data:
-| id | name | calendarType |
+| id | calendarType | name |
 | :--- | :--- | :--- |
-| `a1` | Communications | Finance |
-| `a2` | Strategic Planning | Finance |
-| `l1` | Employee Onboarding | Learning |
+| `a1` | Finance | Communications |
+| `a2` | Finance | Strategic Planning |
+| `l1` | Learning | Employee Onboarding |
 
 ---
 
@@ -49,19 +49,21 @@ Yeh tab calendar grid par dikhne waale rang-birange event bars ko tay karta hai.
 - **Column G (`endDay`)** *(Weekly View)*: Hafta view ke liye ending day.
 - **Column H (`startWeek`)** *(Weekly View)*: Mahine ka kaunsa hafta? (`1`, `2`, `3`, `4`, `5`).
 - **Column I (`endWeek`)** *(Weekly View)*: Mahine ke kis hafte tak? (`1`, `2`, `3`, `4`, `5`).
-- **Column J (`year`)** *(Required)*: Event ka saal. Example: `2024`
+- **Column J (`year`)** *(Required)*: Event ka saal (Dropdown se select karein: `2024`, `2025`, `2026`, etc.).
 
 #### 3. Styling (Color & Line Design)
-- **Column K (`color`)**: Bar ka background color. <br>Allowed Colors: `Primary Blue`, `Cobalt Blue`, `Dark Blue`, `Pacific Blue`, `Purple`, `Pink`, `Teal Green`, `Dark Green` (ya hex code jaise `#00338d`).
-- **Column L (`borderColor`)**: Left border color. (Blank chhoda toh `color` wala hi rahega).
+- **Column K (`color`)**: Bar ka background color cell (Excel cell mein color preview/fill ke saath dikhta hai). <br>Allowed Colors: `Primary Blue`, `Cobalt Blue`, `Dark Blue`, `Pacific Blue`, `Purple`, `Pink`, `Teal Green`, `Dark Green` (ya hex code jaise `#00338d`).
+- **Column L (`borderColor`)**: Left border color cell.
 - **Column M (`lineStyle`)**: Border design. Values: `solid`, `dashed`, `dotted`, `gradient`.
 - **Column N (`isDashed`)**: Left border dashed rakhne ke liye: `true` ya `false`.
 - **Column O (`isTextOnly`)**: Kewal text dikhana ho (transparent bar): `true` ya `false`.
 
 #### 4. Popup Card Info (Click karne par kya dikhega?)
-- **Column P (`category`)**: Category name. Example: `Planning`
-- **Column Q (`owner`)**: Event ka in-charge / Owner name. Example: `John Doe`
-- **Column R (`description`)**: Event ke baare mein poori jankari. Example: `Q1 Strategy Review Meeting`.
+- **Column P (`ctaText`)**: CTA Button text. Example: `View Plan`, `Open Link`
+- **Column Q (`ctaLink`)**: CTA URL / Link. Example: `https://example.com/doc`
+- **Column R (`category`)**: Category name. Example: `Planning`
+- **Column S (`owner`)**: Event ka in-charge / Owner name. Example: `John Doe`
+- **Column T (`description`)**: Event ke baare mein poori jankari. Example: `Q1 Strategy Review Meeting`.
 
 ---
 

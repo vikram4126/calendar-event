@@ -65,7 +65,7 @@ function getBarStyle(event) {
     }
   }
 
-  if (event.isDashed) {
+  if (event.isDashed || event.lineStyle === 'dashed') {
     return {
       height: 24,
       background: lightBg,

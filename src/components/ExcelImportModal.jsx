@@ -15,19 +15,19 @@ export default function ExcelImportModal({ isOpen, onClose }) {
       const wsActivities = workbook.addWorksheet('Activities');
       const wsEvents = workbook.addWorksheet('Events');
 
-      // Define columns for Activities
+      // Define columns for Activities (calendarType moved before name as requested)
       wsActivities.columns = [
         { header: 'id', key: 'id', width: 10 },
-        { header: 'name', key: 'name', width: 25 },
-        { header: 'calendarType', key: 'calendarType', width: 15 }
+        { header: 'calendarType', key: 'calendarType', width: 15 },
+        { header: 'name', key: 'name', width: 25 }
       ];
       
       wsActivities.addRows([
-        { id: 'a1', name: 'Communications', calendarType: 'Finance' },
-        { id: 'l1', name: 'Onboarding', calendarType: 'Learning' }
+        { id: 'a1', calendarType: 'Finance', name: 'Communications' },
+        { id: 'l1', calendarType: 'Learning', name: 'Onboarding' }
       ]);
 
-      // Define columns for Events
+      // Define columns for Events (added ctaText and ctaLink)
       wsEvents.columns = [
         { header: 'id', key: 'id', width: 12 },
         { header: 'activityId', key: 'activityId', width: 12 },
@@ -39,18 +39,20 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         { header: 'startWeek', key: 'startWeek', width: 12 },
         { header: 'endWeek', key: 'endWeek', width: 12 },
         { header: 'year', key: 'year', width: 10 },
-        { header: 'color', key: 'color', width: 16 },
-        { header: 'borderColor', key: 'borderColor', width: 16 },
+        { header: 'color', key: 'color', width: 18 },
+        { header: 'borderColor', key: 'borderColor', width: 18 },
         { header: 'lineStyle', key: 'lineStyle', width: 12 },
         { header: 'isDashed', key: 'isDashed', width: 12 },
         { header: 'isTextOnly', key: 'isTextOnly', width: 12 },
+        { header: 'ctaText', key: 'ctaText', width: 18 },
+        { header: 'ctaLink', key: 'ctaLink', width: 30 },
         { header: 'category', key: 'category', width: 15 },
         { header: 'owner', key: 'owner', width: 15 },
         { header: 'description', key: 'description', width: 30 }
       ];
 
       // Add a sample row in Events
-      wsEvents.addRow({
+      const sampleRow = wsEvents.addRow({
         id: 'ev-1',
         activityId: 'a1',
         label: 'Q1 Comm Plan',
@@ -66,10 +68,29 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         lineStyle: 'solid',
         isDashed: false,
         isTextOnly: false,
+        ctaText: 'View Details',
+        ctaLink: 'https://example.com/details',
         category: 'Planning',
         owner: 'John Doe',
         description: 'Initial planning for Q1.'
       });
+
+      // Style color cell with background color fill preview so user sees visual color in Excel
+      const colorCell = sampleRow.getCell('color');
+      colorCell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF00C0AE' }
+      };
+      colorCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+
+      const borderCell = sampleRow.getCell('borderColor');
+      borderCell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF098E7E' }
+      };
+      borderCell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
 
       // Style header rows (Cobalt Blue background, White text, 30px height)
       const formatHeaderRow = (sheet) => {
@@ -100,6 +121,7 @@ export default function ExcelImportModal({ isOpen, onClose }) {
       const monthListString = '"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"';
       const dayListString = '"Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"';
       const weekListString = '"1,2,3,4,5"';
+      const yearListString = '"2024,2025,2026,2027,2028,2029,2030"';
       const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Pacific Blue,Purple,Pink,Teal Green,Dark Green"';
 
       // Apply Month validations to rows 2 to 100 in Events (columns D and E)
@@ -136,6 +158,13 @@ export default function ExcelImportModal({ isOpen, onClose }) {
         type: 'list',
         allowBlank: true,
         formulae: [weekListString]
+      });
+
+      // Apply Year validation dropdown to row 2 to 100 in Events (column J)
+      wsEvents.dataValidations.add('J2:J100', {
+        type: 'list',
+        allowBlank: true,
+        formulae: [yearListString]
       });
 
       // Apply Color validations to rows 2 to 100 in Events (columns K and L)
@@ -282,10 +311,15 @@ export default function ExcelImportModal({ isOpen, onClose }) {
           const parsedColor = parseColor(event.color);
           const parsedBorderColor = parseColor(event.borderColor);
 
+          const isDashedVal = event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE' || event.lineStyle === 'dashed';
+
           return {
             ...event,
-            isDashed: event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE',
+            isDashed: isDashedVal,
+            lineStyle: event.lineStyle || (isDashedVal ? 'dashed' : 'solid'),
             isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
+            ctaText: event.ctaText || event.cta_text || '',
+            ctaLink: event.ctaLink || event.cta_link || event.ctaUrl || event.link || '',
             startMonth: startMonthVal,
             endMonth: endMonthVal,
             startDay: parseDay(event.startDay),
