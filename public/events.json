@@ -104,7 +104,11 @@
       "ctaLink": "https://example.com/audit-guidelines",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2024",
+      "endDateStr": "28 Jul 2024"
     },
     {
       "id": "f24-a3",
@@ -124,7 +128,11 @@
       "ctaLink": "https://example.com/audit-portal",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Aug 2024",
+      "endDateStr": "28 Sep 2024"
     },
     {
       "id": "f24-fb1",
@@ -144,7 +152,11 @@
       "ctaLink": "https://example.com/forecast-sheet",
       "startWeek": 4,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "22 Jan 2024",
+      "endDateStr": "28 Jan 2024"
     },
     {
       "id": "f24-fb2",
@@ -164,7 +176,11 @@
       "ctaLink": "https://example.com/budget-plan",
       "startWeek": 1,
       "endWeek": 2,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 May 2024",
+      "endDateStr": "12 Jun 2024"
     },
     {
       "id": "f24-fb3",
@@ -174,7 +190,7 @@
       "endMonth": 7,
       "year": 2024,
       "color": "#00338d",
-      "lineStyle": "outline",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "category": "Forecasting/Budget",
@@ -182,7 +198,11 @@
       "description": "Mid-year 6+6 reforecast incorporating H1 actuals.",
       "startWeek": 3,
       "endWeek": 4,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "15 Jul 2024",
+      "endDateStr": "26 Jul 2024"
     },
     {
       "id": "f24-l1",
@@ -192,7 +212,7 @@
       "endMonth": 8,
       "year": 2024,
       "color": "#7213ea",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "category": "Long term planning",
@@ -200,7 +220,11 @@
       "description": "Annual 3-year strategic plan review and refresh workshops.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2024",
+      "endDateStr": "28 Aug 2024"
     },
     {
       "id": "f24-l2",
@@ -218,7 +242,11 @@
       "description": "Preparation and rehearsal for Q4 Board of Directors strategy presentation.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2024",
+      "endDateStr": "28 Nov 2024"
     },
     {
       "id": "f24-p1",
@@ -228,15 +256,19 @@
       "endMonth": 5,
       "year": 2024,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "category": "People",
       "owner": "HR Team",
       "description": "Company-wide campaign reinforcing core values through team activities.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Feb 2024",
+      "endDateStr": "28 May 2024"
     },
     {
       "id": "f24-p2",
@@ -246,15 +278,19 @@
       "endMonth": 6,
       "year": 2024,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "category": "People",
       "owner": "People & Culture",
       "description": "Mid-year employee engagement pulse survey and results analysis.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Apr 2024",
+      "endDateStr": "28 Jun 2024"
     },
     {
       "id": "f24-p3",
@@ -264,15 +300,19 @@
       "endMonth": 10,
       "year": 2024,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "category": "People",
       "owner": "People & Culture",
       "description": "Global People Survey launch and data collection window.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Aug 2024",
+      "endDateStr": "28 Oct 2024"
     },
     {
       "id": "f24-p4",
@@ -290,7 +330,11 @@
       "description": "Annual full-day Finance team training and development event.",
       "startWeek": 3,
       "endWeek": 3,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "15 Feb 2024",
+      "endDateStr": "19 Feb 2024"
     },
     {
       "id": "f24-p5",
@@ -308,7 +352,11 @@
       "description": "Q3 performance and capability calibration sessions for the Finance function.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Sep 2024",
+      "endDateStr": "28 Oct 2024"
     },
     {
       "id": "f24-e1",
@@ -326,7 +374,11 @@
       "description": "Structured training program covering tools, processes, and upskilling for finance teams.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Apr 2024",
+      "endDateStr": "28 Jun 2024"
     },
     {
       "id": "f24-e2",
@@ -336,15 +388,19 @@
       "endMonth": 9,
       "year": 2024,
       "color": "#00b8f5",
-      "lineStyle": "gradient",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "category": "Empowered",
       "owner": "Digital Finance Team",
       "description": "Rollout of Power BI dashboards and training across Finance sub-teams.",
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jul 2024",
+      "endDateStr": "28 Sep 2024"
     },
     {
       "id": "f25-a1",
@@ -359,7 +415,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2025",
+      "endDateStr": "28 Feb 2025"
     },
     {
       "id": "f25-a3",
@@ -374,7 +434,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Sep 2025",
+      "endDateStr": "28 Oct 2025"
     },
     {
       "id": "f25-fb1",
@@ -389,7 +453,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2025",
+      "endDateStr": "28 Feb 2025"
     },
     {
       "id": "f25-fb2",
@@ -404,7 +472,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 May 2025",
+      "endDateStr": "28 Jul 2025"
     },
     {
       "id": "f25-fb3",
@@ -414,12 +486,16 @@
       "endMonth": 9,
       "year": 2025,
       "color": "#1e49e2",
-      "lineStyle": "outline",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#1e49e2"
+      "borderColor": "#1e49e2",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 Aug 2025",
+      "endDateStr": "28 Sep 2025"
     },
     {
       "id": "f25-l1",
@@ -429,12 +505,16 @@
       "endMonth": 3,
       "year": 2025,
       "color": "#7213ea",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Feb 2025",
+      "endDateStr": "28 Mar 2025"
     },
     {
       "id": "f25-l2",
@@ -444,12 +524,16 @@
       "endMonth": 10,
       "year": 2025,
       "color": "#7213ea",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jul 2025",
+      "endDateStr": "28 Oct 2025"
     },
     {
       "id": "f25-l3",
@@ -464,7 +548,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Nov 2025",
+      "endDateStr": "28 Dec 2025"
     },
     {
       "id": "f25-p1",
@@ -474,12 +562,16 @@
       "endMonth": 2,
       "year": 2025,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2025",
+      "endDateStr": "28 Feb 2025"
     },
     {
       "id": "f25-p2",
@@ -489,12 +581,16 @@
       "endMonth": 5,
       "year": 2025,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Apr 2025",
+      "endDateStr": "28 May 2025"
     },
     {
       "id": "f25-p3",
@@ -504,12 +600,16 @@
       "endMonth": 8,
       "year": 2025,
       "color": "#00b8f5",
-      "lineStyle": "dotted",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jul 2025",
+      "endDateStr": "28 Aug 2025"
     },
     {
       "id": "f25-p4",
@@ -519,12 +619,16 @@
       "endMonth": 11,
       "year": 2025,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2025",
+      "endDateStr": "28 Nov 2025"
     },
     {
       "id": "f25-e1",
@@ -539,7 +643,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Feb 2025",
+      "endDateStr": "28 Mar 2025"
     },
     {
       "id": "f25-e2",
@@ -549,12 +657,16 @@
       "endMonth": 8,
       "year": 2025,
       "color": "#00b8f5",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 May 2025",
+      "endDateStr": "28 Aug 2025"
     },
     {
       "id": "f25-e3",
@@ -569,7 +681,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2025",
+      "endDateStr": "28 Nov 2025"
     },
     {
       "id": "f26-a1",
@@ -584,7 +700,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2026",
+      "endDateStr": "28 Mar 2026"
     },
     {
       "id": "f26-a2",
@@ -599,7 +719,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 May 2026",
+      "endDateStr": "28 Jul 2026"
     },
     {
       "id": "f26-a3",
@@ -614,7 +738,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Audit process",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2026",
+      "endDateStr": "28 Dec 2026"
     },
     {
       "id": "f26-fb1",
@@ -629,7 +757,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2026",
+      "endDateStr": "28 Feb 2026"
     },
     {
       "id": "f26-fb2",
@@ -644,7 +776,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2026",
+      "endDateStr": "28 Aug 2026"
     },
     {
       "id": "f26-fb3",
@@ -654,12 +790,16 @@
       "endMonth": 11,
       "year": 2026,
       "color": "#fd349c",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#fd349c"
+      "borderColor": "#fd349c",
+      "activityName": "Forecasting/Budget",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2026",
+      "endDateStr": "28 Nov 2026"
     },
     {
       "id": "f26-l1",
@@ -669,12 +809,16 @@
       "endMonth": 4,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Feb 2026",
+      "endDateStr": "28 Apr 2026"
     },
     {
       "id": "f26-l2",
@@ -684,12 +828,16 @@
       "endMonth": 9,
       "year": 2026,
       "color": "#7213ea",
-      "lineStyle": "dotted",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2026",
+      "endDateStr": "28 Sep 2026"
     },
     {
       "id": "f26-l3",
@@ -704,7 +852,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#0c233c"
+      "borderColor": "#0c233c",
+      "activityName": "Long term planning",
+      "calendarType": "Finance",
+      "startDateStr": "1 Nov 2026",
+      "endDateStr": "28 Dec 2026"
     },
     {
       "id": "f26-p1",
@@ -719,7 +871,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2026",
+      "endDateStr": "28 Jan 2026"
     },
     {
       "id": "f26-p2",
@@ -729,12 +885,16 @@
       "endMonth": 5,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Mar 2026",
+      "endDateStr": "28 May 2026"
     },
     {
       "id": "f26-p3",
@@ -744,12 +904,16 @@
       "endMonth": 6,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "text",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": true,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2026",
+      "endDateStr": "28 Jun 2026"
     },
     {
       "id": "f26-p4",
@@ -759,12 +923,16 @@
       "endMonth": 12,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "People",
+      "calendarType": "Finance",
+      "startDateStr": "1 Oct 2026",
+      "endDateStr": "28 Dec 2026"
     },
     {
       "id": "f26-e1",
@@ -774,12 +942,16 @@
       "endMonth": 4,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jan 2026",
+      "endDateStr": "28 Apr 2026"
     },
     {
       "id": "f26-e2",
@@ -794,7 +966,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#1e49e2"
+      "borderColor": "#1e49e2",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Jun 2026",
+      "endDateStr": "28 Jun 2026"
     },
     {
       "id": "f26-e3",
@@ -804,12 +980,16 @@
       "endMonth": 11,
       "year": 2026,
       "color": "#00b8f5",
-      "lineStyle": "outline",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00b8f5"
+      "borderColor": "#00b8f5",
+      "activityName": "Empowered",
+      "calendarType": "Finance",
+      "startDateStr": "1 Sep 2026",
+      "endDateStr": "28 Nov 2026"
     },
     {
       "id": "lr24-ob1",
@@ -824,7 +1004,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Onboarding",
+      "calendarType": "Learning",
+      "startDateStr": "1 Jan 2024",
+      "endDateStr": "28 Feb 2024"
     },
     {
       "id": "lr24-ob2",
@@ -839,7 +1023,11 @@
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#00338d"
+      "borderColor": "#00338d",
+      "activityName": "Onboarding",
+      "calendarType": "Learning",
+      "startDateStr": "1 Jul 2024",
+      "endDateStr": "28 Aug 2024"
     },
     {
       "id": "lr24-ob3",
@@ -849,12 +1037,16 @@
       "endMonth": 12,
       "year": 2024,
       "color": "#aceaff",
-      "lineStyle": "dotted",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#aceaff"
+      "borderColor": "#aceaff",
+      "activityName": "Onboarding",
+      "calendarType": "Learning",
+      "startDateStr": "1 Jan 2024",
+      "endDateStr": "28 Dec 2024"
     },
     {
       "id": "lr24-ld1",
@@ -864,12 +1056,16 @@
       "endMonth": 5,
       "year": 2024,
       "color": "#fd349c",
-      "lineStyle": "gradient",
+      "lineStyle": "solid",
       "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#fd349c"
+      "borderColor": "#fd349c",
+      "activityName": "Leadership Development",
+      "calendarType": "Learning",
+      "startDateStr": "1 Feb 2024",
+      "endDateStr": "28 May 2024"
     },
     {
       "id": "lr24-ld2",
@@ -879,12 +1075,16 @@
       "endMonth": 9,
       "year": 2024,
       "color": "#7213ea",
-      "lineStyle": "dashed",
-      "isDashed": true,
+      "lineStyle": "solid",
+      "isDashed": false,
       "isTextOnly": false,
       "startWeek": 1,
       "endWeek": 5,
-      "borderColor": "#7213ea"
+      "borderColor": "#7213ea",
+      "activityName": "Leadership Development",
+      "calendarType": "Learning",
+      "startDateStr": "1 Jun 2024",
+      "endDateStr": "28 Sep 2024"
     }
   ],
   "lastUpdated": 1786688540824

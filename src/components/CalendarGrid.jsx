@@ -65,14 +65,11 @@ function getBarStyle(event) {
     }
   }
 
-  const lineStyle = event.lineStyle || (event.isDashed ? 'dashed' : 'solid');
-  const borderLeftStr = lineStyle === 'dotted' ? `4px dotted ${borderC}` : (lineStyle === 'dashed' ? `4px dashed ${borderC}` : `4px solid ${borderC}`);
-
   return {
     height: 24,
     background: lightBg,
     border: 'none',
-    borderLeft: borderLeftStr,
+    borderLeft: `4px solid ${borderC}`,
     borderRadius: '4px',
     color: '#0c233c',
   }

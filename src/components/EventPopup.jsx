@@ -78,15 +78,29 @@ function EventPopup({ event, anchorRect, onClose }) {
     left = 16
   }
 
-  // Parse 0-indexed month array index accurately
-  const startIdx = getMonthIndex(event.startMonth)
-  const endIdx = getMonthIndex(event.endMonth || event.startMonth)
-  const startMonthStr = MONTHS[startIdx]
-  const endMonthStr = MONTHS[endIdx]
+  // Format actual duration date string (e.g. "22 Jan to 28 Jan" or "17 Aug 2026 to 20 Sep 2026")
+  let dateStr = '';
+  if (event.startDateStr && event.endDateStr) {
+    dateStr = event.startDateStr === event.endDateStr
+      ? event.startDateStr
+      : `${event.startDateStr} to ${event.endDateStr}`;
+  } else {
+    const startIdx = getMonthIndex(event.startMonth)
+    const endIdx = getMonthIndex(event.endMonth || event.startMonth)
+    const startMonthStr = MONTHS[startIdx]
+    const endMonthStr = MONTHS[endIdx]
 
-  const dateStr = startIdx === endIdx
-    ? `${startMonthStr} ${event.year}`
-    : `${startMonthStr} – ${endMonthStr} ${event.year}`
+    const sDay = Math.min(28, Math.max(1, ((event.startWeek || 1) - 1) * 7 + 1))
+    const eDay = Math.min(28, Math.max(1, ((event.endWeek || event.startWeek || 1) - 1) * 7 + 5))
+
+    if (startIdx === endIdx) {
+      dateStr = sDay === eDay
+        ? `${sDay} ${startMonthStr} ${event.year || 2026}`
+        : `${sDay} ${startMonthStr} to ${eDay} ${startMonthStr} ${event.year || 2026}`;
+    } else {
+      dateStr = `${sDay} ${startMonthStr} to ${eDay} ${endMonthStr} ${event.year || 2026}`;
+    }
+  }
 
   const ctaLink = event.ctaLink || event.cta_link || event.ctaUrl || event.link
   const ctaText = event.ctaText || event.cta_text || 'View Link'

@@ -2,13 +2,8 @@ import { useState } from 'react';
 import { X, Upload, Download } from 'lucide-react';
 
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-const formatMonthForExcel = (val) => {
-  if (typeof val === 'number') {
-    return MONTH_NAMES[val - 1] || val;
-  }
-  return val || 'Jan';
-};
+const FULL_MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const COLOR_NAME_MAP = {
   '#00338d': 'Primary Blue',
@@ -20,12 +15,132 @@ const COLOR_NAME_MAP = {
   '#fd349c': 'Pink',
 };
 
+const COLOR_MAP = {
+  'primary blue': '#00338d',
+  'primary_blue': '#00338d',
+  'cobalt blue': '#1e49e2',
+  'cobalt_blue': '#1e49e2',
+  'dark blue': '#0c233c',
+  'dark_blue': '#0c233c',
+  'light blue': '#aceaff',
+  'light_blue': '#aceaff',
+  'pacific blue': '#00b8f5',
+  'pacific_blue': '#00b8f5',
+  'purple': '#7213ea',
+  'pink': '#fd349c',
+};
+
 const formatColorForExcel = (val) => {
   if (!val) return 'Primary Blue';
   const s = String(val).trim().toLowerCase();
+  if (COLOR_MAP[s]) return COLOR_NAME_MAP[COLOR_MAP[s]] || 'Primary Blue';
   if (COLOR_NAME_MAP[s]) return COLOR_NAME_MAP[s];
   return val;
 };
+
+const parseColor = (val) => {
+  if (!val) return undefined;
+  const s = String(val).trim().toLowerCase();
+  if (COLOR_MAP[s]) return COLOR_MAP[s];
+  if (s.startsWith('#')) return String(val).trim();
+  return undefined;
+};
+
+function parseDateObject(val) {
+  if (!val && val !== 0) return null;
+
+  // Excel serial date number (e.g. 46252)
+  if (typeof val === 'number') {
+    if (val > 1000) {
+      const date = new Date(Math.round((val - 25569) * 86400 * 1000));
+      if (!isNaN(date.getTime())) return date;
+    }
+  }
+
+  if (val instanceof Date && !isNaN(val.getTime())) {
+    return val;
+  }
+
+  const str = String(val).trim();
+  if (!str) return null;
+
+  // Try standard JS Date constructor
+  let date = new Date(str);
+  if (!isNaN(date.getTime()) && date.getFullYear() > 2000) {
+    return date;
+  }
+
+  // Parse custom strings like "17 August 2026", "17/08/2026", "17-08-2026"
+  const tokens = str.split(/[\s,/-]+/).filter(Boolean);
+  if (tokens.length >= 3) {
+    let day = parseInt(tokens[0]);
+    let monthToken = tokens[1].toLowerCase();
+    let year = parseInt(tokens[2]);
+
+    if (isNaN(day)) {
+      monthToken = tokens[0].toLowerCase();
+      day = parseInt(tokens[1]);
+    }
+
+    let mIdx = MONTH_NAMES.findIndex(m => m.toLowerCase() === monthToken.slice(0, 3));
+    if (mIdx === -1) mIdx = FULL_MONTH_NAMES.findIndex(m => m.toLowerCase().startsWith(monthToken));
+
+    if (mIdx !== -1 && !isNaN(day) && !isNaN(year)) {
+      return new Date(year, mIdx, day);
+    }
+  }
+
+  return null;
+}
+
+function formatDateForDisplay(d) {
+  if (!d || isNaN(d.getTime())) return '';
+  const day = d.getDate();
+  const monthStr = FULL_MONTH_NAMES[d.getMonth()];
+  const year = d.getFullYear();
+  return `${day} ${monthStr} ${year}`;
+}
+
+function extractEventDates(startVal, endVal, fallbackYear = 2026) {
+  const startDate = parseDateObject(startVal);
+  const endDate = parseDateObject(endVal) || startDate;
+
+  if (startDate) {
+    const sYr = startDate.getFullYear();
+    const sMo = startDate.getMonth() + 1; // 1-indexed (1-12)
+    const sDa = WEEKDAYS[startDate.getDay()];
+    const sWk = Math.min(5, Math.ceil(startDate.getDate() / 7));
+
+    const eYr = endDate ? endDate.getFullYear() : sYr;
+    const eMo = endDate ? endDate.getMonth() + 1 : sMo;
+    const eDa = endDate ? WEEKDAYS[endDate.getDay()] : sDa;
+    const eWk = endDate ? Math.min(5, Math.ceil(endDate.getDate() / 7)) : sWk;
+
+    return {
+      year: sYr,
+      startMonth: sMo,
+      endMonth: eMo,
+      startDay: sDa,
+      endDay: eDa,
+      startWeek: sWk,
+      endWeek: eWk,
+      startDateStr: formatDateForDisplay(startDate),
+      endDateStr: formatDateForDisplay(endDate || startDate)
+    };
+  }
+
+  return {
+    year: fallbackYear,
+    startMonth: 1,
+    endMonth: 1,
+    startDay: 'Monday',
+    endDay: 'Friday',
+    startWeek: 1,
+    endWeek: 2,
+    startDateStr: String(startVal || ''),
+    endDateStr: String(endVal || startVal || '')
+  };
+}
 
 export default function ExcelImportModal({ isOpen, onClose, events = [], activities = [] }) {
   const [error, setError] = useState(null);
@@ -39,206 +154,104 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
       const ExcelJS = await import('exceljs');
       const workbook = new ExcelJS.Workbook();
       
-      const wsActivities = workbook.addWorksheet('Activities');
       const wsEvents = workbook.addWorksheet('Events');
 
-      // Define columns for Activities (calendarType moved before name, icon column added)
-      wsActivities.columns = [
-        { header: 'id', key: 'id', width: 10 },
-        { header: 'calendarType', key: 'calendarType', width: 15 },
-        { header: 'name', key: 'name', width: 25 },
-        { header: 'icon', key: 'icon', width: 15 }
-      ];
-      
-      if (activities && activities.length > 0) {
-        activities.forEach(act => {
-          wsActivities.addRow({
-            id: act.id,
-            calendarType: act.calendarType || 'Finance',
-            name: act.name || '',
-            icon: act.icon || ''
-          });
-        });
-      } else {
-        wsActivities.addRows([
-          { id: 'a1', calendarType: 'Finance', name: 'Communications', icon: 'message' },
-          { id: 'l1', calendarType: 'Learning', name: 'Onboarding', icon: 'onboarding' }
-        ]);
-      }
-
-      // Define columns for Events (borderColor and isDashed columns removed)
+      // Define single sheet columns
       wsEvents.columns = [
-        { header: 'id', key: 'id', width: 12 },
-        { header: 'activityId', key: 'activityId', width: 12 },
-        { header: 'label', key: 'label', width: 25 },
-        { header: 'startMonth', key: 'startMonth', width: 15 },
-        { header: 'endMonth', key: 'endMonth', width: 15 },
-        { header: 'startDay', key: 'startDay', width: 15 },
-        { header: 'endDay', key: 'endDay', width: 15 },
-        { header: 'startWeek', key: 'startWeek', width: 12 },
-        { header: 'endWeek', key: 'endWeek', width: 12 },
-        { header: 'year', key: 'year', width: 10 },
-        { header: 'color', key: 'color', width: 18 },
-        { header: 'lineStyle', key: 'lineStyle', width: 12 },
-        { header: 'isTextOnly', key: 'isTextOnly', width: 12 },
-        { header: 'ctaText', key: 'ctaText', width: 18 },
-        { header: 'ctaLink', key: 'ctaLink', width: 30 },
-        { header: 'category', key: 'category', width: 15 },
-        { header: 'owner', key: 'owner', width: 15 },
-        { header: 'description', key: 'description', width: 30 }
+        { header: 'event id', key: 'id', width: 12 },
+        { header: 'Calender type', key: 'calendarType', width: 16 },
+        { header: 'Activity name', key: 'activityName', width: 25 },
+        { header: 'icon', key: 'icon', width: 15 },
+        { header: 'Event name', key: 'eventName', width: 25 },
+        { header: 'Start date', key: 'startDate', width: 20 },
+        { header: 'End date', key: 'endDate', width: 20 },
+        { header: 'Color', key: 'color', width: 16 },
+        { header: 'Description', key: 'description', width: 30 },
+        { header: 'CTA text', key: 'ctaText', width: 18 },
+        { header: 'CTA link', key: 'ctaLink', width: 30 }
       ];
+
+      // Hide icon column (Column 4)
+      wsEvents.getColumn(4).hidden = true;
+
+      // Populate sheet with active events & activities
+      const actMap = {};
+      (activities || []).forEach(a => { actMap[a.id] = a; });
 
       if (events && events.length > 0) {
         events.forEach(ev => {
+          const act = actMap[ev.activityId] || {};
+          const actName = act.name || ev.activityName || ev.category || 'General';
+          const calType = act.calendarType || ev.calendarType || 'Finance';
+          const iconName = act.icon || ev.icon || '';
+
+          const sMoStr = FULL_MONTH_NAMES[(ev.startMonth || 1) - 1] || 'August';
+          const eMoStr = FULL_MONTH_NAMES[(ev.endMonth || ev.startMonth || 1) - 1] || sMoStr;
+          const yr = ev.year || 2026;
+          const sDayNum = Math.min(28, Math.max(1, ((ev.startWeek || 1) - 1) * 7 + 1));
+          const eDayNum = Math.min(28, Math.max(1, ((ev.endWeek || ev.startWeek || 1) - 1) * 7 + 5));
+
+          const sDateStr = ev.startDateStr || `${sDayNum} ${sMoStr} ${yr}`;
+          const eDateStr = ev.endDateStr || `${eDayNum} ${eMoStr} ${yr}`;
+
           wsEvents.addRow({
             id: ev.id,
-            activityId: ev.activityId,
-            label: ev.label ? ev.label.replace(/\\n/g, '\n') : '',
-            startMonth: formatMonthForExcel(ev.startMonth),
-            endMonth: formatMonthForExcel(ev.endMonth || ev.startMonth),
-            startDay: ev.startDay || '',
-            endDay: ev.endDay || ev.startDay || '',
-            startWeek: ev.startWeek || '',
-            endWeek: ev.endWeek || ev.startWeek || '',
-            year: ev.year || 2024,
+            calendarType: calType,
+            activityName: actName,
+            icon: iconName,
+            eventName: ev.label ? ev.label.replace(/\\n/g, '\n') : '',
+            startDate: sDateStr,
+            endDate: eDateStr,
             color: formatColorForExcel(ev.color),
-            lineStyle: ev.lineStyle || (ev.isDashed ? 'dashed' : 'solid'),
-            isTextOnly: ev.isTextOnly ? true : false,
+            description: ev.description || '',
             ctaText: ev.ctaText || ev.cta_text || '',
-            ctaLink: ev.ctaLink || ev.cta_link || ev.ctaUrl || ev.link || '',
-            category: ev.category || '',
-            owner: ev.owner || '',
-            description: ev.description || ''
+            ctaLink: ev.ctaLink || ev.cta_link || ev.ctaUrl || ev.link || ''
           });
         });
       } else {
         wsEvents.addRow({
           id: 'ev-1',
-          activityId: 'a1',
-          label: 'Q1 Comm Plan',
-          startMonth: 'Jan',
-          endMonth: 'Mar',
-          startDay: 'Monday',
-          endDay: 'Friday',
-          startWeek: 1,
-          endWeek: 3,
-          year: 2024,
-          color: 'Teal Green',
-          lineStyle: 'solid',
-          isTextOnly: false,
+          calendarType: 'Finance',
+          activityName: 'Communications',
+          icon: 'MessageSquare',
+          eventName: 'Q1 Comm Plan',
+          startDate: '17 August 2026',
+          endDate: '20 September 2026',
+          color: 'Primary Blue',
+          description: 'Initial planning for Q1.',
           ctaText: 'View Details',
-          ctaLink: 'https://example.com/details',
-          category: 'Planning',
-          owner: 'John Doe',
-          description: 'Initial planning for Q1.'
+          ctaLink: 'https://example.com/details'
         });
       }
 
-      // Style header rows (Cobalt Blue background, White text, 30px height)
-      const formatHeaderRow = (sheet) => {
-        const headerRow = sheet.getRow(1);
-        headerRow.height = 30;
-        headerRow.eachCell((cell) => {
-          cell.font = {
-            bold: true,
-            color: { argb: 'FFFFFFFF' },
-            size: 11
-          };
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FF1E49E2' }
-          };
-          cell.alignment = {
-            vertical: 'middle',
-            horizontal: 'center'
-          };
-        });
-      };
-
-      formatHeaderRow(wsActivities);
-      formatHeaderRow(wsEvents);
+      // Style header row (Cobalt Blue background, White text, 30px height)
+      const headerRow = wsEvents.getRow(1);
+      headerRow.height = 30;
+      headerRow.eachCell((cell) => {
+        cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E49E2' } };
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      });
 
       // Data validation dropdown lists
-      const monthListString = '"Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec"';
-      const dayListString = '"Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday"';
-      const weekListString = '"1,2,3,4,5"';
-      const yearListString = '"2024,2025,2026,2027,2028,2029,2030"';
-      const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Light Blue,Pacific Blue,Purple,Pink"';
-      const lineStyleListString = '"solid,dashed,dotted"';
-      const booleanListString = '"true,false"';
       const calendarTypeListString = '"Finance,Learning"';
+      const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Light Blue,Pacific Blue,Purple,Pink"';
 
-      // Apply calendarType validation to rows 2 to 100 in Activities (column B)
-      wsActivities.dataValidations.add('B2:B100', {
+      // Apply Calender type validation (Column B)
+      wsEvents.dataValidations.add('B2:B100', {
         type: 'list',
         allowBlank: true,
         formulae: [calendarTypeListString]
       });
 
-      // Apply Month validations to rows 2 to 100 in Events (columns D and E)
-      wsEvents.dataValidations.add('D2:D100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [monthListString]
-      });
-      wsEvents.dataValidations.add('E2:E100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [monthListString]
-      });
-
-      // Apply Weekday Name validations to rows 2 to 100 in Events (columns F and G)
-      wsEvents.dataValidations.add('F2:F100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [dayListString]
-      });
-      wsEvents.dataValidations.add('G2:G100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [dayListString]
-      });
-
-      // Apply Week Number validations to rows 2 to 100 in Events (columns H and I)
+      // Apply Color validation (Column H)
       wsEvents.dataValidations.add('H2:H100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [weekListString]
-      });
-      wsEvents.dataValidations.add('I2:I100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [weekListString]
-      });
-
-      // Apply Year validation dropdown to row 2 to 100 in Events (column J)
-      wsEvents.dataValidations.add('J2:J100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [yearListString]
-      });
-
-      // Apply Color validation to rows 2 to 100 in Events (column K)
-      wsEvents.dataValidations.add('K2:K100', {
         type: 'list',
         allowBlank: true,
         formulae: [colorListString]
       });
 
-      // Apply validations for lineStyle (L), isTextOnly (M)
-      wsEvents.dataValidations.add('L2:L100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [lineStyleListString]
-      });
-      wsEvents.dataValidations.add('M2:M100', {
-        type: 'list',
-        allowBlank: true,
-        formulae: [booleanListString]
-      });
-
-      // Apply Excel Conditional Formatting safely
+      // Apply Excel Conditional Formatting preview on Color column (H2:H100)
       try {
         const COLOR_PALETTE = [
           { name: 'Primary Blue', hex: 'FF00338D' },
@@ -252,7 +265,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
 
         COLOR_PALETTE.forEach(c => {
           wsEvents.addConditionalFormatting({
-            ref: 'K2:K100',
+            ref: 'H2:H100',
             rules: [
               {
                 type: 'cellIs',
@@ -260,7 +273,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
                 formulae: [`"${c.name}"`],
                 style: {
                   fill: { type: 'pattern', pattern: 'solid', fgColor: { argb: c.hex }, bgColor: { argb: c.hex } },
-                  font: { color: { argb: 'FFFFFFFF' }, bold: true }
+                  font: { color: { argb: c.name === 'Light Blue' ? 'FF0C233C' : 'FFFFFFFF' }, bold: true }
                 }
               }
             ]
@@ -295,129 +308,81 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
       try {
         const XLSX = await import('xlsx');
         const data = evt.target.result;
-        const workbook = XLSX.read(data, { type: 'binary' });
+        const workbook = XLSX.read(data, { type: 'binary', cellDates: true });
 
-        const activitiesSheet = workbook.Sheets['Activities'];
-        const eventsSheet = workbook.Sheets['Events'];
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
 
-        if (!activitiesSheet || !eventsSheet) {
-          throw new Error("Missing 'Activities' or 'Events' sheet in the uploaded Excel file.");
+        if (!sheet) {
+          throw new Error("Excel file has no valid sheet.");
         }
 
-        const activities = XLSX.utils.sheet_to_json(activitiesSheet);
-        const events = XLSX.utils.sheet_to_json(eventsSheet);
+        const rows = XLSX.utils.sheet_to_json(sheet);
 
-        const parseMonth = (val) => {
-          if (val === undefined || val === null || val === '') return 1;
-          if (typeof val === 'string') {
-            const s = val.trim().toLowerCase();
-            const shortMonths = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-            const longMonths = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-            
-            let idx = shortMonths.indexOf(s);
-            if (idx !== -1) return idx + 1; // 1-indexed
-            
-            idx = longMonths.indexOf(s);
-            if (idx !== -1) return idx + 1; // 1-indexed
-            
-            const num = parseInt(s);
-            if (!isNaN(num)) {
-              return num >= 1 && num <= 12 ? num : (num >= 0 && num <= 11 ? num + 1 : 1);
-            }
-            return 1;
+        if (!rows || rows.length === 0) {
+          throw new Error("No data rows found in the uploaded Excel sheet.");
+        }
+
+        // Group & extract unique Activities from single sheet rows
+        const activityMap = new Map();
+        rows.forEach(r => {
+          const actName = String(r['Activity name'] || r.activityName || r.activity || r.name || 'General').trim();
+          if (!actName) return;
+          const calType = String(r['Calender type'] || r.calendarType || r.calendar_type || 'Finance').trim();
+          const iconName = String(r.icon || '').trim();
+
+          const actId = 'act-' + actName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+          if (!activityMap.has(actId)) {
+            activityMap.set(actId, {
+              id: actId,
+              name: actName,
+              calendarType: ['Finance', 'Learning'].includes(calType) ? calType : 'Finance',
+              icon: iconName || 'Tag'
+            });
+          } else if (iconName && (!activityMap.get(actId).icon || activityMap.get(actId).icon === 'Tag')) {
+            activityMap.get(actId).icon = iconName;
           }
-          if (typeof val === 'number') {
-            return val >= 1 && val <= 12 ? val : (val >= 0 && val <= 11 ? val + 1 : 1);
-          }
-          return 1;
-        };
+        });
+        const formattedActivities = Array.from(activityMap.values());
 
-        const parseWeek = (val) => {
-          if (val === undefined || val === null || val === '') return undefined;
-          if (typeof val === 'string') {
-            const s = val.trim();
-            const num = parseInt(s);
-            return !isNaN(num) && num >= 1 && num <= 5 ? num : undefined;
-          }
-          if (typeof val === 'number') {
-            return val >= 1 && val <= 5 ? val : undefined;
-          }
-          return undefined;
-        };
+        // Map events from single sheet rows
+        const formattedEvents = rows.map((row, idx) => {
+          const actName = String(row['Activity name'] || row.activityName || row.activity || 'General').trim();
+          const actId = 'act-' + actName.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
-        const COLOR_MAP = {
-          'primary blue': '#00338d',
-          'primary_blue': '#00338d',
-          'cobalt blue': '#1e49e2',
-          'cobalt_blue': '#1e49e2',
-          'dark blue': '#0c233c',
-          'dark_blue': '#0c233c',
-          'light blue': '#aceaff',
-          'light_blue': '#aceaff',
-          'pacific blue': '#00b8f5',
-          'pacific_blue': '#00b8f5',
-          'purple': '#7213ea',
-          'pink': '#fd349c',
-        };
+          const startVal = row['Start date'] || row.startDate || row.start_date;
+          const endVal = row['End date'] || row.endDate || row.end_date || startVal;
 
-        const parseColor = (val) => {
-          if (!val) return undefined;
-          const s = String(val).trim().toLowerCase();
-          if (COLOR_MAP[s]) return COLOR_MAP[s];
-          if (s.startsWith('#')) return String(val).trim();
-          return undefined;
-        };
-
-        const parseDay = (val) => {
-          if (val === undefined || val === null || val === '') return undefined;
-          const s = String(val).trim();
-          const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-          const found = validDays.find(d => d.toLowerCase() === s.toLowerCase());
-          if (found) return found;
-          return s;
-        };
-
-        // Transform data to 1-indexed calendar structure
-        const formattedEvents = events.map(event => {
-          const startMonthVal = parseMonth(event.startMonth);
-          const endMonthVal = parseMonth(event.endMonth || event.startMonth);
-
-          const parsedColor = parseColor(event.color);
-          const mainColor = parsedColor || event.color || '#00338d';
-
-          const rawLineStyle = String(event.lineStyle || '').trim().toLowerCase();
-          let lineStyleVal = ['solid', 'dashed', 'dotted'].includes(rawLineStyle) ? rawLineStyle : 'solid';
-          
-          if (event.isDashed === true || event.isDashed === 'true' || event.isDashed === 'TRUE') {
-            lineStyleVal = 'dashed';
-          }
+          const dateInfo = extractEventDates(startVal, endVal, 2026);
+          const parsedColor = parseColor(row['Color'] || row.color);
+          const mainColor = parsedColor || '#00338d';
 
           return {
-            ...event,
-            isDashed: lineStyleVal === 'dashed',
-            lineStyle: lineStyleVal,
-            isTextOnly: event.isTextOnly === true || event.isTextOnly === 'true' || event.isTextOnly === 'TRUE',
-            ctaText: event.ctaText || event.cta_text || '',
-            ctaLink: event.ctaLink || event.cta_link || event.ctaUrl || event.link || '',
-            startMonth: startMonthVal,
-            endMonth: endMonthVal,
-            startDay: parseDay(event.startDay),
-            endDay: parseDay(event.endDay || event.startDay),
-            startWeek: parseWeek(event.startWeek),
-            endWeek: parseWeek(event.endWeek || event.startWeek),
+            id: String(row['event id'] || row.eventId || row.id || `ev-${idx + 1}`).trim(),
+            activityId: actId,
+            activityName: actName,
+            calendarType: String(row['Calender type'] || row.calendarType || 'Finance').trim(),
+            label: String(row['Event name'] || row.eventName || row.label || 'Untitled Event').trim(),
+            startMonth: dateInfo.startMonth,
+            endMonth: dateInfo.endMonth,
+            startDay: dateInfo.startDay,
+            endDay: dateInfo.endDay,
+            startWeek: dateInfo.startWeek,
+            endWeek: dateInfo.endWeek,
+            year: dateInfo.year,
+            startDateStr: dateInfo.startDateStr,
+            endDateStr: dateInfo.endDateStr,
             color: mainColor,
             borderColor: mainColor,
-            year: parseInt(event.year) || new Date().getFullYear(),
+            lineStyle: 'solid',
+            isDashed: false,
+            isTextOnly: false,
+            description: String(row['Description'] || row.description || '').trim(),
+            ctaText: String(row['CTA text'] || row.ctaText || '').trim(),
+            ctaLink: String(row['CTA link'] || row.ctaLink || '').trim(),
+            category: actName
           };
         });
-
-        const formattedActivities = activities.map(act => ({
-          ...act,
-          id: String(act.id || '').trim(),
-          calendarType: String(act.calendarType || 'Finance').trim(),
-          name: String(act.name || '').trim(),
-          icon: String(act.icon || '').trim()
-        }));
 
         const finalJson = {
           lastUpdated: Date.now(),
