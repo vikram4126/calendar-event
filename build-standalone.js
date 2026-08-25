@@ -27,13 +27,13 @@ function buildStandalone() {
 
   const scriptTag = `<script>
         // ==========================================
-        // INLINE EVENTS DATA
+        // UPDATE YOUR EVENTS DATA HERE
         // ==========================================
         window.INLINE_EVENTS_DATA = ${eventsData};
     </script>`;
 
   // Inlining data safely without JS string replace $ issues
-  html = html.replace('<title>temp-app</title>', () => `<title>temp-app</title>\n${scriptTag}`);
+  html = html.replace('<title>Calender app</title>', () => `<title>Calender app</title>\n${scriptTag}`);
 
   // Inlining favicon safely
   if (fs.existsSync(faviconPath)) {
