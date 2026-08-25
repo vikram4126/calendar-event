@@ -153,8 +153,34 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
           }
 
           if (isMatch) {
-            const startCol = getDayCol(e.startDay, 0);
-            const endCol = getDayCol(e.endDay, 4);
+            let startCol = 0; // Monday
+            let endCol = 4;   // Friday
+
+            if (e.startDateStr) {
+              const evStart = new Date(e.startDateStr);
+              const evEnd = e.endDateStr ? new Date(e.endDateStr) : new Date(evStart);
+
+              if (!isNaN(evStart.getTime())) {
+                evStart.setHours(0,0,0,0);
+                if (!isNaN(evEnd.getTime())) evEnd.setHours(23,59,59,999);
+
+                // If event starts during THIS current week, use its actual start weekday
+                if (evStart >= weekStart && evStart <= weekEnd) {
+                  const dayIdx = (evStart.getDay() + 6) % 7; // Mon=0 .. Sun=6
+                  startCol = Math.min(dayIdx, 4); // Limit to Friday max if weekend
+                }
+
+                // If event ends during THIS current week, use its actual end weekday
+                if (evEnd >= weekStart && evEnd <= weekEnd) {
+                  const dayIdx = (evEnd.getDay() + 6) % 7; // Mon=0 .. Sun=6
+                  endCol = Math.min(dayIdx, 4); // Limit to Friday max if weekend
+                }
+              }
+            } else {
+              startCol = getDayCol(e.startDay, 0);
+              endCol = getDayCol(e.endDay, 4);
+            }
+
             filtered.push({
               ...e,
               _start: Math.min(startCol, endCol),
