@@ -8,8 +8,15 @@ import { NavTabIcon } from './components/icons'
 function App() {
   const [activeTab, setActiveTab] = useState('Finance')
   const [viewMode, setViewMode] = useState('Monthly')
-  const [selectedYear, setSelectedYear] = useState(2024)
-  const [currentWeekStart, setCurrentWeekStart] = useState(new Date(2024, 0, 15)) // Jan 15 is Monday
+  const currentYear = new Date().getFullYear()
+  const [selectedYear, setSelectedYear] = useState(currentYear)
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => {
+    const d = new Date()
+    // Set to Monday of current week or Jan 15 of current year
+    const day = d.getDay()
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1)
+    return new Date(d.setDate(diff))
+  })
 
   const [events, setEvents] = useState([])
   const [activities, setActivities] = useState([])

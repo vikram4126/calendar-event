@@ -93,6 +93,12 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
       const tabActivitiesIds = new Set(tabActivities.map(a => a.id));
 
       if (viewMode === 'Weekly') {
+        const weekStart = new Date(currentWeekStart);
+        weekStart.setHours(0, 0, 0, 0);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+
         const currentYear = currentWeekStart.getFullYear();
         const currentMonth = currentWeekStart.getMonth() + 1;
         const currentDay = currentWeekStart.getDate();
@@ -101,27 +107,52 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
         const filtered = [];
         for (const e of events) {
           if (!tabActivitiesIds.has(e.activityId)) continue;
-          if (e.year !== currentYear) continue;
 
-          const rawStartMonth = parseInt(e.startMonth, 10) || 1;
-          const rawEndMonth = parseInt(e.endMonth || e.startMonth, 10) || rawStartMonth;
-          const startMonth = Math.min(rawStartMonth, rawEndMonth);
-          const endMonth = Math.max(rawStartMonth, rawEndMonth);
+          let isMatch = false;
 
-          let startWeek = e.startWeek !== undefined ? parseInt(e.startWeek, 10) : 1;
-          let endWeek = e.endWeek !== undefined ? parseInt(e.endWeek, 10) : 5;
+          // Strategy 1: Check by exact startDateStr / endDateStr if available
+          if (e.startDateStr) {
+            const evStart = new Date(e.startDateStr);
+            const evEnd = e.endDateStr ? new Date(e.endDateStr) : new Date(evStart);
+            
+            if (!isNaN(evStart.getTime())) {
+              evStart.setHours(0,0,0,0);
+              if (!isNaN(evEnd.getTime())) evEnd.setHours(23,59,59,999);
 
-          // Only normalize weeks if it is within the SAME month
-          if (startMonth === endMonth && startWeek > endWeek) {
-            const temp = startWeek;
-            startWeek = endWeek;
-            endWeek = temp;
+              // Overlap check with current week range
+              if (evStart <= weekEnd && evEnd >= weekStart) {
+                isMatch = true;
+              }
+            }
           }
 
-          const isAfterStart = currentMonth > startMonth || (currentMonth === startMonth && currentWeekIdx >= startWeek);
-          const isBeforeEnd = currentMonth < endMonth || (currentMonth === endMonth && currentWeekIdx <= endWeek);
+          // Strategy 2: Fallback to year/month/week calculations
+          if (!isMatch) {
+            if (e.year === currentYear) {
+              const rawStartMonth = parseInt(e.startMonth, 10) || 1;
+              const rawEndMonth = parseInt(e.endMonth || e.startMonth, 10) || rawStartMonth;
+              const startMonth = Math.min(rawStartMonth, rawEndMonth);
+              const endMonth = Math.max(rawStartMonth, rawEndMonth);
 
-          if (isAfterStart && isBeforeEnd) {
+              let startWeek = e.startWeek !== undefined ? parseInt(e.startWeek, 10) : 1;
+              let endWeek = e.endWeek !== undefined ? parseInt(e.endWeek, 10) : 5;
+
+              if (startMonth === endMonth && startWeek > endWeek) {
+                const temp = startWeek;
+                startWeek = endWeek;
+                endWeek = temp;
+              }
+
+              const isAfterStart = currentMonth > startMonth || (currentMonth === startMonth && currentWeekIdx >= startWeek);
+              const isBeforeEnd = currentMonth < endMonth || (currentMonth === endMonth && currentWeekIdx <= endWeek);
+
+              if (isAfterStart && isBeforeEnd) {
+                isMatch = true;
+              }
+            }
+          }
+
+          if (isMatch) {
             const startCol = getDayCol(e.startDay, 0);
             const endCol = getDayCol(e.endDay, 4);
             filtered.push({
@@ -137,13 +168,48 @@ function CalendarGrid({ events, activities, activeTab, year, viewMode, currentWe
       return events
         .filter(e => {
           if (!tabActivitiesIds.has(e.activityId)) return false;
-          return e.year === year;
+
+          const startYear =
+            e.startDateStr
+              ? new Date(e.startDateStr).getFullYear()
+              : e.year;
+
+          const endYear =
+            e.endDateStr
+              ? new Date(e.endDateStr).getFullYear()
+              : startYear;
+
+          return year >= startYear && year <= endYear;
         })
-        .map(e => ({
-          ...e,
-          _start: e.startMonth - 1,
-          _end: (e.endMonth || e.startMonth) - 1
-        }));
+
+        .map(e => {
+          const startYear =
+            e.startDateStr
+              ? new Date(e.startDateStr).getFullYear()
+              : e.year;
+
+          const endYear =
+            e.endDateStr
+              ? new Date(e.endDateStr).getFullYear()
+              : startYear;
+
+          let startMonth = e.startMonth;
+          let endMonth = e.endMonth || e.startMonth;
+
+          if (year > startYear) {
+            startMonth = 1; // Jan
+          }
+
+          if (year < endYear) {
+            endMonth = 12; // Dec
+          }
+
+          return {
+            ...e,
+            _start: startMonth - 1,
+            _end: endMonth - 1
+          };
+        })
     },
     [events, year, tabActivities, viewMode, currentWeekStart]
   )
