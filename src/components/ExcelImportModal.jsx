@@ -158,10 +158,9 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
 
       // Define single sheet columns
       wsEvents.columns = [
-        { header: 'event id', key: 'id', width: 12 },
         { header: 'Calender type', key: 'calendarType', width: 16 },
         { header: 'Activity name', key: 'activityName', width: 25 },
-        { header: 'icon', key: 'icon', width: 15 },
+        { header: 'Icon', key: 'icon', width: 18 },
         { header: 'Event name', key: 'eventName', width: 25 },
         { header: 'Start date', key: 'startDate', width: 20 },
         { header: 'End date', key: 'endDate', width: 20 },
@@ -170,9 +169,6 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
         { header: 'CTA text', key: 'ctaText', width: 18 },
         { header: 'CTA link', key: 'ctaLink', width: 30 }
       ];
-
-      // Hide icon column (Column 4)
-      wsEvents.getColumn(4).hidden = true;
 
       // Populate sheet with active events & activities
       const actMap = {};
@@ -195,7 +191,6 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
           const eDateStr = ev.endDateStr || `${eDayNum} ${eMoStr} ${yr}`;
 
           wsEvents.addRow({
-            id: ev.id,
             calendarType: calType,
             activityName: actName,
             icon: iconName,
@@ -210,7 +205,6 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
         });
       } else {
         wsEvents.addRow({
-          id: 'ev-1',
           calendarType: 'Finance',
           activityName: 'Communications',
           icon: 'MessageSquare',
@@ -237,21 +231,21 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
       const calendarTypeListString = '"Finance,Learning"';
       const colorListString = '"Primary Blue,Cobalt Blue,Dark Blue,Light Blue,Pacific Blue,Purple,Pink"';
 
-      // Apply Calender type validation (Column B)
-      wsEvents.dataValidations.add('B2:B100', {
+      // Apply Calender type validation (Column A)
+      wsEvents.dataValidations.add('A2:A100', {
         type: 'list',
         allowBlank: true,
         formulae: [calendarTypeListString]
       });
 
-      // Apply Color validation (Column H)
-      wsEvents.dataValidations.add('H2:H100', {
+      // Apply Color validation (Column G)
+      wsEvents.dataValidations.add('G2:G100', {
         type: 'list',
         allowBlank: true,
         formulae: [colorListString]
       });
 
-      // Apply Excel Conditional Formatting preview on Color column (H2:H100)
+      // Apply Excel Conditional Formatting preview on Color column (G2:G100)
       try {
         const COLOR_PALETTE = [
           { name: 'Primary Blue', hex: 'FF00338D' },
@@ -265,7 +259,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
 
         COLOR_PALETTE.forEach(c => {
           wsEvents.addConditionalFormatting({
-            ref: 'H2:H100',
+            ref: 'G2:G100',
             rules: [
               {
                 type: 'cellIs',
@@ -329,7 +323,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
           const actName = String(r['Activity name'] || r.activityName || r.activity || r.name || 'General').trim();
           if (!actName) return;
           const calType = String(r['Calender type'] || r.calendarType || r.calendar_type || 'Finance').trim();
-          const iconName = String(r.icon || '').trim();
+          const iconName = String(r['Icon'] || r.icon || '').trim();
 
           const actId = 'act-' + actName.toLowerCase().replace(/[^a-z0-9]/g, '-');
           if (!activityMap.has(actId)) {
@@ -345,7 +339,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
         });
         const formattedActivities = Array.from(activityMap.values());
 
-        // Map events from single sheet rows
+        // Map events from single sheet rows with auto 1-based indexing for event ID (e.g. ev-1, ev-2)
         const formattedEvents = rows.map((row, idx) => {
           const actName = String(row['Activity name'] || row.activityName || row.activity || 'General').trim();
           const actId = 'act-' + actName.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -358,7 +352,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
           const mainColor = parsedColor || '#00338d';
 
           return {
-            id: String(row['event id'] || row.eventId || row.id || `ev-${idx + 1}`).trim(),
+            id: `ev-${idx + 1}`,
             activityId: actId,
             activityName: actName,
             calendarType: String(row['Calender type'] || row.calendarType || 'Finance').trim(),
