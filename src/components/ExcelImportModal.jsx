@@ -46,36 +46,39 @@ const parseColor = (val) => {
   return undefined;
 };
 
-function parseDateObject(val) {
-  if (!val && val !== 0) return null;
+function parseDateObject(val, XLSX) {
+  if (val === null || val === undefined || val === '') return null;
 
-  // Excel serial date number (e.g. 46252)
-  if (typeof val === 'number') {
-    if (val > 1000) {
-      // XLSX raw serial calculation or date string
-      // Excel epoch starts at 1899-12-30.
-      const utcMs = Math.round((val - 25569) * 86400 * 1000);
-      const tempDate = new Date(utcMs);
-      if (!isNaN(tempDate.getTime())) {
-        return new Date(tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate());
-      }
-    }
+  // 1. If val is a Date object (from XLSX cellDates or JS)
+  if (val instanceof Date && !isNaN(val.getTime())) {
+    // Extract exact UTC components if UTC midnight, or local components
+    const yr = val.getUTCFullYear();
+    const mo = val.getUTCMonth();
+    const da = val.getUTCDate();
+    return new Date(yr, mo, da);
   }
 
-  if (val instanceof Date && !isNaN(val.getTime())) {
-    // SheetJS with cellDates: true creates UTC dates or local dates with time offset.
-    // If timezone is behind UTC or UTC date parsed, extract UTC or adjust if raw date was 00:00 UTC.
-    // To be 100% immune to timezone shifts:
-    // SheetJS stores cell.w or raw string, but if we receive Date object:
-    // If time component is 00:00:00 in UTC or local, check timezone offset.
-    return new Date(val.getUTCFullYear(), val.getUTCMonth(), val.getUTCDate());
+  // 2. If val is an Excel Serial Number (e.g. 46285 for 9/20/2026)
+  if (typeof val === 'number' && val > 1000) {
+    if (XLSX && XLSX.SSF) {
+      const parsed = XLSX.SSF.parse_date(val);
+      if (parsed) {
+        return new Date(parsed.y, parsed.m - 1, parsed.d);
+      }
+    }
+    // Fallback formula for Excel Epoch (1899-12-30)
+    // Excel counts 1900-01-01 as 1, and includes non-existent 1900-02-29 (leap year bug)
+    // 25569 days between 1899-12-30 and 1970-01-01
+    const dayCount = Math.floor(val);
+    const utcMs = (dayCount - 25569) * 86400 * 1000;
+    const d = new Date(utcMs);
+    return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   }
 
   const str = String(val).trim();
   if (!str) return null;
 
-  // Check mm/dd/yyyy or yyyy-mm-dd or dd/mm/yyyy formatted string
-  // If string contains numbers like "9/20/2026" or "20/09/2026" or "2026-09-20"
+  // 3. String like "9/20/2026", "20/09/2026", "09/20/2026"
   const m1 = str.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
   if (m1) {
     let p1 = parseInt(m1[1], 10);
@@ -83,57 +86,42 @@ function parseDateObject(val) {
     let yr = parseInt(m1[3], 10);
     let month, day;
     if (p1 > 12) {
-      // p1 is day, p2 is month (DD/MM/YYYY)
       day = p1;
       month = p2 - 1;
     } else if (p2 > 12) {
-      // p1 is month, p2 is day (MM/DD/YYYY)
       month = p1 - 1;
       day = p2;
     } else {
-      // Ambiguous (e.g. 9/20 vs 9/10), default to MM/DD/YYYY for US excel standard (9/20/2026 -> Sep 20)
       month = p1 - 1;
       day = p2;
     }
     return new Date(yr, month, day);
   }
 
+  // 4. String like "2026-09-20" or "September 2026"
   const m2 = str.match(/^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})$/);
   if (m2) {
-    let yr = parseInt(m2[1], 10);
-    let month = parseInt(m2[2], 10) - 1;
-    let day = parseInt(m2[3], 10);
-    return new Date(yr, month, day);
+    return new Date(parseInt(m2[1], 10), parseInt(m2[2], 10) - 1, parseInt(m2[3], 10));
   }
 
-  // Try standard JS Date constructor
-  let date = new Date(str);
-  if (!isNaN(date.getTime()) && date.getFullYear() > 2000) {
-    // Standard JS Date constructor converts "YYYY-MM-DD" as UTC mid-night which causes local day minus 1!
-    // Extract UTC date components if str was ISO or Date parse
-    if (str.includes('-') && !str.includes(':')) {
-      return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-    }
-    return date;
-  }
-
-  // Parse custom strings like "17 August 2026", "17/08/2026", "17-08-2026"
+  // 5. String like "19 September 2026" or "September 2026"
   const tokens = str.split(/[\s,/-]+/).filter(Boolean);
-  if (tokens.length >= 3) {
+  if (tokens.length >= 2) {
     let day = parseInt(tokens[0]);
     let monthToken = tokens[1].toLowerCase();
-    let year = parseInt(tokens[2]);
+    let year = parseInt(tokens[2] || tokens[1]);
 
     if (isNaN(day)) {
       monthToken = tokens[0].toLowerCase();
-      day = parseInt(tokens[1]);
+      day = parseInt(tokens[1]) || 1;
+      year = parseInt(tokens[2]) || 2026;
     }
 
     let mIdx = MONTH_NAMES.findIndex(m => m.toLowerCase() === monthToken.slice(0, 3));
     if (mIdx === -1) mIdx = FULL_MONTH_NAMES.findIndex(m => m.toLowerCase().startsWith(monthToken));
 
-    if (mIdx !== -1 && !isNaN(day) && !isNaN(year)) {
-      return new Date(year, mIdx, day);
+    if (mIdx !== -1 && !isNaN(year)) {
+      return new Date(year, mIdx, isNaN(day) ? 1 : day);
     }
   }
 
@@ -148,9 +136,9 @@ function formatDateForDisplay(d) {
   return `${day} ${monthStr} ${year}`;
 }
 
-function extractEventDates(startVal, endVal, fallbackYear = 2026) {
-  const startDate = parseDateObject(startVal);
-  const endDate = parseDateObject(endVal) || startDate;
+function extractEventDates(startVal, endVal, fallbackYear = 2026, XLSX = null) {
+  const startDate = parseDateObject(startVal, XLSX);
+  const endDate = parseDateObject(endVal, XLSX) || startDate;
 
   if (startDate) {
     const sYr = startDate.getFullYear();
@@ -359,7 +347,8 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
           throw new Error("Excel file has no valid sheet.");
         }
 
-        const rows = XLSX.utils.sheet_to_json(sheet);
+        // Read sheet as raw formatted text object array to prevent SheetJS cell value conversions
+        const rows = XLSX.utils.sheet_to_json(sheet, { raw: false, dateNF: 'yyyy-mm-dd' });
 
         if (!rows || rows.length === 0) {
           throw new Error("No data rows found in the uploaded Excel sheet.");
@@ -395,7 +384,7 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
           const startVal = row['Start date'] || row.startDate || row.start_date;
           const endVal = row['End date'] || row.endDate || row.end_date || startVal;
 
-          const dateInfo = extractEventDates(startVal, endVal, 2026);
+          const dateInfo = extractEventDates(startVal, endVal, 2026, XLSX);
           const parsedColor = parseColor(row['Color'] || row.color);
           const mainColor = parsedColor || '#00338d';
 
