@@ -52,13 +52,20 @@ function parseDateObject(val) {
   // Excel serial date number (e.g. 46252)
   if (typeof val === 'number') {
     if (val > 1000) {
-      const date = new Date(Math.round((val - 25569) * 86400 * 1000));
-      if (!isNaN(date.getTime())) return date;
+      // Excel base date offset accounting for 1900 leap year bug
+      // Use Math.floor or Math.round to get exact days since 1899-12-30 UTC
+      const utcMs = Math.round((val - 25569) * 86400 * 1000);
+      const tempDate = new Date(utcMs);
+      if (!isNaN(tempDate.getTime())) {
+        // Construct local date using UTC components to prevent local timezone offset shift
+        return new Date(tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate());
+      }
     }
   }
 
   if (val instanceof Date && !isNaN(val.getTime())) {
-    return val;
+    // If xlsx returned a Date object (parsed as UTC by cellDates: true), extract UTC components
+    return new Date(val.getUTCFullYear(), val.getUTCMonth(), val.getUTCDate());
   }
 
   const str = String(val).trim();
