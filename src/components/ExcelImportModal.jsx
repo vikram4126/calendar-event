@@ -52,28 +52,68 @@ function parseDateObject(val) {
   // Excel serial date number (e.g. 46252)
   if (typeof val === 'number') {
     if (val > 1000) {
-      // Excel base date offset accounting for 1900 leap year bug
-      // Use Math.floor or Math.round to get exact days since 1899-12-30 UTC
+      // XLSX raw serial calculation or date string
+      // Excel epoch starts at 1899-12-30.
       const utcMs = Math.round((val - 25569) * 86400 * 1000);
       const tempDate = new Date(utcMs);
       if (!isNaN(tempDate.getTime())) {
-        // Construct local date using UTC components to prevent local timezone offset shift
         return new Date(tempDate.getUTCFullYear(), tempDate.getUTCMonth(), tempDate.getUTCDate());
       }
     }
   }
 
   if (val instanceof Date && !isNaN(val.getTime())) {
-    // If xlsx returned a Date object (parsed as UTC by cellDates: true), extract UTC components
+    // SheetJS with cellDates: true creates UTC dates or local dates with time offset.
+    // If timezone is behind UTC or UTC date parsed, extract UTC or adjust if raw date was 00:00 UTC.
+    // To be 100% immune to timezone shifts:
+    // SheetJS stores cell.w or raw string, but if we receive Date object:
+    // If time component is 00:00:00 in UTC or local, check timezone offset.
     return new Date(val.getUTCFullYear(), val.getUTCMonth(), val.getUTCDate());
   }
 
   const str = String(val).trim();
   if (!str) return null;
 
+  // Check mm/dd/yyyy or yyyy-mm-dd or dd/mm/yyyy formatted string
+  // If string contains numbers like "9/20/2026" or "20/09/2026" or "2026-09-20"
+  const m1 = str.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);
+  if (m1) {
+    let p1 = parseInt(m1[1], 10);
+    let p2 = parseInt(m1[2], 10);
+    let yr = parseInt(m1[3], 10);
+    let month, day;
+    if (p1 > 12) {
+      // p1 is day, p2 is month (DD/MM/YYYY)
+      day = p1;
+      month = p2 - 1;
+    } else if (p2 > 12) {
+      // p1 is month, p2 is day (MM/DD/YYYY)
+      month = p1 - 1;
+      day = p2;
+    } else {
+      // Ambiguous (e.g. 9/20 vs 9/10), default to MM/DD/YYYY for US excel standard (9/20/2026 -> Sep 20)
+      month = p1 - 1;
+      day = p2;
+    }
+    return new Date(yr, month, day);
+  }
+
+  const m2 = str.match(/^(\d{4})[\/.-](\d{1,2})[\/.-](\d{1,2})$/);
+  if (m2) {
+    let yr = parseInt(m2[1], 10);
+    let month = parseInt(m2[2], 10) - 1;
+    let day = parseInt(m2[3], 10);
+    return new Date(yr, month, day);
+  }
+
   // Try standard JS Date constructor
   let date = new Date(str);
   if (!isNaN(date.getTime()) && date.getFullYear() > 2000) {
+    // Standard JS Date constructor converts "YYYY-MM-DD" as UTC mid-night which causes local day minus 1!
+    // Extract UTC date components if str was ISO or Date parse
+    if (str.includes('-') && !str.includes(':')) {
+      return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+    }
     return date;
   }
 
@@ -309,7 +349,8 @@ export default function ExcelImportModal({ isOpen, onClose, events = [], activit
       try {
         const XLSX = await import('xlsx');
         const data = evt.target.result;
-        const workbook = XLSX.read(data, { type: 'binary', cellDates: true });
+        // cellDates: false ensures date numbers or formatted date strings (.w) are kept as-is without UTC shift
+        const workbook = XLSX.read(data, { type: 'binary', cellDates: false, cellText: true, cellNF: true });
 
         const sheetName = workbook.SheetNames[0];
         const sheet = workbook.Sheets[sheetName];
